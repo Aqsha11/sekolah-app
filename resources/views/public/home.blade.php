@@ -7,7 +7,7 @@
     @php
         use Illuminate\Support\Str;
 
-        $schoolName = $settings['nama_website'] ?? 'SMPN 1 Lambandia';
+        $schoolName = $settings['nama_website'] ?? '';
         $heroTitle = $settings['hero_title'] ?? $schoolName;
         $heroDesc =
             $settings['hero_description'] ??
@@ -18,8 +18,7 @@
 
         $profileTitle = 'Profil Sekolah';
         $profileDesc =
-            $settings['profil_sekolah'] ??
-            'SMPN 1 Lambandia merupakan sekolah yang berkomitmen memberikan pendidikan berkualitas serta membentuk karakter siswa yang unggul dan berprestasi.';
+            $settings['profil_sekolah'] ?? '';
         $profileImg = !empty($settings['profil_image'])
             ? asset('storage/settings/' . $settings['profil_image'])
             : asset('images/sekolah.jpg');

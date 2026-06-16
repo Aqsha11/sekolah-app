@@ -3,7 +3,7 @@
     {{-- HEADER --}}
     <div>
         <div class="p-6 border-b border-slate-800">
-            <h1 class="text-2xl font-bold">SMPN 1 LAMBANDIA</h1>
+            {{-- <h1 class="text-2xl font-bold">/h1> --}}
             {{-- <p class="text-blue-200 text-sm">Lambandia</p> --}}
         </div>
         <!-- Font Awesome -->

@@ -2,9 +2,9 @@
 
     {{-- HEADER --}}
     <div>
-        <div class="p-6 border-b border-slate-800">
-            <h1 class="text-2xl font-bold">SMPN 1 LAMBANDIA</h1>
-        </div>
+        {{-- <div class="p-6 border-b border-slate-800">
+            <h1 class="text-2xl font-bold"></h1>
+        </div> --}}
 
         <div class="p-4 space-y-2">
 
@@ -190,6 +190,6 @@
 
     {{-- FOOTER --}}
     <div class="p-4 border-t border-slate-800 text-xs text-blue-400">
-        © {{ date('Y') }} SMPN 1 Lambandia
+        © {{ date('Y') }} 
     </div>
 </div>

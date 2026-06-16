@@ -5,7 +5,7 @@
 @section('content')
 
 @php
-    $schoolName = $settings['nama_website'] ?? 'SMPN 1 Lambandia';
+    $schoolName = $settings['nama_website'] ?? '';
 @endphp
 
 <style>

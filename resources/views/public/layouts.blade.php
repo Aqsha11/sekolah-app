@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ $settings['tagline'] ?? 'Website Resmi Sekolah' }}">
-    <title>@yield('title', 'SMPN 1 Lambandia')</title>
+    <title>@yield('title', '')</title>
 
     {{-- Tailwind --}}
     <script src="https://cdn.tailwindcss.com"></script>
@@ -68,7 +68,7 @@
                     <a href="/" id="brandText"
                         class="text-base font-extrabold tracking-tight text-slate-900 leading-none transition-colors duration-300">
 
-                        {{ $settings['nama_website'] ?? 'SMPN 1 Lambandia' }}
+                        {{ $settings['nama_website'] ?? '' }}
 
                     </a>
 
@@ -561,7 +561,7 @@
                     @endif
 
                     <h2 class="font-extrabold text-sm tracking-tight uppercase">
-                        {{ $settings['nama_website'] ?? 'SMPN 1 Lambandia' }}
+                        {{ $settings['nama_website'] ?? '' }}
                     </h2>
                 </div>
 
@@ -720,7 +720,7 @@
 
                 <p>
                     &copy; {{ date('Y') }}
-                    {{ $settings['nama_website'] ?? 'SMPN 1 Lambandia' }}.
+                    {{ $settings['nama_website'] ?? ''}}.
                     Seluruh Hak Cipta Dilindungi.
                 </p>
 

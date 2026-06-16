@@ -537,7 +537,7 @@
                     <img src="{{ asset('images/tutwuri.png') }}"
                         class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
                 @endif
-                <span>SMPN 1 Jakarta</span>
+                <span>{{ $settings['nama_website'] ?? '' }}</span>
             </a>
 
             {{-- navbar --}}
@@ -797,7 +797,7 @@
                 {{-- Breadcrumb / Page Title --}}
                 <div class="flex-1 min-w-0">
                     <h1 class="font-semibold text-gray-800 text-sm truncate">@yield('title', 'Dashboard')</h1>
-                    <p class="text-gray-400 text-xs hidden sm:block">@yield('subtitle', 'SMPN 1 Lambandia Admin Panel')</p>
+                    <p class="text-gray-400 text-xs hidden sm:block">@yield('subtitle', '')</p>
                 </div>
 
                 {{-- Right Actions --}}
@@ -881,7 +881,7 @@
 
             {{-- Footer --}}
             <footer class="px-6 py-4 border-t border-white/10 bg-slate-900 text-center text-xs text-slate-300">
-                © {{ date('Y') }} SMPN 1 Lambandia — Admin Panel
+                © {{ date('Y') }} Admin Panel
                 <span class="block sm:inline sm:ml-1">
                     | Powered by
                     <a href="https://viteks.id" target="_blank"
