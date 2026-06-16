@@ -5,7 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>@yield('title', 'Dashboard')</title>
+    @php
+        $settings = \App\Models\Setting::pluck('value', 'key');
+    @endphp
+    <title>
+        @yield('title', $settings['nama_website'] ?? 'Dashboard')
+    </title>
+    @if (!empty($settings['favicon']))
+        <link rel="icon" href="{{ asset('storage/settings/' . $settings['favicon']) }}">
+    @endif
 
     {{-- Fonts --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -527,17 +535,35 @@
             class="fixed top-0 left-0 h-full w-64 bg-primary-950 z-40 flex flex-col overflow-y-auto
                 -translate-x-full lg:translate-x-0 transition-transform duration-300 ease-in-out">
 
-            {{-- Logo --}}
+            {{-- Logo Sekolah --}}
             <a href="{{ route('admin.dashboard') }}"
-                class="flex items-center gap-3 px-10 py-4 mt-2 mx-2 rounded-lg text-white text-lg font-bold">
+                class="flex items-center gap-3 px-4 py-4 mt-2 mx-2 rounded-lg text-white">
+
+
+                {{-- Logo --}}
                 @if (!empty($settings['logo']))
-                    <img src="{{ asset('storage/settings/' . $settings['logo']) }}"
-                        class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
-                @else
-                    <img src="{{ asset('images/tutwuri.png') }}"
-                        class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
+                    <img src="{{ asset('storage/settings/' . $settings['logo']) }}" alt="Logo Sekolah"
+                        class="w-11 h-11 rounded-full ring-2 ring-primary-500/30 object-cover">
                 @endif
-                <span>{{ $settings['nama_website'] ?? '' }}</span>
+
+
+                <div class="flex flex-col min-w-0">
+
+                    {{-- Nama Sekolah --}}
+                    <span class="font-bold text-sm text-white truncate">
+                        {{ $settings['nama_website'] ?? '' }}
+                    </span>
+
+
+                    {{-- Tagline --}}
+                    @if (!empty($settings['tagline']))
+                        <span class="text-[11px] text-primary-300 truncate">
+                            {{ $settings['tagline'] }}
+                        </span>
+                    @endif
+
+                </div>
+
             </a>
 
             {{-- navbar --}}
@@ -881,16 +907,23 @@
 
             {{-- Footer --}}
             <footer class="px-6 py-4 border-t border-white/10 bg-slate-900 text-center text-xs text-slate-300">
-                © {{ date('Y') }} Admin Panel
+
+                © {{ date('Y') }}
+                {{ $settings['nama_website'] ?? 'Admin Panel' }}
+
                 <span class="block sm:inline sm:ml-1">
                     | Powered by
                     <a href="https://viteks.id" target="_blank"
                         class="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
+
                         <img src="https://viteks.id/storage/site/J5MNxOhayYQO9ENI3oFOxy0fQd50ll84bFpyFshl.png"
                             class="h-3 w-auto inline-block" alt="VITEKS">
+
                         VITEKS
+
                     </a>
                 </span>
+
             </footer>
         </div>
     </div>

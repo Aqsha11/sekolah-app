@@ -9,7 +9,7 @@
     $telepon = $settings['telepon'] ?? 'Telepon sekolah belum diisi';
     $email = $settings['email'] ?? 'Email sekolah belum diisi';
     $jam = $settings['jam_operasional'] ?? 'Senin - Jumat 07:00 - 14:00';
-    $maps = $settings['google_maps'] ?? 'https://www.google.com/maps?q=SMPN%201%20Lambandia&output=embed';
+    // $maps = $settings['google_maps'] ?? 'https://www.google.com/maps?q=SMPN%201%20Lambandia&output=embed';
 @endphp
 
 {{-- HERO --}}
@@ -139,12 +139,12 @@
 
             </div>
 
-            <div class="mt-8 bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-md overflow-hidden border border-white/50">
+            {{-- <div class="mt-8 bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-md overflow-hidden border border-white/50">
 
                 <iframe src="{{ $maps }}" class="w-full h-72 rounded-lg" loading="lazy" allowfullscreen>
                 </iframe>
 
-            </div>
+            </div> --}}
 
         </div>
 

@@ -4,7 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin - SMP 1 Lambandia</title>
+    @php
+        $settings = \App\Models\Setting::pluck('value', 'key');
+    @endphp
+    <title>
+        Login - {{ $settings['nama_website'] ?? '' }}
+    </title>
+    @if (!empty($settings['favicon']))
+        <link rel="icon" href="{{ asset('storage/settings/' . $settings['favicon']) }}">
+    @endif
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
@@ -210,11 +218,22 @@
 <body>
     <div class="login-left">
         <div class="login-left-content">
-            <div class="school-logo"><i class="fa-solid fa-users"></i></div>
-            <div class="school-name">SMP 1 LAMBANDIA</div>
-            <p class="school-tagline">
-                Mewujudkan generasi berkarakter, berprestasi dan berwawasan global.
+            <div class="school-logo overflow-hidden">
+                @if (!empty($settings['logo']))
+                    <img src="{{ asset('storage/settings/' . $settings['logo']) }}"
+                        alt="{{ $settings['nama_website'] ?? 'Logo Sekolah' }}"
+                        class="w-100 h-100 object-fit-cover rounded-circle">
+                @else
+                    <i class="fa-solid fa-school"></i>
+                @endif
+            </div>
+            <div class="school-name">
+                {{ $settings['nama_website'] ?? '' }}
+            </div>
+            <p class="tagline">
+                {{ $settings['tagline'] ?? '' }}
             </p>
+
         </div>
     </div>
 
@@ -262,14 +281,20 @@
             </form>
 
             <div class="login-footer text-center">
-                &copy; {{ date('Y') }} SMP 1 Lambandia. All rights reserved.
+                &copy; {{ date('Y') }}
+                {{ $settings['nama_website'] ?? '' }}
+
                 <br>
+
                 Powered by
                 <a href="https://viteks.id" target="_blank"
                     style="color:#0dcaf0; font-weight:700; text-decoration:none;">
+
                     <img src="https://viteks.id/storage/site/J5MNxOhayYQO9ENI3oFOxy0fQd50ll84bFpyFshl.png"
                         style="height:11px; width:auto; display:inline-block; vertical-align:middle;" alt="VITEKS">
+
                     VITEKS
+
                 </a>
             </div>
         </div>

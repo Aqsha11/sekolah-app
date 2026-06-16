@@ -81,7 +81,7 @@ class SettingController extends Controller
             // website
             'nama_website',
             'tagline',
-            'school_name',
+            'nama_sekolah',
 
             // hero lama
             'hero_title',

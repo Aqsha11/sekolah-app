@@ -86,7 +86,7 @@ class OrangTuaController extends Controller
         // Filter berdasarkan bulan (format: YYYY-MM)
         if ($request->filled('bulan')) {
             $query->whereMonth('tanggal', date('m', strtotime($request->bulan)))
-                  ->whereYear('tanggal', date('Y', strtotime($request->bulan)));
+                ->whereYear('tanggal', date('Y', strtotime($request->bulan)));
         }
 
         $absensis = $query->latest('tanggal')->paginate(30);

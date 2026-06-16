@@ -12,7 +12,7 @@ class DatabaseSeeder extends Seeder {
             RolePermissionSeeder::class,    // 1. Buat role & permission
             CreateAdminUserSeeder::class,   // 2. Buat user admin & operator
             RoleSeeder::class,              // 3. (opsional) tambahan role
-            DummyDataSeeder::class,         // 4. Data dummy untuk development
+            // DummyDataSeeder::class,         // 4. Data dummy untuk development
         ]);
     }
 }

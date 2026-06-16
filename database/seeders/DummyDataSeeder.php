@@ -46,7 +46,7 @@ class DummyDataSeeder extends Seeder
     protected function seedSettings(): void
     {
         $settings = [
-            ['key' => 'nama_sekolah', 'value' => 'SMA Negeri 1 Jakarta'],
+            ['key' => 'nama_website', 'value' => 'SMA Negeri 1 Jakarta'],
             ['key' => 'site_name', 'value' => 'SMAN 1 Jakarta'],
             ['key' => 'school_name', 'value' => 'SMA Negeri 1 Jakarta'],
             ['key' => 'alamat', 'value' => 'Jl. Budi Utomo No. 7, Jakarta Pusat'],

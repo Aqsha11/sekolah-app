@@ -179,13 +179,30 @@ Route::prefix('admin')
         |--------------------------
         */
         Route::middleware('permission:manage siswa')->group(function () {
+
             Route::prefix('orang-tua')->name('orang_tua.')->group(function () {
-                Route::get('/', [AdminOrangTuaController::class, 'index'])->name('index');   // Daftar orang tua
-                Route::get('/{orangTua}/edit', [AdminOrangTuaController::class, 'edit'])->name('edit'); // Form atur anak
-                Route::put('/{orangTua}', [AdminOrangTuaController::class, 'update'])->name('update'); // Simpan relasi
+
+                // daftar orang tua
+                Route::get('/', [AdminOrangTuaController::class, 'index'])
+                    ->name('index');
+
+                // tambah orang tua
+                Route::get('/create', [AdminOrangTuaController::class, 'create'])
+                    ->name('create');
+
+                // simpan orang tua
+                Route::post('/', [AdminOrangTuaController::class, 'store'])
+                    ->name('store');
+
+                // atur anak
+                Route::get('/{orangTua}/edit', [AdminOrangTuaController::class, 'edit'])
+                    ->name('edit');
+
+                // simpan relasi anak
+                Route::put('/{orangTua}', [AdminOrangTuaController::class, 'update'])
+                    ->name('update');
             });
         });
-
         /*
         |--------------------------
         | SISTEM (User, Role, Permission, Settings)

@@ -50,7 +50,8 @@
 
                 <div class="relative">
                     <span
-                        class="absolute -inset-1 rounded-full bg-gradient-to-tr from-blue-500 to-blue-600 opacity-60 blur-sm"></span>
+                        class="absolute -inset-1 rounded-full bg-gradient-to-tr from-blue-500 to-blue-600 opacity-60 blur-sm">
+                    </span>
 
                     <div
                         class="relative w-11 h-11 bg-slate-900 rounded-full flex items-center justify-center border border-white/20 overflow-hidden ring-2 ring-blue-400/20">
@@ -58,50 +59,49 @@
                         @if (!empty($settings['logo']))
                             <img src="{{ asset('storage/settings/' . $settings['logo']) }}"
                                 class="w-7 h-7 object-cover rounded-full">
-                        @else
-                            <img src="{{ asset('images/tutwuri.png') }}" class="w-7 h-7 object-cover rounded-full">
                         @endif
+
                     </div>
-                </div>
-
-                <div>
-                    <a href="/" id="brandText"
-                        class="text-base font-extrabold tracking-tight text-slate-900 leading-none transition-colors duration-300">
-
-                        {{ $settings['nama_website'] ?? '' }}
-
-                    </a>
-
-                    @if (!empty($settings['tagline']))
-                        <p class="text-[11px] text-slate-500">
-                            {{ $settings['tagline'] }}
-                        </p>
-                    @endif
-                </div>
             </div>
 
-            {{-- Desktop Navigation --}}
-            <nav
-                class="hidden lg:flex items-center gap-1.5 bg-slate-900/90 py-1.5 px-2 rounded-full border border-slate-700/50 shadow-inner backdrop-blur-md">
+            <div>
+                <a href="/" id="brandText"
+                    class="text-base font-extrabold tracking-tight text-slate-900 leading-none transition-colors duration-300">
 
-                @foreach ($nav as $url => $label)
-                    <a href="{{ url($url) }}"
-                        class="px-4 py-2 rounded-full text-xs font-bold tracking-wide transition-all duration-300
+                    {{ $settings['nama_website'] ?? '' }}
+
+                </a>
+
+                @if (!empty($settings['tagline']))
+                    <p class="text-[11px] text-slate-500">
+                        {{ $settings['tagline'] }}
+                    </p>
+                @endif
+            </div>
+        </div>
+
+        {{-- Desktop Navigation --}}
+        <nav
+            class="hidden lg:flex items-center gap-1.5 bg-slate-900/90 py-1.5 px-2 rounded-full border border-slate-700/50 shadow-inner backdrop-blur-md">
+
+            @foreach ($nav as $url => $label)
+                <a href="{{ url($url) }}"
+                    class="px-4 py-2 rounded-full text-xs font-bold tracking-wide transition-all duration-300
                     {{ request()->is($url) || (request()->path() === '/' && $url === '/')
                         ? 'bg-blue-400 text-slate-950 shadow-md'
                         : 'text-slate-300 hover:text-white hover:bg-slate-800/70' }}">
 
-                        {{ strtoupper($label) }}
-                    </a>
-                @endforeach
+                    {{ strtoupper($label) }}
+                </a>
+            @endforeach
 
-            </nav>
+        </nav>
 
-            {{-- Right Action --}}
-            <div class="hidden lg:flex items-center gap-3">
+        {{-- Right Action --}}
+        <div class="hidden lg:flex items-center gap-3">
 
-                {{-- AI Button --}}
-                {{-- <button
+            {{-- AI Button --}}
+            {{-- <button
                     class="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-500 text-slate-950 text-xs font-black rounded-full shadow-lg shadow-blue-500/20 hover:scale-105 transition-all group">
 
                     <i class="fa-solid fa-robot text-slate-950 group-hover:rotate-12 transition-transform"></i>
@@ -109,22 +109,22 @@
                     TANYA AI
                 </button> --}}
 
-                {{-- Login --}}
-                <a href="{{ route('login') }}"
-                    class="px-5 py-2.5 bg-slate-900 border border-slate-800 text-white text-xs font-bold rounded-full hover:bg-slate-800 hover:text-blue-400 transition-all shadow-md inline-flex items-center gap-1.5">
+            {{-- Login --}}
+            <a href="{{ route('login') }}"
+                class="px-5 py-2.5 bg-slate-900 border border-slate-800 text-white text-xs font-bold rounded-full hover:bg-slate-800 hover:text-blue-400 transition-all shadow-md inline-flex items-center gap-1.5">
 
-                    LOGIN
+                LOGIN
 
-                    <i class="fa-solid fa-arrow-right text-blue-400 text-[11px]"></i>
-                </a>
-            </div>
+                <i class="fa-solid fa-arrow-right text-blue-400 text-[11px]"></i>
+            </a>
+        </div>
 
-            {{-- Mobile Button --}}
-            <button id="menuBtn"
-                class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all text-slate-900 hover:bg-slate-200">
+        {{-- Mobile Button --}}
+        <button id="menuBtn"
+            class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all text-slate-900 hover:bg-slate-200">
 
-                <i class="fa-solid fa-bars text-lg"></i>
-            </button>
+            <i class="fa-solid fa-bars text-lg"></i>
+        </button>
 
         </div>
 
@@ -554,10 +554,7 @@
                 <div class="flex items-center gap-3 mb-5">
                     @if (!empty($settings['logo']))
                         <img src="{{ asset('storage/settings/' . $settings['logo']) }}"
-                            class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
-                    @else
-                        <img src="{{ asset('images/tutwuri.png') }}"
-                            class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
+                            class="w-7 h-7 object-cover rounded-full">
                     @endif
 
                     <h2 class="font-extrabold text-sm tracking-tight uppercase">
@@ -720,7 +717,7 @@
 
                 <p>
                     &copy; {{ date('Y') }}
-                    {{ $settings['nama_website'] ?? ''}}.
+                    {{ $settings['nama_website'] ?? '' }}.
                     Seluruh Hak Cipta Dilindungi.
                 </p>
 

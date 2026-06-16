@@ -44,7 +44,7 @@
                 <div>
                     <label class="block font-semibold mb-1">Email</label>
                     <input type="email" name="email" value="{{ old('email', $settings->email ?? '') }}"
-                        placeholder="contoh: info@smpn1lambandia.sch.id"
+                        placeholder="contoh: info@smp.sch.id"
                         class="w-full border rounded-lg px-4 py-2 focus:ring focus:ring-primary-300">
                 </div>
                 <div>

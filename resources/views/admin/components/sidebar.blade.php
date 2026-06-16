@@ -91,7 +91,7 @@
                 <a href="{{ route('admin.settings.index') }}"
                     class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition {{ request()->routeIs('admin.settings.*') ? 'bg-slate-800' : '' }}">
                     <span><i class="fa-solid fa-cog"></i></span>
-                    <span>Pengaturan</span>
+                    <span>Pengaturan Website</span>
                 </a>
             @endrole
 
