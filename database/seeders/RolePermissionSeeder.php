@@ -18,6 +18,7 @@ class RolePermissionSeeder extends Seeder {
             'manage guru', 'manage prestasi', 'manage kontak',
             'manage banner',
             'manage berita', 'manage absensi', 'manage siswa',
+            'manage kelas', 'manage agenda', 'manage alumni',
         ];
 
         foreach ($permissions as $permission) {

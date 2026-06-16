@@ -27,7 +27,7 @@ class AuthenticatedSessionController extends Controller
         $request->authenticate();
         $request->session()->regenerate();
 
-        if (auth()->user()->hasRole('orang_tua')) {
+        if (auth()->user()->roles->contains('name', 'orang_tua')) {
             return redirect()->route('orangtua.dashboard');
         }
 

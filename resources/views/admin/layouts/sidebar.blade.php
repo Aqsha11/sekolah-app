@@ -33,6 +33,90 @@
                 <span>Prestasi</span>
             </a>
 
+            <a href="{{ route('admin.guru.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.guru.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-chalkboard-user"></i>
+                <span>Guru</span>
+            </a>
+
+            <a href="{{ route('admin.galeri.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.galeri.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-images"></i>
+                <span>Galeri</span>
+            </a>
+
+            <a href="{{ route('admin.fasilitas.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.fasilitas.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-building"></i>
+                <span>Fasilitas</span>
+            </a>
+
+            <a href="{{ route('admin.kontak.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.kontak.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-envelope"></i>
+                <span>Pesan Masuk</span>
+            </a>
+
+            <a href="{{ route('admin.banner.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.banner.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-images"></i>
+                <span>Banner</span>
+            </a>
+
+            <a href="{{ route('admin.siswa.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.siswa.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-user-graduate"></i>
+                <span>Siswa</span>
+            </a>
+
+            <a href="{{ route('admin.absensi.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.absensi.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-calendar-check"></i>
+                <span>Absensi</span>
+            </a>
+
+            <a href="{{ route('admin.orang_tua.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.orang_tua.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-people-arrows"></i>
+                <span>Orang Tua</span>
+            </a>
+
+            <a href="{{ route('admin.kelas.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.kelas.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-school"></i>
+                <span>Kelas</span>
+            </a>
+
+            <a href="{{ route('admin.agenda.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.agenda.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-calendar"></i>
+                <span>Agenda</span>
+            </a>
+
+            <a href="{{ route('admin.alumni.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.alumni.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-user-graduate"></i>
+                <span>Alumni</span>
+            </a>
+
+            <a href="{{ route('admin.settings.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
+                {{ request()->routeIs('admin.settings.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-gear"></i>
+                <span>Pengaturan</span>
+            </a>
+
             {{-- ======================
                 MENU KHUSUS GURU
             ======================= --}}
@@ -42,20 +126,6 @@
                         Menu Guru
                     </p>
                 </div>
-
-                <a href="{{ route('guru.mengajar') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
-                    {{ request()->routeIs('guru.mengajar') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
-                    <i class="fa-solid fa-chalkboard-user"></i>
-                    <span>Data Mengajar</span>
-                </a>
-
-                <a href="{{ route('guru.nilai') }}"
-                    class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
-                    {{ request()->routeIs('guru.nilai') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
-                    <i class="fa-solid fa-clipboard-list"></i>
-                    <span>Input Nilai</span>
-                </a>
             @endrole
 
 

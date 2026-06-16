@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Berita extends Model
@@ -11,9 +12,6 @@ class Berita extends Model
 
     protected $table = 'berita';
 
-    /**
-     * Kolom yang boleh diisi (berita/artikel)
-     */
     protected $fillable = [
         'title',
         'slug',
@@ -26,4 +24,9 @@ class Berita extends Model
         'views',
         'date',
     ];
+
+    public function author(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

@@ -9,10 +9,13 @@ return new class extends Migration
 {
     /**
      * Tambah opsi 'terlambat' ke kolom status di tabel absensis
+     * SQLite tidak support MODIFY COLUMN, tapi menggunakan TEXT tanpa constraint
      */
     public function up(): void
     {
-        DB::statement("ALTER TABLE absensis MODIFY COLUMN status ENUM('hadir','izin','sakit','alpha','terlambat') DEFAULT 'hadir'");
+        if (DB::connection()->getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE absensis MODIFY COLUMN status ENUM('hadir','izin','sakit','alpha','terlambat') DEFAULT 'hadir'");
+        }
     }
 
     /**
@@ -20,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        DB::statement("ALTER TABLE absensis MODIFY COLUMN status ENUM('hadir','izin','sakit','alpha') DEFAULT 'hadir'");
+        if (DB::connection()->getDriverName() !== 'sqlite') {
+            DB::statement("ALTER TABLE absensis MODIFY COLUMN status ENUM('hadir','izin','sakit','alpha') DEFAULT 'hadir'");
+        }
     }
 };

@@ -5,6 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use Spatie\Permission\Models\Role;
 
 return new class extends Migration
 {
@@ -21,6 +22,7 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Role::firstOrCreate(['name' => 'orang_tua', 'guard_name' => 'web']);
         $orangTuaUsers = User::role('orang_tua')->get();
         foreach ($orangTuaUsers as $user) {
             DB::table('orang_tua')->insert([

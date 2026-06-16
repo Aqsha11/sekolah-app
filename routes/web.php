@@ -19,6 +19,9 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\SiswaController;
 use App\Http\Controllers\Admin\AbsensiController;
+use App\Http\Controllers\Admin\KelasController;
+use App\Http\Controllers\Admin\AgendaController;
+use App\Http\Controllers\Admin\AlumniController;
 use App\Http\Controllers\Admin\OrangTuaController as AdminOrangTuaController;
 
 // ============ PUBLIC CONTROLLERS ============
@@ -40,6 +43,7 @@ use Illuminate\Support\Facades\Auth;
 |==========================================================================
 | Digunakan untuk logout paksa jika ada masalah session
 */
+
 Route::middleware('auth')->post('/force-logout', function () {
     Auth::logout();
     request()->session()->invalidate();
@@ -119,6 +123,18 @@ Route::prefix('admin')
 
         Route::middleware('permission:manage banner')->group(function () {
             Route::resource('banner', BannerController::class);      // CRUD Banner Hero
+        });
+
+        Route::middleware('permission:manage kelas')->group(function () {
+            Route::resource('kelas', KelasController::class);        // CRUD Kelas
+        });
+
+        Route::middleware('permission:manage agenda')->group(function () {
+            Route::resource('agenda', AgendaController::class);      // CRUD Agenda
+        });
+
+        Route::middleware('permission:manage alumni')->group(function () {
+            Route::resource('alumni', AlumniController::class);      // CRUD Alumni
         });
 
         /*
