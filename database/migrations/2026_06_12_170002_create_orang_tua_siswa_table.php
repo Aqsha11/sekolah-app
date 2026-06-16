@@ -20,7 +20,7 @@ return new class extends Migration
 
     /**
      * Hapus tabel orang_tua_siswa
-     */
+     */ 
     public function down(): void
     {
         Schema::dropIfExists('orang_tua_siswa');
