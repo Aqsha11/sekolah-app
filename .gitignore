@@ -1,0 +1,90 @@
+# ================================
+# File Log
+# ================================
+*.log
+
+# ================================
+# File Sistem Operasi
+# ================================
+.DS_Store
+Thumbs.db
+
+# ================================
+# File Environment / Konfigurasi Rahasia
+# ================================
+.env
+.env.backup
+.env.production
+
+# ================================
+# Folder & Konfigurasi Editor / IDE
+# ================================
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+
+# ================================
+# Cache & Konfigurasi PHP
+# ================================
+.phpactor.json
+.phpunit.result.cache
+/.phpunit.cache
+/auth.json
+
+# ================================
+# Dependency Project
+# ================================
+/node_modules
+/vendor
+
+# ================================
+# File Build Frontend (Vite)
+# ================================
+/public/build
+/public/hot
+
+# ================================
+# File Storage Laravel
+# ================================
+/public/storage
+/storage/*.key
+/storage/pail
+
+# Log Laravel
+/storage/logs/*
+
+# Cache, Session, dan View Laravel
+/storage/framework/cache/*
+/storage/framework/sessions/*
+/storage/framework/views/*
+
+# ================================
+# Laravel Debugbar
+# ================================
+/public/vendor
+
+# ================================
+# Hasil Testing / Coverage
+# ================================
+coverage/
+
+# ================================
+# File Sementara Vite
+# ================================
+vite.config.ts.timestamp-*
+
+# ================================
+# Log Package Manager
+# ================================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ================================
+# File Laravel Homestead
+# ================================
+Homestead.json
+Homestead.yaml

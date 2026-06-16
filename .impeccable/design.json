@@ -1,0 +1,230 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-06-15T00:00:00.000Z",
+  "title": "Design System: SMPN 1 Lambandia",
+  "extensions": {
+    "colorMeta": {
+      "prestige-gold": {
+        "role": "primary",
+        "displayName": "Prestige Gold",
+        "canonical": "oklch(79% 0.17 95)",
+        "tonalRamp": [
+          "oklch(25% 0.08 95)",
+          "oklch(35% 0.10 95)",
+          "oklch(45% 0.12 95)",
+          "oklch(55% 0.14 95)",
+          "oklch(65% 0.16 95)",
+          "oklch(72% 0.17 95)",
+          "oklch(79% 0.17 95)",
+          "oklch(90% 0.12 95)"
+        ]
+      },
+      "ink-slate": {
+        "role": "neutral",
+        "displayName": "Institutional Slate",
+        "canonical": "oklch(21% 0.03 265)",
+        "tonalRamp": [
+          "oklch(15% 0.02 265)",
+          "oklch(21% 0.03 265)",
+          "oklch(28% 0.03 265)",
+          "oklch(35% 0.03 265)",
+          "oklch(45% 0.03 265)",
+          "oklch(55% 0.02 265)",
+          "oklch(70% 0.02 265)",
+          "oklch(96% 0.005 265)"
+        ]
+      },
+      "surface-light": {
+        "role": "neutral",
+        "displayName": "Surface Light",
+        "canonical": "oklch(98% 0.005 265)",
+        "tonalRamp": [
+          "oklch(21% 0.03 265)",
+          "oklch(35% 0.03 265)",
+          "oklch(50% 0.02 265)",
+          "oklch(65% 0.015 265)",
+          "oklch(80% 0.01 265)",
+          "oklch(90% 0.008 265)",
+          "oklch(96% 0.005 265)",
+          "oklch(99% 0.003 265)"
+        ]
+      },
+      "admin-indigo": {
+        "role": "secondary",
+        "displayName": "Admin Indigo (Legacy)",
+        "canonical": "oklch(58% 0.22 275)",
+        "tonalRamp": [
+          "oklch(20% 0.10 275)",
+          "oklch(30% 0.14 275)",
+          "oklch(40% 0.18 275)",
+          "oklch(50% 0.20 275)",
+          "oklch(58% 0.22 275)",
+          "oklch(65% 0.18 275)",
+          "oklch(75% 0.12 275)",
+          "oklch(92% 0.05 275)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero banner dan judul halaman utama."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Judul section seperti Profil, Prestasi, Berita."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Paragraf deskriptif; maks 65–75ch."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Badge kategori uppercase; satu per section, bukan eyebrow berulang."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card-rest",
+        "value": "0 1px 3px rgba(0,0,0,0.08)",
+        "purpose": "Kartu default saat idle."
+      },
+      {
+        "name": "card-hover",
+        "value": "0 20px 40px rgba(0,0,0,0.08)",
+        "purpose": "Lift pada hover kartu statistik dan prestasi."
+      },
+      {
+        "name": "floating-gold",
+        "value": "0 10px 25px rgba(234,179,8,0.3)",
+        "purpose": "Tombol back-to-top dan CTA floating emas."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Transisi default hover dan state change."
+      },
+      {
+        "name": "duration-fast",
+        "value": "200ms",
+        "purpose": "Sidebar link dan micro-interaction admin."
+      },
+      {
+        "name": "duration-medium",
+        "value": "300ms",
+        "purpose": "Tombol, kartu hover, mobile menu."
+      }
+    ],
+    "breakpoints": [
+      { "name": "sm", "value": "640px" },
+      { "name": "md", "value": "768px" },
+      { "name": "lg", "value": "1024px" },
+      { "name": "xl", "value": "1280px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Tombol gelap institusional; hover ke emas prestasi.",
+      "html": "<button class=\"ds-btn-primary\">LOGIN</button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; justify-content: center; gap: 6px; background: #0f172a; color: #ffffff; padding: 10px 20px; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 700; border: 1px solid #1e293b; border-radius: 9999px; cursor: pointer; transition: background 0.3s, color 0.3s; } .ds-btn-primary:hover { background: #eab308; color: #0f172a; } .ds-btn-primary:focus-visible { outline: 2px solid #eab308; outline-offset: 2px; }"
+    },
+    {
+      "name": "Accent CTA Button",
+      "kind": "button",
+      "refersTo": "button-accent",
+      "description": "CTA emas untuk aksi utama section.",
+      "html": "<button class=\"ds-btn-accent\">LIHAT SEMUA</button>",
+      "css": ".ds-btn-accent { display: inline-flex; align-items: center; justify-content: center; background: #0f172a; color: #ffffff; padding: 12px 20px; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 800; border: none; border-radius: 16px; cursor: pointer; transition: background 0.3s, color 0.3s; } .ds-btn-accent:hover { background: #eab308; color: #0f172a; } .ds-btn-accent:focus-visible { outline: 2px solid #eab308; outline-offset: 2px; }"
+    },
+    {
+      "name": "Nav Pill Active",
+      "kind": "nav",
+      "refersTo": "nav-pill-active",
+      "description": "Item navigasi aktif dalam container gelap.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-pill ds-nav-pill-active\" href=\"#\">Beranda</a><a class=\"ds-nav-pill\" href=\"#\">Profil</a></nav>",
+      "css": ".ds-nav { display: inline-flex; gap: 6px; background: rgba(15,23,42,0.9); padding: 6px 8px; border-radius: 9999px; border: 1px solid rgba(51,65,85,0.5); } .ds-nav-pill { padding: 8px 16px; border-radius: 9999px; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 700; letter-spacing: 0.02em; text-decoration: none; color: #cbd5e1; transition: background 0.3s, color 0.3s; } .ds-nav-pill:hover { color: #ffffff; background: rgba(30,41,59,0.7); } .ds-nav-pill-active { background: #facc15; color: #0f172a; } .ds-nav-pill-active:hover { background: #facc15; color: #0f172a; }"
+    },
+    {
+      "name": "Prestasi Card",
+      "kind": "card",
+      "refersTo": "card-surface",
+      "description": "Kartu prestasi dengan sudut besar dan hover border emas.",
+      "html": "<article class=\"ds-card-prestasi\"><h3 class=\"ds-card-title\">Juara 1 Olimpiade</h3><p class=\"ds-card-body\">Tingkat kabupaten bidang matematika.</p></article>",
+      "css": ".ds-card-prestasi { background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 32px; padding: 24px; transition: border-color 0.3s, box-shadow 0.3s; } .ds-card-prestasi:hover { border-color: rgba(250,204,21,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.08); } .ds-card-title { font-family: Inter, system-ui, sans-serif; font-size: 18px; font-weight: 700; color: #0f172a; margin: 0 0 8px; } .ds-card-body { font-family: Inter, system-ui, sans-serif; font-size: 14px; color: #64748b; line-height: 1.6; margin: 0; }"
+    },
+    {
+      "name": "Section Badge",
+      "kind": "chip",
+      "description": "Satu badge kategori per section — bukan eyebrow berulang.",
+      "html": "<span class=\"ds-badge\">PRESTASI SEKOLAH</span>",
+      "css": ".ds-badge { display: inline-block; background: #fefce8; color: #ca8a04; padding: 4px 12px; font-family: Inter, system-ui, sans-serif; font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 9999px; }"
+    },
+    {
+      "name": "Form Input",
+      "kind": "input",
+      "description": "Input form standar; focus ring migrasi ke emas.",
+      "html": "<label class=\"ds-label\">Nama Lengkap</label><input class=\"ds-input\" type=\"text\" placeholder=\"Masukkan nama\">",
+      "css": ".ds-label { display: block; font-family: Inter, system-ui, sans-serif; font-size: 14px; font-weight: 500; color: #334155; margin-bottom: 8px; } .ds-input { width: 100%; padding: 8px 16px; font-family: Inter, system-ui, sans-serif; font-size: 16px; color: #0f172a; background: #ffffff; border: 1px solid #cbd5e1; border-radius: 12px; transition: border-color 0.2s, box-shadow 0.2s; } .ds-input:focus { outline: none; border-color: #eab308; box-shadow: 0 0 0 2px rgba(234,179,8,0.3); } .ds-input::placeholder { color: #64748b; }"
+    },
+    {
+      "name": "Stat Card",
+      "kind": "card",
+      "description": "Kartu statistik dashboard — target migrasi dari indigo ke emas.",
+      "html": "<div class=\"ds-stat-card\"><div class=\"ds-stat-icon\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><path d=\"M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2\"/><circle cx=\"9\" cy=\"7\" r=\"4\"/></svg></div><p class=\"ds-stat-value\">128</p><p class=\"ds-stat-label\">Total Users</p></div>",
+      "css": ".ds-stat-card { background: #ffffff; border: 1px solid #f1f5f9; border-radius: 16px; padding: 20px; transition: transform 0.2s, box-shadow 0.2s; } .ds-stat-card:hover { transform: translateY(-3px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); } .ds-stat-icon { width: 44px; height: 44px; border-radius: 12px; background: #fefce8; color: #ca8a04; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; } .ds-stat-value { font-family: Inter, system-ui, sans-serif; font-size: 24px; font-weight: 800; color: #0f172a; margin: 0 0 4px; } .ds-stat-label { font-family: Inter, system-ui, sans-serif; font-size: 12px; color: #64748b; margin: 0; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "Gedung Digital Berprestasi",
+    "overview": "Sistem visual ini mencerminkan sekolah menengah yang modern, unggul, dan berwawasan global — bukan playground digital. Identitas utama terlihat di website publik: emas prestasi sebagai aksen langka di atas fondasi slate gelap dan permukaan terang. Tujuannya menyatukan website publik, panel admin, portal orang tua, dan halaman login agar terasa satu institusi.",
+    "keyCharacteristics": [
+      "Aksen emas langka di permukaan gelap — prestise, bukan dekorasi berlebihan",
+      "Hierarki tipografi tebal untuk headline, body yang terbaca di mobile",
+      "Sudut membulat besar (16–32px) untuk kartu; pill untuk navigasi dan CTA",
+      "Kedalaman melalui shadow + hover lift, bukan border-stripe",
+      "Animasi purposeful — tidak playful"
+    ],
+    "rules": [
+      {
+        "name": "The One Gold Rule",
+        "body": "Emas prestasi adalah satu-satunya aksen interaktif. Jangan menambah indigo, biru tombol, atau hijau generik sebagai aksen kedua.",
+        "section": "colors"
+      },
+      {
+        "name": "The Unification Rule",
+        "body": "Panel admin, portal orang tua, dan login harus mengadopsi prestige-gold + ink-slate, bukan admin-indigo atau navy Bootstrap.",
+        "section": "colors"
+      },
+      {
+        "name": "The Prestige Weight Rule",
+        "body": "Heading memakai font-weight 700–800; body tetap 400. Jangan menurunkan heading ke 600 untuk elegan.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Permukaan datar saat idle. Shadow muncul sebagai respons hover atau elemen floating.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do gunakan emas prestasi (#eab308) sebagai satu-satunya aksen interaktif di semua permukaan.",
+      "Do pertahankan kontras teks body ≥4.5:1.",
+      "Do samakan font Inter di publik, admin, dan login saat melakukan unifikasi.",
+      "Do gunakan rounded-2xl untuk kartu konten dan rounded-full untuk navigasi/CTA pill.",
+      "Do tampilkan prestasi, fasilitas, dan data nyata sekolah sebagai bukti kepercayaan."
+    ],
+    "donts": [
+      "Don't buat tampilan terlalu playful, kartun, atau seperti website SD/TK.",
+      "Don't pakai dashboard SaaS generik yang terasa bukan institusi pendidikan.",
+      "Don't pisahkan website publik dan admin seolah dua produk berbeda.",
+      "Don't tambahkan eyebrow/kicker uppercase di setiap section, gradient text, glassmorphism dekoratif, atau border-left berwarna.",
+      "Don't pertahankan palet indigo admin sebagai warna primer jangka panjang.",
+      "Don't gunakan animasi berlebihan atau efek yang mengganggu."
+    ]
+  }
+}
