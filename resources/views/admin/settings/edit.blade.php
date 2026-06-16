@@ -192,7 +192,7 @@
             {{-- =========================
     SLIDER HOMEPAGE
 ========================= --}}
-            <div class="border-t pt-6">
+            {{-- <div class="border-t pt-6">
 
                 <h2 class="text-lg font-bold mb-4">
                     Slider Homepage
@@ -253,7 +253,7 @@
 
                 </div>
 
-            </div>
+            </div> --}}
 
             {{-- =========================
 SOSIAL MEDIA

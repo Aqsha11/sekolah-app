@@ -31,7 +31,7 @@
             $favicon = $settings['favicon'] ?? null;
             $profilImage = $settings['profil_image'] ?? null;
             $heroImage = $settings['hero_image'] ?? null;
-            $sliderImage = $settings['slider_image'] ?? null;
+            // $sliderImage = $settings['slider_image'] ?? null;
         @endphp
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -242,7 +242,7 @@
 
                 </div>
 
-                <div class="border rounded-xl p-4 text-center">
+                {{-- <div class="border rounded-xl p-4 text-center">
 
                     <h3 class="font-medium mb-3">
                         Slider
@@ -257,7 +257,7 @@
                         </p>
                     @endif
 
-                </div>
+                </div> --}}
 
             </div>
 
