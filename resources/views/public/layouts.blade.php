@@ -62,46 +62,46 @@
                         @endif
 
                     </div>
+                </div>
+
+                <div>
+                    <a href="/" id="brandText"
+                        class="text-base font-extrabold tracking-tight text-slate-900 leading-none transition-colors duration-300">
+
+                        {{ $settings['nama_website'] ?? '' }}
+
+                    </a>
+
+                    @if (!empty($settings['tagline']))
+                        <p class="text-[11px] text-slate-500">
+                            {{ $settings['tagline'] }}
+                        </p>
+                    @endif
+                </div>
             </div>
 
-            <div>
-                <a href="/" id="brandText"
-                    class="text-base font-extrabold tracking-tight text-slate-900 leading-none transition-colors duration-300">
+            {{-- Desktop Navigation --}}
+            <nav
+                class="hidden lg:flex items-center gap-1.5 bg-slate-900/90 py-1.5 px-2 rounded-full border border-slate-700/50 shadow-inner backdrop-blur-md">
 
-                    {{ $settings['nama_website'] ?? '' }}
-
-                </a>
-
-                @if (!empty($settings['tagline']))
-                    <p class="text-[11px] text-slate-500">
-                        {{ $settings['tagline'] }}
-                    </p>
-                @endif
-            </div>
-        </div>
-
-        {{-- Desktop Navigation --}}
-        <nav
-            class="hidden lg:flex items-center gap-1.5 bg-slate-900/90 py-1.5 px-2 rounded-full border border-slate-700/50 shadow-inner backdrop-blur-md">
-
-            @foreach ($nav as $url => $label)
-                <a href="{{ url($url) }}"
-                    class="px-4 py-2 rounded-full text-xs font-bold tracking-wide transition-all duration-300
+                @foreach ($nav as $url => $label)
+                    <a href="{{ url($url) }}"
+                        class="px-4 py-2 rounded-full text-xs font-bold tracking-wide transition-all duration-300
                     {{ request()->is($url) || (request()->path() === '/' && $url === '/')
                         ? 'bg-blue-400 text-slate-950 shadow-md'
                         : 'text-slate-300 hover:text-white hover:bg-slate-800/70' }}">
 
-                    {{ strtoupper($label) }}
-                </a>
-            @endforeach
+                        {{ strtoupper($label) }}
+                    </a>
+                @endforeach
 
-        </nav>
+            </nav>
 
-        {{-- Right Action --}}
-        <div class="hidden lg:flex items-center gap-3">
+            {{-- Right Action --}}
+            <div class="hidden lg:flex items-center gap-3">
 
-            {{-- AI Button --}}
-            {{-- <button
+                {{-- AI Button --}}
+                {{-- <button
                     class="flex items-center gap-1.5 px-4 py-2.5 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-500 text-slate-950 text-xs font-black rounded-full shadow-lg shadow-blue-500/20 hover:scale-105 transition-all group">
 
                     <i class="fa-solid fa-robot text-slate-950 group-hover:rotate-12 transition-transform"></i>
@@ -109,22 +109,22 @@
                     TANYA AI
                 </button> --}}
 
-            {{-- Login --}}
-            <a href="{{ route('login') }}"
-                class="px-5 py-2.5 bg-slate-900 border border-slate-800 text-white text-xs font-bold rounded-full hover:bg-slate-800 hover:text-blue-400 transition-all shadow-md inline-flex items-center gap-1.5">
+                {{-- Login --}}
+                <a href="{{ route('login') }}"
+                    class="px-5 py-2.5 bg-slate-900 border border-slate-800 text-white text-xs font-bold rounded-full hover:bg-slate-800 hover:text-blue-400 transition-all shadow-md inline-flex items-center gap-1.5">
 
-                LOGIN
+                    LOGIN
 
-                <i class="fa-solid fa-arrow-right text-blue-400 text-[11px]"></i>
-            </a>
-        </div>
+                    <i class="fa-solid fa-arrow-right text-blue-400 text-[11px]"></i>
+                </a>
+            </div>
 
-        {{-- Mobile Button --}}
-        <button id="menuBtn"
-            class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all text-slate-900 hover:bg-slate-200">
+            {{-- Mobile Button --}}
+            <button id="menuBtn"
+                class="lg:hidden w-10 h-10 rounded-full flex items-center justify-center transition-all text-slate-900 hover:bg-slate-200">
 
-            <i class="fa-solid fa-bars text-lg"></i>
-        </button>
+                <i class="fa-solid fa-bars text-lg"></i>
+            </button>
 
         </div>
 
@@ -259,21 +259,35 @@
             }
         });
 
-        const menuBtn = document.getElementById('menuBtn');
-        const closeMenu = document.getElementById('closeMenu');
-        const mobileMenu = document.getElementById('mobileMenu');
+        const menuButton = document.getElementById('menuBtn');
+        const closeButton = document.getElementById('closeMenu');
+        const mobileNavigation = document.getElementById('mobileMenu');
 
-        menuBtn.addEventListener('click', () => {
 
-            mobileMenu.style.maxHeight =
-                mobileMenu.style.maxHeight && mobileMenu.style.maxHeight !== '0px' ?
-                '0' :
-                mobileMenu.scrollHeight + 'px';
-        });
+        if (menuButton && mobileNavigation) {
 
-        closeMenu.addEventListener('click', () => {
-            mobileMenu.style.maxHeight = '0';
-        });
+            menuButton.addEventListener('click', () => {
+
+                mobileNavigation.style.maxHeight =
+                    mobileNavigation.style.maxHeight &&
+                    mobileNavigation.style.maxHeight !== '0px' ?
+                    '0px' :
+                    mobileNavigation.scrollHeight + 'px';
+
+            });
+
+        }
+
+
+        if (closeButton && mobileNavigation) {
+
+            closeButton.addEventListener('click', () => {
+
+                mobileNavigation.style.maxHeight = '0px';
+
+            });
+
+        }
     </script>
 
     <style>
@@ -754,18 +768,50 @@
 
 
     <script>
-        const menuBtn = document.getElementById('menuBtn');
-        const mobileMenu = document.getElementById('mobileMenu');
-        menuBtn.addEventListener('click', () => {
-            const isOpen = mobileMenu.classList.contains('open');
-            if (isOpen) {
-                mobileMenu.style.maxHeight = '0';
-                mobileMenu.classList.remove('open');
-            } else {
-                mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
-                mobileMenu.classList.add('open');
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const menuBtn = document.getElementById('menuBtn');
+            const closeMenu = document.getElementById('closeMenu');
+            const mobileMenu = document.getElementById('mobileMenu');
+
+            if (menuBtn && mobileMenu) {
+
+                menuBtn.addEventListener('click', function() {
+
+                    const isOpen = mobileMenu.classList.contains('open');
+
+                    if (isOpen) {
+
+                        mobileMenu.style.maxHeight = '0px';
+                        mobileMenu.classList.remove('open');
+
+                    } else {
+
+                        mobileMenu.style.maxHeight =
+                            mobileMenu.scrollHeight + 'px';
+
+                        mobileMenu.classList.add('open');
+
+                    }
+
+                });
+
             }
-            menuBtn.classList.toggle('open');
+
+
+            if (closeMenu && mobileMenu) {
+
+                closeMenu.addEventListener('click', function() {
+
+                    mobileMenu.style.maxHeight = '0px';
+
+                    mobileMenu.classList.remove('open');
+
+                });
+
+            }
+
+
         });
     </script>
 
