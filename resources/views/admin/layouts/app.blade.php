@@ -530,7 +530,13 @@
             {{-- Logo --}}
             <a href="{{ route('admin.dashboard') }}"
                 class="flex items-center gap-3 px-10 py-4 mt-2 mx-2 rounded-lg text-white text-lg font-bold">
-                <img src="{{ asset('images/tutwuri.png') }}" class="w-10 h-10 rounded-full">
+                @if (!empty($settings['logo']))
+                    <img src="{{ asset('storage/settings/' . $settings['logo']) }}"
+                        class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
+                @else
+                    <img src="{{ asset('images/tutwuri.png') }}"
+                        class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
+                @endif
                 <span>SMPN 1 Jakarta</span>
             </a>
 

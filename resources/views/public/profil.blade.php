@@ -5,7 +5,7 @@
 @section('content')
 
 @php
-    $schoolName = $settings['site_name'] ?? 'SMPN 1 Lambandia';
+    $schoolName = $settings['nama_website'] ?? 'SMPN 1 Lambandia';
 
     $heroImg = !empty($settings['hero_image'])
         ? asset('storage/settings/' . $settings['hero_image'])

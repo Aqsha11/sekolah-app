@@ -5,7 +5,7 @@
 @section('content')
 
 @php
-    $schoolName = $settings['site_name'] ?? 'Sekolah';
+    $schoolName = $settings['nama_website'] ?? 'Sekolah';
 @endphp
 
 <style>

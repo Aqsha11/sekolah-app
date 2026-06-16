@@ -90,6 +90,18 @@ Route::prefix('admin')
         Route::get('/dashboard', [DashboardController::class, 'index'])
             ->name('dashboard');
 
+        Route::prefix('admin')
+            ->middleware(['auth'])
+            ->name('admin.')
+            ->group(function () {
+
+                Route::get('/tentang', [App\Http\Controllers\Admin\TentangController::class, 'index'])
+                    ->name('tentang.index');
+
+                Route::put('/tentang', [App\Http\Controllers\Admin\TentangController::class, 'update'])
+                    ->name('tentang.update');
+            });
+
         /*
         |--------------------------
         | CONTENT MANAGEMENT — dibatasi permission masing-masing

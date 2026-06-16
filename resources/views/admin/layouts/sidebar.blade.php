@@ -110,11 +110,18 @@
                 <span>Alumni</span>
             </a>
 
+            {{-- <a href="{{ route('admin.tentang.index') }}"
+                class="flex items-center gap-3 px-4 py-3 rounded-xl transition
+                {{ request()->routeIs('admin.tentang.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
+                <i class="fa-solid fa-globe"></i>
+                <span>Tentang Website</span>
+            </a> --}}
+
             <a href="{{ route('admin.settings.index') }}"
                 class="flex items-center gap-3 px-4 py-3 rounded-xl transition 
                 {{ request()->routeIs('admin.settings.*') ? 'bg-slate-800' : 'hover:bg-slate-800' }}">
                 <i class="fa-solid fa-gear"></i>
-                <span>Pengaturan</span>
+                <span>Pengaturan Website</span>
             </a>
 
             {{-- ======================

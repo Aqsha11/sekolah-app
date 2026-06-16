@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ $settings['tagline'] ?? 'Website Resmi Sekolah' }}">
     <title>@yield('title', 'SMPN 1 Lambandia')</title>
 
     {{-- Tailwind --}}
@@ -16,7 +17,7 @@
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
 
     @php
-        $settings = \App\Models\Setting::pluck('value', 'key');
+        $settings = \App\Models\Setting::pluck('value', 'key')->toArray();
         $nav = [
             '/' => 'Beranda',
             'profil' => 'Profil',
@@ -28,6 +29,12 @@
             'kontak' => 'Kontak',
         ];
     @endphp
+
+    @if (!empty($settings['favicon']))
+        <link rel="icon" type="image/png" href="{{ asset('storage/settings/' . $settings['favicon']) }}">
+    @endif
+
+
 </head>
 
 <body class="bg-slate-50 text-slate-900">
@@ -47,7 +54,12 @@
                     <div
                         class="relative w-11 h-11 bg-slate-900 rounded-full flex items-center justify-center border border-white/20 overflow-hidden ring-2 ring-blue-400/20">
 
-                        <img src="{{ asset('images/tutwuri.png') }}" class="w-7 h-7 object-cover rounded-full">
+                        @if (!empty($settings['logo']))
+                            <img src="{{ asset('storage/settings/' . $settings['logo']) }}"
+                                class="w-7 h-7 object-cover rounded-full">
+                        @else
+                            <img src="{{ asset('images/tutwuri.png') }}" class="w-7 h-7 object-cover rounded-full">
+                        @endif
                     </div>
                 </div>
 
@@ -55,12 +67,15 @@
                     <a href="/" id="brandText"
                         class="text-base font-extrabold tracking-tight text-slate-900 leading-none transition-colors duration-300">
 
-                        {{ $settings['site_name'] ?? 'SMPN 1 Lambandia' }}
+                        {{ $settings['nama_website'] ?? 'SMPN 1 Lambandia' }}
+
                     </a>
 
-                    {{-- <span class="text-[10px] font-bold uppercase tracking-wider text-blue-500">
-                        Modern Digital School
-                    </span> --}}
+                    @if (!empty($settings['tagline']))
+                        <p class="text-[11px] text-slate-500">
+                            {{ $settings['tagline'] }}
+                        </p>
+                    @endif
                 </div>
             </div>
 
@@ -536,11 +551,16 @@
             {{-- Column 1 : School Identity --}}
             <div>
                 <div class="flex items-center gap-3 mb-5">
-                    <img src="{{ asset('images/tutwuri.png') }}"
-                        class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
+                    @if (!empty($settings['logo']))
+                        <img src="{{ asset('storage/settings/' . $settings['logo']) }}"
+                            class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
+                    @else
+                        <img src="{{ asset('images/tutwuri.png') }}"
+                            class="w-11 h-11 rounded-full ring-2 ring-blue-500/30 object-cover">
+                    @endif
 
                     <h2 class="font-extrabold text-sm tracking-tight uppercase">
-                        {{ $settings['site_name'] ?? 'SMPN 1 Lambandia' }}
+                        {{ $settings['nama_website'] ?? 'SMPN 1 Lambandia' }}
                     </h2>
                 </div>
 
@@ -555,7 +575,7 @@
                     </div>
 
                     <div class="text-[11px] text-slate-300 font-bold leading-relaxed">
-                        Terakreditasi A 
+                        Terakreditasi A
                     </div>
                 </div>
             </div>
@@ -646,25 +666,26 @@
                     kegiatan siswa, dan dokumentasi sekolah.
                 </p>
 
-                <div class="flex gap-3">
+                @php
+                    $socials = json_decode($settings['social_media'] ?? '[]', true);
+                @endphp
 
-                    <a href="{{ $settings['facebook'] ?? '#' }}" target="_blank"
-                        class="w-10 h-10 bg-slate-900 hover:bg-blue-400 border border-white/5 text-slate-400 hover:text-slate-950 flex items-center justify-center rounded-xl transition-all duration-300 hover:scale-110">
+                <div class="flex gap-3 flex-wrap">
 
-                        <i class="fa-brands fa-facebook-f text-sm"></i>
-                    </a>
+                    @if (!empty($socials))
+                        @foreach ($socials as $social)
+                            <a href="{{ $social['url'] ?? '#' }}" target="_blank" rel="noopener noreferrer"
+                                class="w-10 h-10 bg-slate-900 hover:bg-blue-400 border border-white/5 text-slate-400 hover:text-slate-950 flex items-center justify-center rounded-xl transition-all">
 
-                    <a href="{{ $settings['instagram'] ?? '#' }}" target="_blank"
-                        class="w-10 h-10 bg-slate-900 hover:bg-blue-400 border border-white/5 text-slate-400 hover:text-slate-950 flex items-center justify-center rounded-xl transition-all duration-300 hover:scale-110">
+                                <i class="{{ $social['icon'] }}"></i>
 
-                        <i class="fa-brands fa-instagram text-sm"></i>
-                    </a>
-
-                    <a href="{{ $settings['youtube'] ?? '#' }}" target="_blank"
-                        class="w-10 h-10 bg-slate-900 hover:bg-blue-400 border border-white/5 text-slate-400 hover:text-slate-950 flex items-center justify-center rounded-xl transition-all duration-300 hover:scale-110">
-
-                        <i class="fa-brands fa-youtube text-sm"></i>
-                    </a>
+                            </a>
+                        @endforeach
+                    @else
+                        <span class="text-xs text-slate-500">
+                            Belum ada sosial media yang ditambahkan.
+                        </span>
+                    @endif
 
                 </div>
 
@@ -675,14 +696,16 @@
                         POWERED BY
                     </span>
 
-                    <a href="https://viteks.id" target="_blank"
+                    <a href="https://viteks.id" target="_blank" rel="noopener noreferrer"
                         class="text-xs text-cyan-400 hover:text-cyan-300 font-bold mt-1 inline-flex items-center gap-1.5 grayscale hover:grayscale-0 transition-all">
 
                         <img src="https://viteks.id/storage/site/J5MNxOhayYQO9ENI3oFOxy0fQd50ll84bFpyFshl.png"
                             class="h-4 w-auto inline-block bg-white rounded-md p-0.5" alt="VITEKS">
 
                         VITEKS
+
                     </a>
+
                 </div>
             </div>
 
@@ -696,7 +719,7 @@
 
                 <p>
                     &copy; {{ date('Y') }}
-                    {{ $settings['site_name'] ?? 'SMPN 1 Lambandia' }}.
+                    {{ $settings['nama_website'] ?? 'SMPN 1 Lambandia' }}.
                     Seluruh Hak Cipta Dilindungi.
                 </p>
 
@@ -717,6 +740,13 @@
                     <a href="/kontak" class="hover:text-white transition-colors">
                         Kontak
                     </a>
+
+                    @if (!empty($settings['jam_operasional']))
+                        <div class="flex items-center gap-3 text-slate-400 text-xs">
+                            <i class="fa-solid fa-clock text-blue-400"></i>
+                            <span>{{ $settings['jam_operasional'] }}</span>
+                        </div>
+                    @endif
 
                 </div>
             </div>
