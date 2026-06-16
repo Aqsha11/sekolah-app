@@ -14,10 +14,10 @@ class CreateAdminUserSeeder extends Seeder
      */
     public function run()
     {
-        // 🔥 RESET CACHE SPATIE PERMISSION (wajib!)
+        //  RESET CACHE SPATIE PERMISSION (wajib!)
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
-        // 🔥 BUAT ROLE JIKA BELUM ADA
+        //  BUAT ROLE JIKA BELUM ADA
         $superAdminRole = Role::firstOrCreate([
             'name' => 'super_admin',
             'guard_name' => 'web'
@@ -33,7 +33,7 @@ class CreateAdminUserSeeder extends Seeder
             'guard_name' => 'web'
         ]);
 
-        // 🔥 ADMIN USER (email: admin@sekolah.test / password: password)
+        //  ADMIN USER (email: admin@sekolah.test / password: password)
         $admin = User::firstOrCreate(
             ['email' => 'admin@sekolah.test'],
             [
@@ -44,7 +44,7 @@ class CreateAdminUserSeeder extends Seeder
         );
         $admin->syncRoles(['super_admin']);
 
-        // 🔥 OPERATOR USER (email: operator@sekolah.test / password: password)
+        //  OPERATOR USER (email: operator@sekolah.test / password: password)
         $operator = User::firstOrCreate(
             ['email' => 'operator@sekolah.test'],
             [
