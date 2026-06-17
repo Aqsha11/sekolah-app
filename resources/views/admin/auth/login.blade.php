@@ -7,311 +7,247 @@
     @php
         $settings = \App\Models\Setting::pluck('value', 'key');
     @endphp
-    <title>
-        Login - {{ $settings['nama_website'] ?? '' }}
-    </title>
+    <title>Login - {{ $settings['nama_website'] ?? 'Sekolah' }}</title>
     @if (!empty($settings['favicon']))
         <link rel="icon" href="{{ asset('storage/settings/' . $settings['favicon']) }}">
     @endif
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&display=swap"
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
         rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter']
+                    },
+                },
+            },
+        }
+    </script>
+
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            height: 100vh;
-            margin: 0;
-            display: flex;
-        }
-
-        .login-left {
-            flex: 1;
-            background: linear-gradient(160deg, #0f172a 0%, #1e293b 55%, #334155 100%);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        .login-left::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: url('{{ asset('images/bg-school.jpg') }}') center/cover no-repeat;
-            opacity: .18;
-        }
-
-        .login-left-content {
-            position: relative;
-            text-align: center;
-            color: #fff;
-            padding: 40px;
-        }
-
-        .school-logo {
-            width: 90px;
-            height: 90px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, .15);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 20px;
-            border: 2px solid rgba(255, 255, 255, .3);
-            font-size: 36px;
-            font-weight: 800;
-            color: #0d6cf083;
-        }
-
-        .school-name {
-            font-size: 28px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .school-tagline {
-            font-size: 13px;
-            opacity: .75;
-            line-height: 1.6;
-            max-width: 280px;
-            margin: 0 auto;
-        }
-
-        .login-right {
-            width: 420px;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 48px 40px;
-        }
-
-        .login-greeting {
-            font-size: 22px;
-            font-weight: 700;
-            color: #0f172a;
-            margin-bottom: 6px;
-        }
-
-        .login-sub {
-            font-size: 13px;
-            color: #6b7c9d;
-            margin-bottom: 32px;
-        }
-
-        .form-label {
-            font-size: 13px;
-            font-weight: 600;
-            color: #0f172a;
-        }
-
-        .form-control {
-            border-radius: 8px;
-            border: 1.5px solid #dde3f0;
-            padding: 10px 14px;
-            font-size: 13px;
-            transition: border-color .2s;
-        }
-
-        .form-control:focus {
-            border-color: #0d6cf083;
-            box-shadow: 0 0 0 3px rgba(13, 108, 240, 0.18);
-        }
-
-        .input-group .input-group-text {
-            border-radius: 0 8px 8px 0;
-            border: 1.5px solid #dde3f0;
-            border-left: none;
-            background: #fff;
-            cursor: pointer;
-            color: #6b7c9d;
-        }
-
-        .input-group .input-group-text:hover {
-            color: #0d6cf083;
-        }
-
-        .input-group .form-control {
-            border-radius: 8px 0 0 8px;
-        }
-
-        .btn-login {
-            width: 100%;
-            background: #0f172a;
-            color: #0d6cf0;
-            border: none;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all .2s;
-            margin-top: 8px;
-        }
-
-        .btn-login:hover {
-            background: #0d6cf083;
-            color: #0f172a;
-        }
-
-        .form-check-label {
-            font-size: 13px;
-            color: #6b7c9d;
-        }
-
-        .link-forgot {
-            font-size: 13px;
-            color: #0d6cf083;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .login-footer {
-            font-size: 11px;
-            color: #b0b9cc;
-            margin-top: 32px;
-        }
-
-        .alert {
-            font-size: 13px;
-            border-radius: 8px;
-        }
-
-        @media (max-width: 768px) {
-            body {
-                flex-direction: column;
-                height: auto;
-                min-height: 100vh;
-            }
-
-            .login-left {
-                flex: none;
-                padding: 40px 20px;
-                min-height: 220px;
-            }
-
-            .login-left-content {
-                padding: 0;
-            }
-
-            .school-name {
-                font-size: 22px;
-            }
-
-            .school-logo {
-                width: 70px;
-                height: 70px;
-                font-size: 28px;
-            }
-
-            .login-right {
-                width: 100%;
-                padding: 32px 24px;
-            }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
     </style>
 </head>
 
-<body>
-    <div class="login-left">
-        <div class="login-left-content">
-            <div class="school-logo overflow-hidden">
-                @if (!empty($settings['logo']))
-                    <img src="{{ asset('storage/settings/' . $settings['logo']) }}"
-                        alt="{{ $settings['nama_website'] ?? 'Logo Sekolah' }}"
-                        class="w-100 h-100 object-fit-cover rounded-circle">
-                @else
-                    <i class="fa-solid fa-school"></i>
-                @endif
-            </div>
-            <div class="school-name">
-                {{ $settings['nama_website'] ?? '' }}
-            </div>
-            <p class="tagline">
-                {{ $settings['tagline'] ?? '' }}
-            </p>
+<body class="min-h-screen flex flex-col lg:flex-row bg-white font-sans antialiased select-none">
 
+    {{-- LEFT: BRANDING --}}
+    <div
+        class="hidden lg:flex w-1/2 bg-slate-950 text-white flex-col justify-between p-12 relative overflow-hidden border-r border-slate-900">
+        {{-- Top Logo --}}
+        <div class="flex items-center gap-3 relative z-10">
+            @if (!empty($settings['logo']))
+                <img src="{{ asset('storage/settings/' . $settings['logo']) }}" alt="Logo Sekolah"
+                    class="w-10 h-10 rounded object-contain">
+            @else
+                <div class="w-8 h-8 rounded bg-blue-600 flex items-center justify-center text-white">
+                    <span class="material-symbols-outlined text-lg">school</span>
+                </div>
+            @endif
+            <div>
+                <h1 class="font-bold text-xs tracking-tight text-white leading-none">
+                    {{ $settings['site_name'] ?? ($settings['nama_website'] ?? '') }}</h1>
+                <span class="text-[9px] text-slate-500 font-bold block mt-1 uppercase"></span>
+            </div>
+        </div>
+
+        {{-- Center Slogan --}}
+        <div class="my-auto space-y-6 max-w-md relative z-10">
+            {{-- <span class="inline-flex items-center gap-1.5 bg-blue-500/20 text-blue-300 font-extrabold text-[9px] py-1.5 px-3 rounded-full uppercase tracking-widest border border-blue-500/10">
+                <span class="material-symbols-outlined text-sm animate-pulse">auto_awesome</span>
+                DIGITAL SCHOOL PILOT
+            </span> --}}
+            <h2 class="text-3xl font-extrabold tracking-tight text-white leading-tight">
+                Mari Mewujudkan <span class="text-blue-400">Pendidikan Digital Modern</span> Berbasis Integritas.
+            </h2>
+            <p class="text-xs text-slate-300 leading-relaxed font-normal">
+                Sistem informasi akademik terpadu yang memfasilitasi administrasi kesiswaan terlengkap, monitoring
+                absensi RFID real-time, serta transparansi pelaporan bagi orang tua murid.
+            </p>
+        </div>
+
+        {{-- Footer --}}
+        <div class="text-[10px] text-slate-500 font-semibold uppercase tracking-wider relative z-10 text-center">
+            &copy; {{ date('Y') }} {{ $settings['nama_website'] ?? '' }}. Hak Cipta Dilindungi Undang-Undang.
+            <br>
+            Powered by
+            <a href="https://viteks.id" target="_blank" class="text-slate-600 hover:text-primary-600 hover:underline">
+                Viteks
+            </a>
         </div>
     </div>
 
-    <div class="login-right">
-        <div style="width:100%">
-            <div class="login-greeting">Selamat Datang 👋</div>
-            <div class="login-sub">Silakan masuk untuk mengakses dashboard admin.</div>
+    {{-- RIGHT: LOGIN FORM --}}
+    <div class="flex-1 flex flex-col justify-center items-center py-12 px-6 sm:px-12 bg-slate-50/50">
+        <div
+            class="w-full max-w-md space-y-8 bg-white p-8 rounded-xl border border-slate-200/80 shadow-md shadow-slate-100">
 
+            {{-- Header --}}
+            <div class="space-y-3 text-center lg:text-left">
+                <div
+                    class="w-11 h-11 rounded-2xl bg-blue-50 text-blue-600 flex lg:hidden items-center justify-center mx-auto shadow-md">
+                    @if (!empty($settings['logo']))
+                        <img src="{{ asset('storage/settings/' . $settings['logo']) }}" alt="Logo Sekolah"
+                            class="w-7 h-7 object-contain">
+                    @else
+                        <span class="material-symbols-outlined text-2xl">school</span>
+                    @endif
+                </div>
+                <h3 class="text-2xl font-black text-slate-900 tracking-tight leading-none">Sign In ke Portal</h3>
+                <p class="text-xs text-slate-500">Silakan pilih portal dan masukkan akun Anda.</p>
+            </div>
+
+            {{-- Role Tabs --}}
+            <div class="grid grid-cols-2 p-1 bg-slate-100 rounded-lg" x-data="{ role: 'admin' }">
+                <button type="button"
+                    @click="role = 'admin'; document.getElementById('email').value = 'admin@sekolah.test'; document.getElementById('password').value = 'password'"
+                    :class="role === 'admin' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'"
+                    class="py-2 rounded-md text-xs font-semibold transition cursor-pointer">
+                    <span class="material-symbols-outlined text-sm align-middle mr-1">group</span>
+                    Staff / Admin
+                </button>
+                <button type="button"
+                    @click="role = 'orang_tua'; document.getElementById('email').value = 'budi.ortu@sekolah.test'; document.getElementById('password').value = 'password'"
+                    :class="role === 'orang_tua' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-700'"
+                    class="py-2 rounded-md text-xs font-semibold transition cursor-pointer">
+                    <span class="material-symbols-outlined text-sm align-middle mr-1">badge</span>
+                    Orang Tua / Wali
+                </button>
+            </div>
+
+            {{-- Error & Status Messages --}}
             @if ($errors->any())
-                <div class="alert alert-bg-red-600 mb-3">
-                    <i class="fa-solid fa-circle-exclamation me-2"></i>
+                <div
+                    class="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-xs font-medium flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm text-red-500">error</span>
                     {{ $errors->first() }}
                 </div>
             @endif
 
             @if (session('status'))
-                <div class="alert alert-success mb-3">
-                    <i class="fa-solid fa-check-circle me-2"></i>
+                <div
+                    class="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg text-xs font-medium flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm text-emerald-500">check_circle</span>
                     {{ session('status') }}
                 </div>
             @endif
 
-            <form action="{{ route('login') }}" method="POST">
+            {{-- Form --}}
+            <form action="{{ route('login') }}" method="POST" class="space-y-5">
                 @csrf
-                <div class="mb-3">
-                    <label class="form-label">Email</label>
-                    <input type="email" name="email" class="form-control" placeholder="Masukkan email"
-                        value="{{ old('email') }}" required>
-                </div>
 
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <div class="input-group">
-                        <input type="password" name="password" id="passwordInput" class="form-control"
-                            placeholder="Masukkan password" required>
-                        <span class="input-group-text" onclick="togglePass()">
-                            <i class="fa-solid fa-eye" id="eyeIcon"></i>
+                {{-- Email --}}
+                <div class="space-y-1.5 text-left">
+                    <label for="email"
+                        class="block text-[10px] font-bold text-slate-700 tracking-wide uppercase">Email Portal
+                        Akademis</label>
+                    <div class="relative rounded-xl">
+                        <span
+                            class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
+                            <span class="material-symbols-outlined text-base">mail</span>
                         </span>
+                        <input type="email" name="email" id="email"
+                            value="{{ old('email', 'admin@sekolah.test') }}" placeholder="name@sekolah.sch.id"
+                            class="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl outline-none font-semibold text-xs transition-all"
+                            required autofocus autocomplete="username">
                     </div>
                 </div>
 
-                <button type="submit" class="btn-login">
-                    <i class="fa-solid fa-arrow-right-to-bracket me-2"></i>Masuk
+                {{-- Password --}}
+                <div class="space-y-1.5 text-left">
+                    <label for="password"
+                        class="block text-[10px] font-bold text-slate-700 tracking-wide uppercase">Password
+                        Keamanan</label>
+                    <div class="relative rounded-xl">
+                        <span
+                            class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
+                            <span class="material-symbols-outlined text-base">lock</span>
+                        </span>
+                        <input type="password" name="password" id="password" value="password"
+                            placeholder="Masukkan password..."
+                            class="w-full pl-9 pr-12 py-2.5 bg-white border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl outline-none font-semibold text-xs transition-all"
+                            required autocomplete="current-password">
+                        <button type="button" onclick="togglePass()"
+                            class="absolute inset-y-0 right-0 pr-3.5 flex items-center text-slate-400 hover:text-slate-700 transition cursor-pointer">
+                            <span class="material-symbols-outlined text-base" id="passIcon">visibility</span>
+                        </button>
+                    </div>
+                </div>
+
+                {{-- Remember Me + SSL --}}
+                <div class="flex items-center justify-between select-none font-semibold text-slate-500 py-1">
+                    <label class="flex items-center gap-2.5 cursor-pointer">
+                        <input type="checkbox" name="remember" checked
+                            class="rounded border-slate-300 text-blue-600 focus:ring-blue-500">
+                        <span class="text-xs">Ingat Sesi Masuk Saya</span>
+                    </label>
+                    <span class="inline-flex items-center gap-1 text-[10px] text-emerald-600">
+                        <span class="material-symbols-outlined text-sm">verified_user</span>
+                        SSL Aman
+                    </span>
+                </div>
+
+                {{-- Submit --}}
+                <button type="submit" id="loginBtn"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs py-3 rounded-lg transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 shadow-sm">
+                    <span id="btnText">Masuk Ke Portal Staff / Admin</span>
+                    <span class="material-symbols-outlined text-base">arrow_forward</span>
                 </button>
             </form>
-
-            <div class="login-footer text-center">
-                &copy; {{ date('Y') }}
-                {{ $settings['nama_website'] ?? '' }}
-
-                <br>
-
-                Powered by
-                <a href="https://viteks.id" target="_blank"
-                    style="color:#0dcaf0; font-weight:700; text-decoration:none;">
-
-                    <img src="https://viteks.id/storage/site/J5MNxOhayYQO9ENI3oFOxy0fQd50ll84bFpyFshl.png"
-                        style="height:11px; width:auto; display:inline-block; vertical-align:middle;" alt="VITEKS">
-
-                    VITEKS
-
-                </a>
-            </div>
         </div>
+
+        {{-- Footer Mobile --}}
+        <p class="text-[10px] text-slate-400 mt-8 lg:hidden text-center">
+            &copy; {{ date('Y') }} {{ $settings['nama_website'] ?? '' }}
+            <br>
+            Powered by
+            <a href="https://viteks.id/" class="font-semibold text-primary-600 hover:underline">
+                Viteks
+            </a>
+        </p>
     </div>
 
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <script>
         function togglePass() {
-            const inp = document.getElementById('passwordInput');
-            const icon = document.getElementById('eyeIcon');
+            const inp = document.getElementById('password');
+            const icon = document.getElementById('passIcon');
             if (inp.type === 'password') {
                 inp.type = 'text';
-                icon.className = 'fa-solid fa-eye-slash';
+                icon.textContent = 'visibility_off';
             } else {
                 inp.type = 'password';
-                icon.className = 'fa-solid fa-eye';
+                icon.textContent = 'visibility';
             }
         }
+
+        // Update button text based on role selection
+        document.addEventListener('alpine:init', () => {
+            Alpine.effect(() => {
+                const role = Alpine.store('role');
+            });
+        });
+    </script>
+    <script>
+        // Keep button text synced with role (using Alpine's x-data)
+        document.addEventListener('click', function(e) {
+            const btn = document.getElementById('loginBtn');
+            const btnText = document.getElementById('btnText');
+            const email = document.getElementById('email').value;
+            if (email.includes('ortu')) {
+                btnText.textContent = 'Masuk Ke Portal Orang Tua';
+            } else {
+                btnText.textContent = 'Masuk Ke Portal Staff / Admin';
+            }
+        });
     </script>
 </body>
 

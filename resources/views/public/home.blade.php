@@ -6,684 +6,824 @@
 
     @php
         use Illuminate\Support\Str;
-
         $schoolName = $settings['nama_website'] ?? '';
         $heroTitle = $settings['hero_title'] ?? $schoolName;
-        $heroDesc =
-            $settings['hero_description'] ??
-            'Mewujudkan generasi berkarakter, disiplin, unggul, dan berwawasan global.';
-        $heroImg = !empty($settings['hero_image'])
-            ? asset('storage/settings/' . $settings['hero_image'])
-            : asset('images/sekolah.jpg');
+        $heroDesc = $settings['hero_description'] ?? 'Mewujudkan generasi berkarakter, disiplin, unggul, dan berwawasan global.';
+        $heroImg = !empty($settings['hero_image']) ? asset('storage/settings/' . $settings['hero_image']) : null;
 
-        $profileTitle = 'Profil Sekolah';
-        $profileDesc =
-            $settings['profil_sekolah'] ?? '';
-        $profileImg = !empty($settings['profil_image'])
-            ? asset('storage/settings/' . $settings['profil_image'])
-            : asset('images/sekolah.jpg');
+        $slides = [];
+        $bgClasses = [
+            'bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900',
+            'bg-gradient-to-r from-emerald-950 via-emerald-900 to-slate-900',
+            'bg-gradient-to-r from-indigo-950 via-indigo-900 to-slate-900',
+        ];
+        if ($banners->isNotEmpty()) {
+            foreach ($banners as $i => $banner) {
+                $slides[] = [
+                    'title' => $banner->title,
+                    'description' => $banner->subtitle ?? '',
+                    'accent' => $banner->link ? 'Info Terkini' : 'Pendidikan Digital',
+                    'bg' => $bgClasses[$i % 3],
+                    'image' => $banner->image ? asset('storage/' . $banner->image) : null,
+                    'link' => $banner->link ? url($banner->link) : null,
+                ];
+            }
+        } else {
+            $slides = [
+                ['title' => 'Membentuk Generasi Unggul Berkarakter Pancasila', 'description' => $settings['hero_description'] ?? 'Sekolah berkomitmen menyediakan ekosistem pendidikan terbaik.', 'accent' => 'Unggul & Berintegritas', 'bg' => $bgClasses[0], 'image' => null, 'link' => null],
+                ['title' => 'Prestasi Akademik & Non-Akademik', 'description' => 'Kami mendidik siswa berinovasi dan berkompetisi di kancah global.', 'accent' => 'Inovator Masa Depan', 'bg' => $bgClasses[1], 'image' => null, 'link' => null],
+                ['title' => 'Fasilitas Belajar Digital & Laboratorium Canggih', 'description' => 'Sistem sekolah pintar dengan absensi digital RFID dan kelas multimedia.', 'accent' => 'Teknologi Smart School', 'bg' => $bgClasses[2], 'image' => null, 'link' => null],
+            ];
+        }
     @endphp
 
-    {{-- ============ HERO BANNER ============ --}}
-    <section id="bannerSlider" class="relative min-h-[85vh] flex items-center justify-center overflow-hidden">
-
-        @forelse($banners as $index => $banner)
+    {{-- ============ HERO CAROUSEL ============ --}}
+    <section class="relative min-h-[460px] sm:min-h-[580px] flex items-center overflow-hidden"
+        x-data="heroCarousel({{ json_encode($slides) }})" x-init="init()">
+        <template x-for="(slide, idx) in slides" :key="idx">
             <div
-                class="banner-slide absolute inset-0 {{ $index === 0 ? 'opacity-100' : 'opacity-0' }} transition-opacity duration-1000 ease-in-out">
-                <img src="{{ asset('storage/' . $banner->image) }}"
-                    class="absolute inset-0 w-full h-full object-cover scale-105 banner-bg">
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/70 to-slate-900/40"></div>
-
-                <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-                    <div class="flex flex-col items-center justify-center min-h-[85vh] py-20">
-                        <div class="space-y-6">
-                            <span
-                                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 backdrop-blur-sm text-white text-sm font-semibold border border-white/10">
-                                <i class="fa-solid fa-school"></i>
-                                {{ $schoolName }}
-                            </span>
-                            <h1
-                                class="text-4xl sm:text-5xl md:text-7xl text-white font-bold leading-tight tracking-tight drop-shadow-lg">
-                                {{ $banner->title }}
-                            </h1>
-                            @if ($banner->subtitle)
-                                <p class="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-                                    {{ $banner->subtitle }}
-                                </p>
-                            @endif
-                        </div>
-                        @if ($banner->link)
-                            <div class="pt-8">
-                                <a href="{{ $banner->link }}"
-                                    class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-8 py-3.5 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-                                    Selengkapnya
-                                    <i class="fa-solid fa-arrow-right text-sm"></i>
-                                </a>
-                            </div>
-                        @endif
-                    </div>
+                class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
+                :class="idx === current ? 'opacity-100 z-10' : 'opacity-0 z-0'">
+                <div class="absolute inset-0" :class="slide.bg">
+                    <img x-show="slide.image" :src="slide.image" class="w-full h-full object-cover">
                 </div>
-            </div>
-        @empty
-            <img src="{{ $heroImg }}" class="absolute inset-0 w-full h-full object-cover scale-105 banner-bg">
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/70 to-slate-900/40"></div>
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-transparent"></div>
 
-            <div class="relative z-10 max-w-5xl mx-auto px-4 text-center">
-                <div class="flex flex-col items-center justify-center min-h-[85vh] py-20">
-                    <div class="space-y-6">
-                        <span
-                            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/20 backdrop-blur-sm text-white text-sm font-semibold border border-white/10">
-                            <i class="fa-solid fa-school"></i>
-                            {{ $schoolName }}
+                <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 h-full items-center relative z-20 pt-24 pb-20">
+                    <div class="lg:col-span-8 space-y-6">
+                        <span class="inline-flex items-center gap-1.5 bg-blue-500/20 border border-blue-500/30 text-blue-300 font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest"
+                            x-text="slide.accent">
                         </span>
-                        <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold leading-tight tracking-tight drop-shadow-lg">
-                            {{ $settings['slider_title'] ?? $heroTitle }}
-                        </h1>
-                        <p class="text-base sm:text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-                            {{ $settings['slider_description'] ?? $heroDesc }}
+                        <h2 class="text-xl sm:text-3xl md:text-5xl font-extrabold tracking-tight leading-tight md:leading-none text-white max-w-2xl"
+                            x-text="slide.title">
+                        </h2>
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl"
+                            x-text="slide.description">
                         </p>
-                    </div>
-                    <div class="flex flex-col sm:flex-row justify-center gap-4 pt-8">
-                        <a href="/profil"
-                            class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-8 py-3.5 rounded-xl font-semibold transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5">
-                            <i class="fa-solid fa-newspaper"></i>
-                            Tentang Kami
-                        </a>
-                        <a href="/kontak"
-                            class="inline-flex items-center gap-2 border border-white/30 hover:border-white text-white/90 hover:text-white px-8 py-3.5 rounded-xl font-semibold transition-all bg-white/5 hover:bg-white/10 backdrop-blur-sm">
-                            <i class="fa-solid fa-phone"></i>
-                            Kontak Kami
-                        </a>
+                        <div class="flex items-center gap-3 pt-4">
+                            <a x-show="slide.link" :href="slide.link"
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/15 flex items-center gap-2 transition hover:scale-105">
+                                Pelajari Selengkapnya
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </a>
+                        </div>
                     </div>
                 </div>
             </div>
-        @endforelse
+        </template>
 
-        @if ($banners->count() > 1)
-            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-3">
-                @foreach ($banners as $index => $banner)
-                    <button onclick="goToSlide({{ $index }})"
-                        class="w-2.5 h-2.5 rounded-full transition-all duration-300 banner-dot {{ $index === 0 ? 'bg-blue-500 w-6' : 'bg-white/40 hover:bg-white/70' }}"></button>
-                @endforeach
+        {{-- Carousel controls --}}
+        <div class="absolute bottom-6 left-0 right-0 z-30 max-w-7xl mx-auto px-6 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <template x-for="(_, dotIdx) in slides" :key="dotIdx">
+                    <button
+                        class="transition-all duration-300 h-2 rounded-full cursor-pointer"
+                        :class="dotIdx === current ? 'w-8 bg-blue-500' : 'w-2 bg-slate-600'"
+                        @click="goTo(dotIdx)">
+                    </button>
+                </template>
             </div>
-        @endif
+            <div class="flex gap-2">
+                <button @click="prev()"
+                    class="w-9 h-9 rounded-lg bg-slate-900/60 hover:bg-slate-900 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">chevron_left</span>
+                </button>
+                <button @click="next()"
+                    class="w-9 h-9 rounded-lg bg-slate-900/60 hover:bg-slate-900 text-slate-400 hover:text-white flex items-center justify-center transition cursor-pointer">
+                    <span class="material-symbols-outlined text-sm">chevron_right</span>
+                </button>
+            </div>
+        </div>
     </section>
 
-    {{-- ============ STATISTIK ============ --}}
-    <section class="max-w-7xl mx-auto px-4 md:px-6 -mt-14 relative z-20 pb-16">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-
+    {{-- ============ STATISTICS ============ --}}
+    <section class="bg-slate-50 border-y border-slate-200 py-10 relative z-20">
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-6">
             @php
-                $statColors = [
-                    'Fasilitas' => ['bg' => 'bg-blue-500', 'icon' => 'fa-building'],
-                    'Guru' => ['bg' => 'bg-emerald-500', 'icon' => 'fa-chalkboard-user'],
-                    'Berita' => ['bg' => 'bg-amber-500', 'icon' => 'fa-newspaper'],
-                    'Prestasi' => ['bg' => 'bg-purple-500', 'icon' => 'fa-trophy'],
+                $statIcons = [
+                    'Fasilitas' => 'business',
+                    'Guru' => 'group',
+                    'Berita' => 'newspaper',
+                    'Prestasi' => 'military_tech',
                 ];
             @endphp
-
-            @forelse($statistics ?? [] as $stat)
-                @php $colors = $statColors[$stat->label] ?? ['bg' => 'bg-slate-500', 'icon' => 'fa-chart-bar']; @endphp
-
-                <div data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}"
-                    class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg hover:shadow-xl transition-all p-6 text-center group border border-white/50">
-
-                    <div
-                        class="w-14 h-14 mx-auto rounded-xl {{ $colors['bg'] }} flex items-center justify-center mb-4 group-hover:scale-110 transition-transform text-white text-2xl shadow-lg">
-                        <i class="fa-solid {{ $colors['icon'] }}"></i>
+            @forelse ($statistics ?? [] as $stat)
+                    <div data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}"
+                        class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex items-center sm:items-start gap-3 sm:gap-4 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                        <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                            <span class="material-symbols-outlined text-lg sm:text-xl">{{ $statIcons[$stat->label] ?? 'bar_chart' }}</span>
+                        </div>
+                        <div class="min-w-0">
+                            <h4 class="text-base sm:text-lg font-extrabold text-slate-900 leading-none truncate">{{ $stat->value }}</h4>
+                            <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase mt-1 tracking-wide leading-none truncate">{{ $stat->label }}</p>
+                        </div>
                     </div>
-
-                    <h3 class="text-xs text-slate-500 font-semibold uppercase tracking-wider">{{ $stat->label }}</h3>
-                    <p class="text-3xl font-extrabold text-slate-900 mt-1 group-hover:text-blue-500 transition-colors">
-                        {{ $stat->value }}</p>
-
-                </div>
             @empty
-                <div class="col-span-4 text-center text-slate-400 py-8 bg-white/60 backdrop-blur-sm rounded-2xl">
-                    <i class="fa-solid fa-chart-bar text-4xl mb-3 opacity-30"></i>
-                    <p>Data statistik belum tersedia</p>
-                </div>
+                <div class="col-span-4 text-center py-8 text-slate-400 text-xs">Data statistik belum tersedia</div>
             @endforelse
+        </div>
+    </section>
 
+    {{-- ============ SAMBUTAN KEPSEK ============ --}}
+    <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center">
+        <div class="lg:col-span-5 relative" data-aos="fade-right">
+            <div class="absolute -top-4 -left-4 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-45 -z-10"></div>
+            @if (!empty($settings['hero_image']))
+                <img src="{{ asset('storage/settings/' . $settings['hero_image']) }}"
+                    alt="Kepala Sekolah"
+                    class="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl border border-slate-100">
+            @else
+                <div class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-slate-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-6xl text-blue-300">person</span>
+                </div>
+            @endif
+            @if (!empty($settings['kepala_sekolah']))
+                <div class="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur text-white px-4 py-2.5 rounded-xl border border-slate-700">
+                    <span class="text-[9px] font-bold uppercase text-blue-400 tracking-wider">Kepala Sekolah</span>
+                    <h5 class="text-xs font-black">{{ $settings['kepala_sekolah'] }}</h5>
+                </div>
+            @endif
+        </div>
+
+        <div class="lg:col-span-7 space-y-6" data-aos="fade-left">
+            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                Sambutan Kepala Sekolah
+            </span>
+            <h3 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">
+                Selamat Datang di {{ $settings['nama_website'] ?? 'Portal Sekolah' }}
+            </h3>
+            <div class="text-xs text-slate-600 leading-relaxed space-y-4">
+                <p>{{ $settings['sambutan_kepsek'] ?? 'Assalamu\'alaikum Warahmatullahi Wabarakatuh. Selamat datang di portal resmi sekolah kami.' }}</p>
+                @if (!empty($settings['visi']))
+                    <p class="font-semibold text-slate-700">Visi: {{ $settings['visi'] }}</p>
+                @endif
+            </div>
+            <div class="flex flex-wrap gap-3 pt-2">
+                <a href="/profil"
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-3 rounded-xl transition shadow">
+                    Lihat Visi Misi Sekolah
+                </a>
+                {{-- <a href="/kontak"
+                    class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs px-5 py-3 rounded-xl transition">
+                    Hubungi Tata Usaha
+                </a> --}}
+            </div>
+        </div>
+    </section>
+
+    {{-- ============ QUICK PORTALS ============ --}}
+    <section class="py-14 sm:py-20 bg-slate-50 border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center space-y-3 max-w-xl mx-auto mb-14">
+                <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                    Navigasi Cepat
+                </span>
+                <h3 class="text-2xl font-black text-slate-900 tracking-tight">Jelajahi Portal Layanan</h3>
+                <p class="text-xs text-slate-500">Dapatkan akses instan ke seluruh informasi penting sekolah.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <a href="/profil"
+                    class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300 text-left">
+                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-xl">school</span>
+                    </div>
+                    <h4 class="font-extrabold text-xs text-slate-900 uppercase">Profil & Sejarah</h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed mt-2">Telusuri perjalanan sekolah serta visi kurikulum kami.</p>
+                </a>
+
+                <a href="/prestasi"
+                    class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300 text-left">
+                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-xl">trophy</span>
+                    </div>
+                    <h4 class="font-extrabold text-xs text-slate-900 uppercase">Prestasi Akademik</h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed mt-2">Melihat torehan prestasi di berbagai bidang.</p>
+                </a>
+
+                <a href="/data-guru"
+                    class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300 text-left">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-xl">group</span>
+                    </div>
+                    <h4 class="font-extrabold text-xs text-slate-900 uppercase">Staf Pengajar</h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed mt-2">Kenali dewan guru profesional kami.</p>
+                </a>
+
+                <a href="/kontak"
+                    class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300 text-left">
+                    <div class="w-10 h-10 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mb-4">
+                        <span class="material-symbols-outlined text-xl">forum</span>
+                    </div>
+                    <h4 class="font-extrabold text-xs text-slate-900 uppercase">Kotak Masukan</h4>
+                    <p class="text-[11px] text-slate-500 leading-relaxed mt-2">Sampaikan saran, aspirasi, dan pengaduan.</p>
+                </a>
+            </div>
         </div>
     </section>
 
     {{-- ============ PROFIL ============ --}}
-    <section class="max-w-7xl mx-auto px-4 md:px-6 pb-20">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-
-            <div data-aos="fade-right" class="relative">
-                <div class="absolute -inset-4 bg-gradient-to-br from-blue-500/20 to-transparent rounded-3xl blur-xl"></div>
-                <img src="{{ $profileImg }}" class="relative rounded-2xl shadow-xl w-full h-80 md:h-96 object-cover">
+    <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+        <div data-aos="fade-right" class="space-y-6">
+            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                Tentang Sekolah
+            </span>
+            <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight leading-normal">
+                Mengabdi Demi Mencerdaskan Kehidupan Bangsa
+            </h3>
+            <p class="text-xs text-slate-600 leading-relaxed">
+                {{ $settings['profil_sekolah'] ?? $settings['tentang_sekolah'] ?? 'Deskripsi sekolah belum tersedia.' }}
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+                <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 text-xs">
+                        <span class="material-symbols-outlined text-sm">check</span>
+                    </div>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-800">Kurikulum Global</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">Interkoneksi materi dan ujian terstandar.</p>
+                    </div>
+                </div>
+                <div class="flex items-start gap-2.5">
+                    <div class="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 text-xs">
+                        <span class="material-symbols-outlined text-sm">check</span>
+                    </div>
+                    <div>
+                        <h5 class="text-xs font-bold text-slate-800">Ekstrakurikuler Aktif</h5>
+                        <p class="text-[11px] text-slate-500 mt-1">Membina bakat minat robotik dan atletik.</p>
+                    </div>
+                </div>
             </div>
+            <a href="/profil"
+                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold text-xs transition shadow-md">
+                Selengkapnya
+                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+            </a>
+        </div>
 
-            <div data-aos="fade-left" class="space-y-6">
-
-                <span
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold">
-                    <i class="fa-solid fa-school"></i>
-                    Profil Sekolah
-                </span>
-
-                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 leading-tight">{{ $profileTitle }}</h2>
-
-                <p class="text-slate-600 text-lg leading-relaxed">{{ $profileDesc }}</p>
-
-                <a href="/profil"
-                    class="inline-flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg">
-                    Selengkapnya
-                    <i class="fa-solid fa-arrow-right text-sm"></i>
-                </a>
-
-            </div>
+        <div class="relative" data-aos="fade-left">
+            <div class="absolute -top-4 -left-4 w-72 h-72 bg-blue-200 rounded-full blur-3xl opacity-40 -z-10"></div>
+            @if (!empty($settings['profil_image']))
+                <img src="{{ asset('storage/settings/' . $settings['profil_image']) }}"
+                    alt="Profil Sekolah"
+                    class="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl border border-slate-100">
+            @else
+                <div class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-slate-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-6xl text-blue-300">school</span>
+                </div>
+            @endif
 
         </div>
     </section>
 
     {{-- ============ PRESTASI ============ --}}
-    <section class="py-20 bg-white relative overflow-hidden">
+    <section class="py-14 sm:py-20 bg-slate-50 border-y border-slate-200"
+        x-data="{ filter: 'Semua' }">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-12" data-aos="fade-up">
+                <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                    Galeri Prestasi
+                </span>
+                <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight mt-3">Ukiran Prestasi</h3>
+                <p class="text-xs text-slate-500 mt-2">Daftar torehan membanggakan yang diraih siswa-siswi di berbagai bidang.</p>
 
-        <div class="absolute top-0 left-0 w-72 h-72 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="absolute bottom-0 right-0 w-72 h-72 bg-purple-500/5 rounded-full blur-[100px] pointer-events-none">
-        </div>
-
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12" data-aos="fade-up">
-
-                <div>
-                    <span
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-600 text-sm font-semibold">
-                        <i class="fa-solid fa-trophy"></i>
-                        PRESTASI SEKOLAH
-                    </span>
-
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-4">Prestasi Siswa</h2>
-
-                    <p class="text-slate-500 mt-2 max-w-2xl">
-                        Berbagai pencapaian dan penghargaan yang berhasil diraih oleh siswa maupun sekolah dalam bidang
-                        akademik dan non akademik.
-                    </p>
+                <div class="flex gap-2.5 overflow-x-auto pb-1 justify-center mt-6">
+                    @php
+                        $categories = ['Semua'];
+                        foreach ($recentPrestasi as $p) {
+                            if ($p->category && !in_array($p->category, $categories)) {
+                                $categories[] = $p->category;
+                            }
+                        }
+                    @endphp
+                    @foreach ($categories as $cat)
+                        <button @click="filter = '{{ $cat }}'"
+                            class="px-4 py-2 text-xs font-bold rounded-xl border transition-all shrink-0 cursor-pointer"
+                            :class="filter === '{{ $cat }}'
+                                ? 'bg-blue-600 text-white border-transparent shadow'
+                                : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-200'">
+                            {{ $cat }}
+                        </button>
+                    @endforeach
                 </div>
-
-                <a href="{{ route('prestasi') }}"
-                    class="mt-5 md:mt-0 inline-flex items-center gap-2 bg-slate-900 hover:bg-purple-500 text-white px-6 py-3 rounded-xl font-semibold transition-all">
-                    LIHAT SEMUA
-                    <i class="fa-solid fa-arrow-right text-sm"></i>
-                </a>
-
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-
-                @forelse($recentPrestasi as $index => $prestasi)
-                    <div data-aos="fade-up" data-aos-delay="{{ ($index % 3) * 100 }}"
-                        class="group bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 hover:border-purple-300 hover:shadow-xl transition-all duration-300">
-
-                        <div class="relative h-48 overflow-hidden bg-slate-100">
-                            @if ($prestasi->image)
-                                <img src="{{ asset('storage/prestasi/' . $prestasi->image) }}"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <i class="fa-solid fa-trophy text-5xl text-slate-300"></i>
-                                </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                @forelse ($recentPrestasi as $prestasi)
+                    <div x-show="filter === 'Semua' || filter === '{{ $prestasi->category }}'"
+                        x-transition:enter="transition ease-out duration-300"
+                        data-aos="fade-up"
+                        class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                        <div class="flex items-center justify-between">
+                            <span class="text-[10px] bg-blue-50 text-blue-600 font-extrabold uppercase px-2.5 py-1 rounded-full">
+                                {{ $prestasi->category ?? 'Prestasi' }}
+                            </span>
+                            @if ($prestasi->year)
+                                <span class="text-[10px] font-semibold text-slate-400">{{ $prestasi->year }}</span>
                             @endif
-                            <div class="absolute top-3 left-3">
-                                <span
-                                    class="px-3 py-1 bg-purple-500 text-white text-xs font-semibold rounded-full shadow">PRESTASI</span>
-                            </div>
                         </div>
-
-                        <div class="p-6">
-                            <h3
-                                class="text-lg font-bold text-slate-900 mb-2 group-hover:text-purple-600 transition line-clamp-2">
-                                {{ $prestasi->title }}
-                            </h3>
-                            <p class="text-sm text-slate-500 leading-relaxed line-clamp-3">
-                                {{ Str::limit(strip_tags($prestasi->description), 120) }}
-                            </p>
-                            <a href="{{ route('prestasi.show', $prestasi->id) }}"
-                                class="inline-flex items-center gap-1 mt-4 text-purple-600 hover:text-purple-500 font-semibold text-sm transition">
-                                Baca Selengkapnya <i class="fa-solid fa-arrow-right text-xs"></i>
-                            </a>
-                        </div>
-
+                        <h4 class="font-extrabold text-sm text-slate-900 mt-4 leading-snug">{{ $prestasi->title }}</h4>
+                        @if ($prestasi->description)
+                            <p class="text-[11px] text-slate-500 leading-relaxed mt-2.5">{{ Str::limit(strip_tags($prestasi->description), 100) }}</p>
+                        @endif
+                        @if ($prestasi->level)
+                            <span class="inline-block mt-3 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">{{ $prestasi->level }}</span>
+                        @endif
                     </div>
                 @empty
-                    <div class="col-span-3 text-center py-12">
-                        <i class="fa-solid fa-trophy text-5xl text-slate-300 mb-3"></i>
-                        <p class="text-slate-400">Belum ada data prestasi tersedia</p>
-                    </div>
+                    <div class="col-span-4 text-center py-12 text-slate-400 text-xs">Belum ada data prestasi.</div>
                 @endforelse
-
             </div>
 
+            @if ($recentPrestasi->count() > 0)
+                <div class="text-center mt-10">
+                    <a href="/prestasi"
+                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs transition">
+                        Lihat Semua Prestasi
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                </div>
+            @endif
         </div>
-
     </section>
 
     {{-- ============ BERITA ============ --}}
-    <section class="py-20 bg-slate-50 relative overflow-hidden">
-
-        <div class="absolute top-0 left-0 w-72 h-72 bg-amber-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="absolute bottom-0 right-0 w-72 h-72 bg-amber-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12" data-aos="fade-up">
-
-                <div>
-                    <span
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-100 text-amber-600 text-sm font-semibold">
-                        <i class="fa-solid fa-newspaper"></i>
-                        INFORMASI SEKOLAH
-                    </span>
-
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-4">Berita & Kegiatan</h2>
-
-                    <p class="text-slate-500 mt-2 max-w-2xl">
-                        Informasi terbaru seputar kegiatan, pengumuman, dan perkembangan sekolah.
-                    </p>
-                </div>
-
-                <a href="{{ route('berita.index') }}"
-                    class="mt-5 md:mt-0 inline-flex items-center gap-2 bg-slate-900 hover:bg-amber-500 text-white px-6 py-3 rounded-xl font-semibold transition-all">
-                    LIHAT SEMUA
-                    <i class="fa-solid fa-arrow-right text-sm"></i>
-                </a>
-
-            </div>
-
-            <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6">
-
-                @forelse($recentNews as $index => $news)
-                    <article data-aos="fade-up" data-aos-delay="{{ $index * 100 }}"
-                        class="bg-white rounded-2xl shadow-md hover:shadow-xl transition-all overflow-hidden group">
-
-                        <div class="relative h-44 overflow-hidden bg-slate-200">
-                            @if ($news->image)
-                                <img src="{{ asset('storage/berita/' . $news->image) }}"
-                                    class="w-full h-full object-cover group-hover:scale-110 transition duration-500">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center bg-slate-300">
-                                    <i class="fa-solid fa-newspaper text-4xl text-white/40"></i>
-                                </div>
-                            @endif
-                        </div>
-
-                        <div class="p-5">
-                            <span class="text-xs text-slate-400 font-medium">
-                                {{ \Carbon\Carbon::parse($news->created_at)->translatedFormat('d F Y') }}
-                            </span>
-                            <h3 class="font-bold text-slate-900 mt-1 line-clamp-2 group-hover:text-amber-600 transition">
-                                {{ $news->title }}
-                            </h3>
-                            <p class="text-sm text-slate-600 mt-2 line-clamp-2 leading-relaxed">
-                                {{ Str::limit(strip_tags($news->content), 80) }}
-                            </p>
-                            <a href="{{ route('berita.show', $news->slug) }}"
-                                class="inline-flex items-center gap-1 mt-3 text-amber-600 hover:text-amber-500 font-semibold text-sm transition">
-                                Baca Selengkapnya <i class="fa-solid fa-arrow-right text-xs"></i>
-                            </a>
-                        </div>
-
-                    </article>
-                @empty
-                    <div class="col-span-3 text-center py-12">
-                        <i class="fa-solid fa-newspaper text-5xl text-slate-300 mb-3"></i>
-                        <p class="text-slate-400">Belum ada berita tersedia</p>
-                    </div>
-                @endforelse
-
-            </div>
-
+    <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6"
+        x-data="{ selectedNews: null }">
+        <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
+            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                Berita Sekolah
+            </span>
+            <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Menyajikan Kabar Hangat & Terpercaya</h3>
+            <p class="text-xs text-slate-500">Liputan kegiatan, pengumuman akademik, dan aktivitas sosial sekolah.</p>
         </div>
 
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            @forelse ($recentNews as $news)
+                <article @click="selectedNews = {{ $news->id }}"
+                    class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col group"
+                    data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
+                    <div class="h-48 relative overflow-hidden bg-slate-100">
+                        @if ($news->image)
+                            <img src="{{ asset('storage/berita/' . $news->image) }}"
+                                alt="{{ $news->title }}"
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-slate-300">
+                                <span class="material-symbols-outlined text-5xl">newspaper</span>
+                            </div>
+                        @endif
+                        @if ($news->category)
+                            <span class="absolute top-4 left-4 bg-blue-600 text-white text-[9px] font-extrabold uppercase py-1 px-3 rounded-full shadow">
+                                {{ $news->category }}
+                            </span>
+                        @endif
+                    </div>
+                    <div class="p-6 space-y-3 flex flex-col flex-1">
+                        <div>
+                            <div class="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
+                                <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                <span>{{ \Carbon\Carbon::parse($news->created_at)->translatedFormat('d F Y') }}</span>
+                            </div>
+                            <h4 class="font-extrabold text-sm text-slate-900 tracking-tight group-hover:text-blue-600 transition leading-snug">
+                                {{ $news->title }}
+                            </h4>
+                            <p class="text-[11px] text-slate-500 leading-normal mt-2 line-clamp-3">
+                                {{ Str::limit(strip_tags($news->content), 120) }}
+                            </p>
+                        </div>
+                        <div class="pt-4 border-t border-slate-100 mt-auto">
+                            <span class="text-[11px] font-bold text-blue-600 group-hover:text-blue-800 transition flex items-center gap-1">
+                                Baca Selengkapnya
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </span>
+                        </div>
+                    </div>
+                </article>
+            @empty
+                <div class="col-span-3 text-center py-12 text-slate-400 text-xs">Belum ada berita tersedia.</div>
+            @endforelse
+        </div>
+
+        @if ($recentNews->count() > 0)
+            <div class="text-center mt-12">
+                <a href="/berita"
+                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs transition">
+                    Lihat Semua Berita
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+        @endif
+
+        {{-- Berita Detail Modal --}}
+        <template x-teleport="body">
+            <div x-show="selectedNews !== null"
+                class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
+                x-cloak
+                @click="selectedNews = null">
+                <div @click.stop
+                    class="bg-white rounded-3xl max-w-2xl w-full my-8 overflow-hidden shadow-2xl border border-slate-100 text-left">
+                    @foreach ($recentNews as $news)
+                        <div x-show="selectedNews === {{ $news->id }}" x-cloak>
+                            <div class="h-56 sm:h-72 relative bg-slate-100">
+                                @if ($news->image)
+                                    <img src="{{ asset('storage/berita/' . $news->image) }}"
+                                        alt="{{ $news->title }}"
+                                        class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full flex items-center justify-center text-slate-300">
+                                        <span class="material-symbols-outlined text-6xl">newspaper</span>
+                                    </div>
+                                @endif
+                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+                                <button @click="selectedNews = null"
+                                    class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center transition cursor-pointer">
+                                    <span class="material-symbols-outlined">close</span>
+                                </button>
+                                @if ($news->category)
+                                    <span class="absolute bottom-6 left-6 bg-blue-600 text-white text-[10px] font-extrabold uppercase py-1.5 px-4 rounded-full shadow">
+                                        {{ $news->category }}
+                                    </span>
+                                @endif
+                            </div>
+                            <div class="p-6 sm:p-8 space-y-4 overflow-y-auto max-h-[50vh]">
+                                <div>
+                                    <div class="flex items-center gap-3 text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3">
+                                        <span class="flex items-center gap-1">
+                                            <span class="material-symbols-outlined text-sm">calendar_month</span>
+                                            {{ \Carbon\Carbon::parse($news->created_at)->translatedFormat('d F Y') }}
+                                        </span>
+                                        <span>•</span>
+                                        <span>Oleh: Admin</span>
+                                    </div>
+                                    <h3 class="text-lg sm:text-xl font-black text-slate-900 tracking-tight leading-snug">
+                                        {{ $news->title }}
+                                    </h3>
+                                </div>
+                                <div class="text-xs text-slate-600 leading-relaxed space-y-4 border-b border-slate-100 pb-6">
+                                    {!! nl2br(e($news->content)) !!}
+                                </div>
+                            </div>
+                            <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+                                <button @click="selectedNews = null"
+                                    class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs px-5 py-2.5 rounded-xl transition cursor-pointer">
+                                    Tutup
+                                </button>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </template>
     </section>
 
     {{-- ============ FASILITAS ============ --}}
-    <section class="py-20 bg-white relative overflow-hidden">
-
-        <div class="absolute top-0 left-0 w-72 h-72 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="absolute bottom-0 right-0 w-72 h-72 bg-blue-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12" data-aos="fade-up">
-
-                <div>
-                    <span
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold">
-                        <i class="fa-solid fa-building"></i>
-                        SARANA SEKOLAH
-                    </span>
-
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-4">Fasilitas</h2>
-
-                    <p class="text-slate-500 mt-2 max-w-2xl">
-                        Berbagai fasilitas unggulan sekolah yang mendukung pembelajaran aktif, kreatif, dan inovatif.
-                    </p>
-                </div>
-
-                <a href="{{ route('fasilitas') }}"
-                    class="mt-5 md:mt-0 inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-500 text-white px-6 py-3 rounded-xl font-semibold transition-all">
-                    LIHAT SEMUA
-                    <i class="fa-solid fa-arrow-right text-sm"></i>
-                </a>
-
+    <section class="py-14 sm:py-20 bg-slate-50 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
+                <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                    Fasilitas Utama
+                </span>
+                <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Infrastruktur Kelas Dunia</h3>
+                <p class="text-xs text-slate-500">Mendukung sarana belajar mengajar bagi seluruh peserta didik.</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-
-                @foreach ($recentFasilitas as $index => $item)
-                    <div data-aos="fade-up" data-aos-delay="{{ ($index % 3) * 100 }}"
-                        class="group bg-slate-50 rounded-2xl overflow-hidden border border-slate-200 hover:border-blue-300 hover:shadow-xl transition-all">
-
-                        <div class="relative h-48 overflow-hidden">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                @forelse ($recentFasilitas as $item)
+                    <div data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}"
+                        class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-lg transition duration-300 flex flex-col">
+                        <div class="h-40 overflow-hidden bg-slate-100">
                             @if ($item->image)
                                 <img src="{{ asset('storage/' . $item->image) }}"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
+                                    alt="{{ $item->name }}"
+                                    class="w-full h-full object-cover hover:scale-105 transition duration-500">
                             @else
-                                <div class="w-full h-full bg-slate-300 flex items-center justify-center">
-                                    <i class="fa-solid fa-school text-5xl text-slate-400"></i>
+                                <div class="w-full h-full flex items-center justify-center text-slate-300">
+                                    <span class="material-symbols-outlined text-5xl">business</span>
                                 </div>
                             @endif
-                            <div class="absolute top-3 left-3">
-                                <span
-                                    class="px-3 py-1 bg-blue-500 text-white text-xs font-semibold rounded-full shadow">FASILITAS</span>
-                            </div>
                         </div>
-
-                        <div class="p-6">
-                            <h3 class="text-lg font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition">
-                                {{ $item->name }}</h3>
-                            <p class="text-sm text-slate-500 leading-relaxed line-clamp-3">
-                                {{ Str::limit(strip_tags($item->description), 120) }}</p>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h4 class="font-bold text-sm text-slate-900">{{ $item->name }}</h4>
+                            <p class="text-[11px] text-slate-500 leading-relaxed mt-2 flex-1">
+                                {{ Str::limit(strip_tags($item->description), 100) }}
+                            </p>
+                            <a href="/fasilitas"
+                                class="inline-flex items-center gap-1 mt-3 text-[10px] font-bold text-blue-600 hover:text-blue-700 uppercase tracking-wider">
+                                Telusuri Area
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </a>
                         </div>
-
                     </div>
-                @endforeach
-
+                @empty
+                    <div class="col-span-4 text-center py-12 text-slate-400 text-xs">Belum ada data fasilitas.</div>
+                @endforelse
             </div>
-
         </div>
-
     </section>
 
     {{-- ============ GURU ============ --}}
-    <section class="py-20 bg-slate-50 relative overflow-hidden">
-
-        <div class="absolute top-0 left-0 w-72 h-72 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="absolute bottom-0 right-0 w-72 h-72 bg-emerald-500/5 rounded-full blur-[100px] pointer-events-none">
+    <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6"
+        x-data="{ search: '', deptFilter: 'Semua' }">
+        <div class="text-center space-y-3 max-w-xl mx-auto mb-12" data-aos="fade-up">
+            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                Direktori Staf Pengajar
+            </span>
+            <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Dipimpin Praktisi Pendidikan Berkelas</h3>
+            <p class="text-xs text-slate-500">Para guru merupakan lulusan universitas terbaik dan berlisensi profesional.</p>
         </div>
 
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12" data-aos="fade-up">
-
-                <div>
-                    <span
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-emerald-100 text-emerald-600 text-sm font-semibold">
-                        <i class="fa-solid fa-chalkboard-user"></i>
-                        TENAGA PENDIDIK
-                    </span>
-
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-4">Guru & Staff Profesional</h2>
-
-                    <p class="text-slate-500 mt-2 max-w-2xl">
-                        Didukung tenaga pendidik berpengalaman dan profesional untuk menciptakan pembelajaran modern
-                        berkualitas.
-                    </p>
-                </div>
-
-                <a href="{{ route('guru.index') }}"
-                    class="mt-5 md:mt-0 inline-flex items-center gap-2 bg-slate-900 hover:bg-emerald-500 text-white px-6 py-3 rounded-xl font-semibold transition-all">
-                    LIHAT SEMUA
-                    <i class="fa-solid fa-arrow-right text-sm"></i>
-                </a>
-
+        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl mb-10 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm" data-aos="fade-up">
+            <div class="relative w-full md:max-w-md">
+                <span class="material-symbols-outlined text-sm text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2">search</span>
+                <input type="text"
+                    x-model="search"
+                    placeholder="Cari guru berdasarkan nama atau bidang..."
+                    class="w-full text-xs font-medium pl-9 pr-4 py-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition">
             </div>
-
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                @foreach ($recentGuru as $index => $guru)
-                    <div data-aos="fade-up" data-aos-delay="{{ ($index % 4) * 100 }}"
-                        class="group bg-white rounded-2xl overflow-hidden border border-slate-200 hover:border-emerald-300 hover:shadow-xl transition-all">
-
-                        <div class="relative h-64 overflow-hidden bg-slate-100">
-                            @if ($guru->photo)
-                                <img src="{{ asset('storage/guru/' . $guru->photo) }}"
-                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-700">
-                            @else
-                                <div class="w-full h-full flex items-center justify-center">
-                                    <i class="fa-solid fa-user text-5xl text-slate-400"></i>
-                                </div>
-                            @endif
-                        </div>
-
-                        <div class="p-5 text-center">
-                            <h3 class="text-lg font-bold text-slate-900 group-hover:text-emerald-600 transition">
-                                {{ $guru->name }}</h3>
-                            <p class="text-emerald-600 text-sm font-semibold mt-1">{{ $guru->position }}</p>
-                            <p class="text-slate-500 text-xs mt-2">{{ $guru->subject ?? 'Guru ' . $schoolName }}</p>
-                        </div>
-
-                    </div>
+            <div class="flex gap-2.5 overflow-x-auto pb-1 shrink-0">
+                @php
+                    $depts = ['Semua'];
+                    foreach ($recentGuru as $g) {
+                        if ($g->subject && !in_array($g->subject, $depts)) {
+                            $depts[] = $g->subject;
+                        }
+                    }
+                @endphp
+                @foreach ($depts as $dept)
+                    <button @click="deptFilter = '{{ $dept }}'"
+                        class="px-4 py-2 text-xs font-bold rounded-xl border transition-all shrink-0 cursor-pointer"
+                        :class="deptFilter === '{{ $dept }}'
+                            ? 'bg-blue-600 text-white border-transparent shadow-md'
+                            : 'bg-white hover:bg-slate-100 text-slate-600 border-slate-200'">
+                        {{ $dept }}
+                    </button>
                 @endforeach
-
             </div>
-
         </div>
 
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            @forelse ($recentGuru as $guru)
+                <div x-show="
+                    (deptFilter === 'Semua' || deptFilter === '{{ $guru->subject }}') &&
+                    (search === '' ||
+                        '{{ strtolower($guru->name) }}'.includes(search.toLowerCase()) ||
+                        '{{ strtolower($guru->position ?? '') }}'.includes(search.toLowerCase()) ||
+                        '{{ strtolower($guru->subject ?? '') }}'.includes(search.toLowerCase()))"
+                    x-transition:enter="transition ease-out duration-300"
+                    data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}"
+                    class="bg-white rounded-2xl p-6 border border-slate-200 text-center shadow-sm hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 group flex flex-col">
+                    <div class="relative w-24 h-24 mx-auto rounded-full overflow-hidden border-2 border-slate-100 mb-4 bg-slate-100">
+                        @if ($guru->photo)
+                            <img src="{{ asset('storage/guru/' . $guru->photo) }}"
+                                alt="{{ $guru->name }}"
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
+                        @else
+                            <div class="w-full h-full flex items-center justify-center text-slate-300">
+                                <span class="material-symbols-outlined text-3xl">person</span>
+                            </div>
+                        @endif
+                    </div>
+                    @if ($guru->subject)
+                        <span class="text-[9px] bg-slate-50 border border-slate-200 text-slate-500 px-2.5 py-1 rounded-full uppercase font-bold tracking-wider mb-3">
+                            {{ $guru->subject }}
+                        </span>
+                    @endif
+                    <h4 class="font-extrabold text-sm text-slate-900 group-hover:text-blue-600 transition">{{ $guru->name }}</h4>
+                    @if ($guru->position)
+                        <p class="text-[10px] text-blue-600 font-bold mt-1">{{ $guru->position }}</p>
+                    @endif
+                    @if ($guru->bio)
+                        <p class="text-[10px] text-slate-500 leading-normal mt-3 line-clamp-2 italic">
+                            "{{ Str::limit(strip_tags($guru->bio), 80) }}"
+                        </p>
+                    @endif
+                </div>
+            @empty
+                <div class="col-span-3 text-center py-12 text-slate-400 text-xs">Belum ada data guru.</div>
+            @endforelse
+        </div>
+
+        @if ($recentGuru->count() > 0)
+            <div class="text-center mt-12">
+                <a href="/data-guru"
+                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs transition">
+                    Lihat Semua Guru
+                    <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                </a>
+            </div>
+        @endif
     </section>
 
     {{-- ============ GALERI ============ --}}
-    <section class="py-20 bg-white relative overflow-hidden">
-
-        <div class="absolute top-0 left-0 w-72 h-72 bg-rose-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-        <div class="absolute bottom-0 right-0 w-72 h-72 bg-rose-500/5 rounded-full blur-[100px] pointer-events-none"></div>
-
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12" data-aos="fade-up">
-
-                <div>
-                    <span
-                        class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-rose-100 text-rose-600 text-sm font-semibold">
-                        <i class="fa-solid fa-images"></i>
-                        DOKUMENTASI SEKOLAH
-                    </span>
-
-                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mt-4">Galeri Kegiatan</h2>
-
-                    <p class="text-slate-500 mt-2 max-w-2xl">
-                        Dokumentasi berbagai kegiatan sekolah, pembelajaran, dan aktivitas siswa.
-                    </p>
-                </div>
-
-                <a href="{{ route('galeri.index') }}"
-                    class="mt-5 md:mt-0 inline-flex items-center gap-2 bg-slate-900 hover:bg-rose-500 text-white px-6 py-3 rounded-xl font-semibold transition-all">
-                    LIHAT SEMUA
-                    <i class="fa-solid fa-arrow-right text-sm"></i>
-                </a>
-
+    <section class="py-14 sm:py-20 bg-slate-50 border-y border-slate-200"
+        x-data="{ lightbox: null }">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
+                <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                    Galeri Dokumentasi
+                </span>
+                <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Mengabadikan Momentum Kebersamaan</h3>
+                <p class="text-xs text-slate-500">Klik foto untuk melihat pratinjau resolusi tinggi.</p>
             </div>
 
-            <style>
-                .card-home-galeri {
-                    position: relative;
-                    width: 100%;
-                    height: 280px;
-                    background-color: #f2f2f2;
-                    border-radius: 16px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    overflow: hidden;
-                    perspective: 1000px;
-                    box-shadow: 0 0 0 5px #ffffff80;
-                    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                }
-
-                .card-home-galeri .card-icon {
-                    width: 56px;
-                    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    z-index: 1;
-                }
-
-                .card-home-galeri:hover {
-                    transform: scale(1.05);
-                    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-                }
-
-                .card-home-galeri .card-content {
-                    position: absolute;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    padding: 24px;
-                    box-sizing: border-box;
-                    background-color: #f2f2f2;
-                    transform: rotateX(-90deg);
-                    transform-origin: bottom;
-                    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    display: flex;
-                    flex-direction: column;
-                    justify-content: center;
-                }
-
-                .card-home-galeri:hover .card-content {
-                    transform: rotateX(0deg);
-                }
-
-                .card-home-galeri .card-title {
-                    margin: 0;
-                    font-size: 18px;
-                    color: #333;
-                    font-weight: 700;
-                }
-
-                .card-home-galeri:hover .card-icon {
-                    scale: 0;
-                }
-
-                .card-home-galeri .card-description {
-                    margin: 10px 0 0;
-                    font-size: 13px;
-                    color: #555;
-                    line-height: 1.5;
-                    display: -webkit-box;
-                    -webkit-line-clamp: 5;
-                    -webkit-box-orient: vertical;
-                    overflow: hidden;
-                }
-
-                .card-home-galeri .card-badge {
-                    position: absolute;
-                    top: 12px;
-                    right: 12px;
-                    z-index: 2;
-                    padding: 4px 12px;
-                    border-radius: 999px;
-                    font-size: 11px;
-                    font-weight: 600;
-                    background: rgba(34, 197, 94, 0.9);
-                    color: #fff;
-                    backdrop-filter: blur(4px);
-                }
-
-                .card-home-galeri .card-image {
-                    position: absolute;
-                    inset: 0;
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-                    z-index: 0;
-                }
-
-                .card-home-galeri:hover .card-image {
-                    scale: 0;
-                }
-            </style>
-
-            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-
-                @forelse($recentGaleri as $index => $foto)
-                    <div data-aos="fade-up" data-aos-delay="{{ $index * 100 }}" class="card-home-galeri">
-
-                        <span class="card-badge">{{ $foto->category ?? 'Umum' }}</span>
-
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+                @forelse ($recentGaleri as $foto)
+                    <div @click="lightbox = '{{ asset('storage/galeri/' . $foto->image) }}'"
+                        class="group relative cursor-pointer overflow-hidden rounded-2xl border border-slate-200 shadow-sm aspect-[4/3] bg-slate-100"
+                        data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
                         @if ($foto->image)
-                            <img src="{{ asset('storage/galeri/' . $foto->image) }}" alt="{{ $foto->title }}"
-                                class="card-image">
+                            <img src="{{ asset('storage/galeri/' . $foto->image) }}"
+                                alt="{{ $foto->title }}"
+                                class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         @else
-                            <i class="fa-solid fa-image card-icon text-5xl text-slate-400"></i>
+                            <div class="w-full h-full flex items-center justify-center text-slate-300">
+                                <span class="material-symbols-outlined text-5xl">image</span>
+                            </div>
                         @endif
-
-                        <div class="card-content">
-                            <h3 class="card-title">{{ $foto->title }}</h3>
-                            <p class="card-description">{{ $foto->description ?? '' }}</p>
+                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            <p class="text-[10px] text-white leading-relaxed font-semibold">{{ $foto->title }}</p>
                         </div>
-
                     </div>
                 @empty
-                    <div class="col-span-4 text-center py-12">
-                        <i class="fa-solid fa-image text-5xl text-slate-300 mb-3"></i>
-                        <p class="text-slate-400">Belum ada galeri tersedia</p>
-                    </div>
+                    <div class="col-span-4 text-center py-12 text-slate-400 text-xs">Belum ada galeri.</div>
                 @endforelse
-
             </div>
 
+            @if ($recentGaleri->count() > 0)
+                <div class="text-center mt-10">
+                    <a href="/galeri"
+                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs transition">
+                        Lihat Semua Galeri
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                    </a>
+                </div>
+            @endif
         </div>
 
+        {{-- Lightbox --}}
+        <template x-teleport="body">
+            <div x-show="lightbox !== null"
+                class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4"
+                x-cloak
+                @click="lightbox = null">
+                <button @click="lightbox = null"
+                    class="absolute top-6 right-6 w-10 h-10 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+                <div @click.stop class="max-w-4xl max-h-[85vh]">
+                    <img :src="lightbox"
+                        alt="Preview"
+                        class="rounded-2xl border border-slate-800 shadow-2xl max-w-full max-h-[80vh] object-contain">
+                </div>
+            </div>
+        </template>
     </section>
+
+    {{-- ============ KONTAK & ASPIRASI ============ --}}
+    {{-- <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6">
+        <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
+            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                Hubungi Kami
+            </span>
+            <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Pusat Layanan & Aspirasi</h3>
+            <p class="text-xs text-slate-500">Sampaikan saran, pengaduan, atau pertanyaan melalui form di bawah.</p>
+        </div> --}}
+
+        {{-- <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start"> --}}
+            {{-- Left: Info kontak --}}
+            {{-- <div class="lg:col-span-5 space-y-8" data-aos="fade-right">
+                <div class="bg-slate-900 text-white p-8 rounded-2xl shadow-xl space-y-6 relative overflow-hidden">
+                    <div class="absolute right-0 top-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
+                    <h4 class="text-sm font-extrabold tracking-wide uppercase text-blue-400">Informasi Layanan</h4>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        {{ $settings['deskripsi_layanan'] ?? 'Loket layanan administrasi buka setiap hari kerja. Silakan hubungi kami atau kunjungi ruang sekretariat.' }}
+                    </p>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-sm">location_on</span>
+                            </div>
+                            <div>
+                                <h5 class="text-[11px] font-bold text-slate-300 uppercase">Alamat</h5>
+                                <p class="text-xs text-slate-200 mt-1.5">{{ $settings['alamat'] ?? '-' }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-sm">call</span>
+                            </div>
+                            <div>
+                                <h5 class="text-[11px] font-bold text-slate-300 uppercase">Telepon</h5>
+                                <p class="text-xs text-slate-200 mt-1.5">{{ $settings['telepon'] ?? '-' }}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-3.5">
+                            <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                                <span class="material-symbols-outlined text-sm">mail</span>
+                            </div>
+                            <div>
+                                <h5 class="text-[11px] font-bold text-slate-300 uppercase">Email</h5>
+                                <p class="text-xs text-slate-200 mt-1.5 font-mono">{{ $settings['email'] ?? '-' }}</p>
+                            </div>
+                        </div>
+                        @if (!empty($settings['jam_operasional']))
+                            <div class="flex items-start gap-3.5">
+                                <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
+                                    <span class="material-symbols-outlined text-sm">schedule</span>
+                                </div>
+                                <div>
+                                    <h5 class="text-[11px] font-bold text-slate-300 uppercase">Jam Operasional</h5>
+                                    <p class="text-xs text-slate-200 mt-1.5">{{ $settings['jam_operasional'] }}</p>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div> --}}
+
+            {{-- Right: Contact Form --}}
+            {{-- <div class="lg:col-span-7" data-aos="fade-left">
+                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
+                    <h4 class="font-extrabold text-sm text-slate-900 mb-5 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-blue-600">send</span>
+                        Kirim Pesan / Aspirasi
+                    </h4>
+
+                    @if (session('success'))
+                        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-6 rounded-xl text-center space-y-3">
+                            <span class="material-symbols-outlined text-4xl text-emerald-500">check_circle</span>
+                            <h5 class="font-bold text-xs uppercase">Pesan Berhasil Terkirim</h5>
+                            <p class="text-[11px] text-emerald-700">{{ session('success') }}</p>
+                        </div>
+                    @else
+                        <form action="{{ route('kontak.store') }}" method="POST" class="space-y-4 text-left">
+                            @csrf
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
+                                    <input type="text" name="name" value="{{ old('name') }}" required
+                                        class="w-full text-xs px-3.5 py-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+                                        placeholder="Nama Anda">
+                                </div>
+                                <div>
+                                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Email</label>
+                                    <input type="email" name="email" value="{{ old('email') }}" required
+                                        class="w-full text-xs px-3.5 py-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+                                        placeholder="email@contoh.com">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Subjek</label>
+                                <input type="text" name="subject" value="{{ old('subject') }}" required
+                                    class="w-full text-xs px-3.5 py-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+                                    placeholder="Subjek pesan">
+                            </div>
+                            <div>
+                                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pesan</label>
+                                <textarea name="message" required rows="4"
+                                    class="w-full text-xs px-3.5 py-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none"
+                                    placeholder="Tulis pesan Anda...">{{ old('message') }}</textarea>
+                            </div>
+                            <button type="submit"
+                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] py-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition uppercase tracking-wider">
+                                <span class="material-symbols-outlined text-sm">send</span>
+                                Kirim Pesan
+                            </button>
+                        </form>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </section> --}}
 
     @push('scripts')
         <script>
-            // Banner zoom animation
-            document.querySelectorAll('.banner-bg').forEach(img => {
-                img.style.transition = 'transform 8s ease-out';
-                img.style.transform = 'scale(1)';
-                setTimeout(() => {
-                    img.style.transform = 'scale(1.08)';
-                }, 100);
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('heroCarousel', (initialSlides) => ({
+                    current: 0,
+                    slides: initialSlides,
+                    timer: null,
+                    init() {
+                        if (this.slides.length > 1) {
+                            this.timer = setInterval(() => this.next(), 6000);
+                        }
+                    },
+                    goTo(idx) {
+                        this.current = idx;
+                        clearInterval(this.timer);
+                        if (this.slides.length > 1) {
+                            this.timer = setInterval(() => this.next(), 6000);
+                        }
+                    },
+                    next() {
+                        this.current = (this.current + 1) % this.slides.length;
+                    },
+                    prev() {
+                        this.current = (this.current - 1 + this.slides.length) % this.slides.length;
+                    }
+                }));
             });
-
-            // Banner Slider
-            const bannerSlides = document.querySelectorAll('.banner-slide');
-            const bannerDots = document.querySelectorAll('.banner-dot');
-            let currentSlide = 0;
-            let slideInterval;
-
-            function goToSlide(index) {
-                bannerSlides.forEach((slide, i) => {
-                    slide.classList.toggle('opacity-100', i === index);
-                    slide.classList.toggle('opacity-0', i !== index);
-                });
-                bannerDots.forEach((dot, i) => {
-                    dot.classList.toggle('bg-blue-500', i === index);
-                    dot.classList.toggle('bg-white/40', i !== index);
-                    if (i === index) dot.classList.add('w-6');
-                    else dot.classList.remove('w-6');
-                });
-                currentSlide = index;
-            }
-
-            function nextSlide() {
-                goToSlide((currentSlide + 1) % bannerSlides.length);
-            }
-
-            if (bannerSlides.length > 1) {
-                slideInterval = setInterval(nextSlide, 5000);
-                document.getElementById('bannerSlider').addEventListener('mouseenter', () => clearInterval(slideInterval));
-                document.getElementById('bannerSlider').addEventListener('mouseleave', () => {
-                    slideInterval = setInterval(nextSlide, 5000);
-                });
-            }
         </script>
     @endpush
 
