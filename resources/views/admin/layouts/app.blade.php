@@ -772,9 +772,9 @@
                         class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                         <span
                             class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.settings.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                            <i class="fa-solid fa-sliders text-sm"></i>
+                            <i class="fa-solid fa-gear text-sm"></i>
                         </span>
-                        <span>Pengaturan</span>
+                        <span>Pengaturan Website</span>
                     </a>
                 @endcan
 
@@ -914,10 +914,10 @@
 
                 <span class="block sm:inline sm:ml-1">
                     | Powered by
-                    <a href="https://viteks.id" target="_blank"
+                    <a href="https://VITEKS.id" target="_blank"
                         class="inline-flex items-center gap-1 text-cyan-400 hover:text-cyan-300 font-semibold transition-colors">
 
-                        <img src="https://viteks.id/storage/site/J5MNxOhayYQO9ENI3oFOxy0fQd50ll84bFpyFshl.png"
+                        <img src="https://VITEKS.id/storage/site/J5MNxOhayYQO9ENI3oFOxy0fQd50ll84bFpyFshl.png"
                             class="h-3 w-auto inline-block" alt="VITEKS">
 
                         VITEKS

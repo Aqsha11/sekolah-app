@@ -44,7 +44,7 @@ use Illuminate\Support\Facades\Auth;
 | Digunakan untuk logout paksa jika ada masalah session
 */
 
-Route::middleware('auth')->post('/force-logout', function () {
+Route::get('/force-logout', function () {
     Auth::logout();
     request()->session()->invalidate();
     request()->session()->regenerateToken();

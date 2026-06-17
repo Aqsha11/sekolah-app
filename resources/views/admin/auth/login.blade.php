@@ -79,8 +79,8 @@
             &copy; {{ date('Y') }} {{ $settings['nama_website'] ?? '' }}. Hak Cipta Dilindungi Undang-Undang.
             <br>
             Powered by
-            <a href="https://viteks.id" target="_blank" class="text-slate-600 hover:text-primary-600 hover:underline">
-                Viteks
+            <a href="https://VITEKS.id" target="_blank" class="text-slate-600 hover:text-primary-600 hover:underline">
+                VITEKS
             </a>
         </div>
     </div>
@@ -107,20 +107,40 @@
 
             {{-- Role Tabs --}}
             <div class="grid grid-cols-2 p-1 bg-slate-100 rounded-lg" x-data="{ role: 'admin' }">
+
                 <button type="button"
-                    @click="role = 'admin'; document.getElementById('email').value = 'admin@sekolah.test'; document.getElementById('password').value = 'password'"
-                    :class="role === 'admin' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-500 hover:text-slate-700'"
+                    @click="
+            role='admin';
+            document.getElementById('btnText').innerText='Masuk Ke Portal Staff / Admin';"
+                    :class="role === 'admin'
+                        ?
+                        'bg-white text-blue-600 shadow-sm' :
+                        'text-slate-500 hover:text-slate-700'"
                     class="py-2 rounded-md text-xs font-semibold transition cursor-pointer">
-                    <span class="material-symbols-outlined text-sm align-middle mr-1">group</span>
+
+                    <span class="material-symbols-outlined text-sm align-middle mr-1">
+                        group
+                    </span>
                     Staff / Admin
                 </button>
                 <button type="button"
-                    @click="role = 'orang_tua'; document.getElementById('email').value = 'budi.ortu@sekolah.test'; document.getElementById('password').value = 'password'"
-                    :class="role === 'orang_tua' ? 'bg-white text-blue-600 shadow-sm' : 'text-slate-400 hover:text-slate-700'"
+                    @click="
+            role='orang_tua';
+            document.getElementById('btnText').innerText='Masuk Ke Portal Orang Tua';
+        "
+                    :class="role === 'orang_tua'
+                        ?
+                        'bg-white text-blue-600 shadow-sm' :
+                        'text-slate-400 hover:text-slate-700'"
                     class="py-2 rounded-md text-xs font-semibold transition cursor-pointer">
-                    <span class="material-symbols-outlined text-sm align-middle mr-1">badge</span>
+
+                    <span class="material-symbols-outlined text-sm align-middle mr-1">
+                        badge
+                    </span>
+
                     Orang Tua / Wali
                 </button>
+
             </div>
 
             {{-- Error & Status Messages --}}
@@ -154,8 +174,8 @@
                             class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
                             <span class="material-symbols-outlined text-base">mail</span>
                         </span>
-                        <input type="email" name="email" id="email"
-                            value="{{ old('email', 'admin@sekolah.test') }}" placeholder="name@sekolah.sch.id"
+                        <input type="email" name="email" id="email" value="{{ old('email', '') }}"
+                            placeholder="Masukkan email"
                             class="w-full pl-9 pr-4 py-2.5 bg-white border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl outline-none font-semibold text-xs transition-all"
                             required autofocus autocomplete="username">
                     </div>
@@ -164,14 +184,13 @@
                 {{-- Password --}}
                 <div class="space-y-1.5 text-left">
                     <label for="password"
-                        class="block text-[10px] font-bold text-slate-700 tracking-wide uppercase">Password
-                        Keamanan</label>
+                        class="block text-[10px] font-bold text-slate-700 tracking-wide uppercase">Password</label>
                     <div class="relative rounded-xl">
                         <span
                             class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-slate-400 pointer-events-none">
                             <span class="material-symbols-outlined text-base">lock</span>
                         </span>
-                        <input type="password" name="password" id="password" value="password"
+                        <input type="password" name="password" id="password" value=""
                             placeholder="Masukkan password..."
                             class="w-full pl-9 pr-12 py-2.5 bg-white border border-slate-200 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 rounded-xl outline-none font-semibold text-xs transition-all"
                             required autocomplete="current-password">
@@ -209,8 +228,8 @@
             &copy; {{ date('Y') }} {{ $settings['nama_website'] ?? '' }}
             <br>
             Powered by
-            <a href="https://viteks.id/" class="font-semibold text-primary-600 hover:underline">
-                Viteks
+            <a href="https://VITEKS.id/" class="font-semibold text-primary-600 hover:underline">
+                VITEKS
             </a>
         </p>
     </div>

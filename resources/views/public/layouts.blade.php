@@ -4,12 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{{ $settings['tagline'] ?? 'Website Resmi Sekolah' }}">
     <title>@yield('title', '')</title>
 
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css" />
 
@@ -17,7 +20,9 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Inter'] },
+                    fontFamily: {
+                        sans: ['Inter']
+                    },
                 },
             },
         }
@@ -27,21 +32,43 @@
         .material-symbols-outlined {
             font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
         }
+
         .navbar-scrolled {
-            background: rgba(15, 23, 42, 0.85) !important;
+            background: rgba(255, 255, 255, 0.95) !important;
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(51, 65, 85, 0.7) !important;
+            border-bottom: 1px solid rgba(225, 218, 218, 0.7) !important;
             padding-top: 0.75rem !important;
             padding-bottom: 0.75rem !important;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
         }
+
         #backToTop.show {
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
         }
-        [x-cloak] { display: none !important; }
+
+        [x-cloak] {
+            display: none !important;
+        }
+
+        html,
+        body {
+            overflow-x: hidden;
+        }
+
+        img {
+            max-width: 100%;
+        }
+
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scrollbar-hide {
+            scrollbar-width: none;
+        }
     </style>
 
     @php
@@ -69,11 +96,12 @@
 
     {{-- NAVBAR --}}
     <header id="mainHeader"
-        class="fixed top-0 left-0 right-0 z-50 bg-transparent py-4 transition-all duration-300 border-b border-transparent">
+        class="fixed top-0 left-0 right-0 z-50 h-16 bg-white py-4 transition-all duration-300 border-b border-slate-200 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
             {{-- Brand --}}
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20 shrink-0">
+                <div
+                    class="w-9 h-9 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold shadow-md shadow-blue-500/20 shrink-0">
                     @if (!empty($settings['logo']))
                         <img src="{{ asset('storage/settings/' . $settings['logo']) }}"
                             class="w-7 h-7 object-contain rounded">
@@ -83,11 +111,11 @@
                 </div>
                 <div>
                     <a href="/" id="brandText"
-                        class="font-extrabold text-xs tracking-tight uppercase leading-none text-white transition-colors duration-300">
+                        class="font-extrabold text-xs tracking-tight uppercase leading-none text-slate-900 transition-colors duration-300">
                         {{ $settings['site_name'] ?? ($settings['nama_website'] ?? '') }}
                     </a>
                     @if (!empty($settings['tagline']))
-                        <p class="text-[9px] text-slate-400 font-medium block mt-0.5 leading-none">
+                        <p class="text-[9px] text-slate-500 font-medium block mt-0.5 leading-none">
                             {{ $settings['tagline'] }}
                         </p>
                     @endif
@@ -100,8 +128,8 @@
                     <a href="{{ url($url) }}"
                         class="px-3.5 py-2 rounded-lg text-[10px] font-bold tracking-wider uppercase transition-all duration-200
                         {{ request()->is(ltrim($url, '/')) || (request()->path() === '/' && $url === '/')
-                            ? 'text-blue-400 bg-blue-500/10'
-                            : 'text-slate-300 hover:text-white hover:bg-slate-800/50' }}">
+                            ? 'text-blue-600 bg-blue-50'
+                            : 'text-slate-600 hover:text-blue-600 hover:bg-blue-50' }}">
                         {{ $label }}
                     </a>
                 @endforeach
@@ -162,13 +190,14 @@
     </button>
 
     {{-- CONTENT --}}
-    <main>
+    <main class="pt-16">
         @yield('content')
     </main>
 
     {{-- FOOTER --}}
     <footer class="bg-slate-950 text-slate-400 border-t border-slate-800">
-        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
+        <div
+            class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
             {{-- Col 1: Brand --}}
             <div class="space-y-4">
                 <div class="flex items-center gap-2.5">
@@ -180,7 +209,8 @@
                             <span class="material-symbols-outlined text-sm">school</span>
                         @endif
                     </div>
-                    <span class="font-bold text-sm text-white">{{ $settings['site_name'] ?? ($settings['nama_website'] ?? '') }}</span>
+                    <span
+                        class="font-bold text-sm text-white">{{ $settings['site_name'] ?? ($settings['nama_website'] ?? '') }}</span>
                 </div>
                 <p class="text-xs text-slate-400 leading-relaxed">
                     {{ $settings['visi'] ?? 'Mewujudkan lulusan yang berkarakter, unggul dalam prestasi, religius, kokoh dalam IPTEK, serta peduli lingkungan.' }}
@@ -236,11 +266,13 @@
                     </li>
                     <li class="flex items-center gap-2.5">
                         <span class="material-symbols-outlined text-sm text-blue-400">mail</span>
-                        <a href="mailto:{{ $settings['email'] ?? '#' }}" class="text-slate-400 hover:text-white transition">{{ $settings['email'] ?? '-' }}</a>
+                        <a href="mailto:{{ $settings['email'] ?? '#' }}"
+                            class="text-slate-400 hover:text-white transition">{{ $settings['email'] ?? '-' }}</a>
                     </li>
                     <li class="flex items-center gap-2.5">
                         <span class="material-symbols-outlined text-sm text-blue-400">call</span>
-                        <a href="tel:{{ $settings['telepon'] ?? '#' }}" class="text-slate-400 hover:text-white transition">{{ $settings['telepon'] ?? '-' }}</a>
+                        <a href="tel:{{ $settings['telepon'] ?? '#' }}"
+                            class="text-slate-400 hover:text-white transition">{{ $settings['telepon'] ?? '-' }}</a>
                     </li>
                 </ul>
             </div>
@@ -254,16 +286,17 @@
                 </div>
                 <div class="pt-2">
                     <p class="text-[9px] text-slate-500 font-bold uppercase tracking-wider">Powered by</p>
-                    <a href="https://viteks.id" target="_blank"
+                    <a href="https://VITEKS.id" target="_blank"
                         class="text-xs text-cyan-400 hover:text-cyan-300 font-bold mt-1 inline-block">
-                        Viteks
+                        VITEKS
                     </a>
                 </div>
             </div>
         </div>
 
         <div class="border-t border-slate-800">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-[10px] text-slate-500 font-semibold">
+            <div
+                class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-col md:flex-row items-center justify-between gap-3 text-[10px] text-slate-500 font-semibold">
                 <p>&copy; {{ date('Y') }} {{ $settings['nama_website'] ?? '' }}. Hak Cipta Dilindungi.</p>
                 <div class="flex gap-4">
                     <a href="/" class="hover:text-white transition">Beranda</a>
@@ -280,14 +313,20 @@
         const brandText = document.getElementById('brandText');
 
         window.addEventListener('scroll', () => {
+            // if (window.scrollY > 20) {
+            //     header.classList.add('navbar-scrolled');
+            //     if (brandText) brandText.classList.remove('text-white');
+            //     if (brandText) brandText.classList.add('text-white');
+            // } else {
+            //     header.classList.remove('navbar-scrolled');
+            //     if (brandText) brandText.classList.remove('text-white');
+            //     if (brandText) brandText.classList.add('text-white');
+            // }
+
             if (window.scrollY > 20) {
                 header.classList.add('navbar-scrolled');
-                if (brandText) brandText.classList.remove('text-white');
-                if (brandText) brandText.classList.add('text-white');
             } else {
                 header.classList.remove('navbar-scrolled');
-                if (brandText) brandText.classList.remove('text-white');
-                if (brandText) brandText.classList.add('text-white');
             }
         });
 
@@ -297,7 +336,10 @@
             if (window.scrollY > 300) backToTop.classList.add('show');
             else backToTop.classList.remove('show');
         });
-        backToTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+        backToTop.addEventListener('click', () => window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        }));
 
         // Mobile menu
         const menuBtn = document.getElementById('menuBtn');
@@ -326,9 +368,14 @@
     <script src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 800, once: true, offset: 120 });
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 120
+        });
     </script>
 
     @stack('scripts')
 </body>
+
 </html>

@@ -6,63 +6,88 @@
 
     @php
         use Illuminate\Support\Str;
-        $schoolName = $settings['nama_website'] ?? '';
-        $heroTitle = $settings['hero_title'] ?? $schoolName;
-        $heroDesc = $settings['hero_description'] ?? 'Mewujudkan generasi berkarakter, disiplin, unggul, dan berwawasan global.';
-        $heroImg = !empty($settings['hero_image']) ? asset('storage/settings/' . $settings['hero_image']) : null;
-
+        /*
+|--------------------------------------------------------------------------
+| HERO BANNER DATA
+|--------------------------------------------------------------------------
+*/
+        $schoolName = $settings['nama_website'] ?? 'Portal Sekolah';
+        $defaultDescription = 'Mewujudkan generasi berkarakter, disiplin, unggul, dan berwawasan global.';
         $slides = [];
-        $bgClasses = [
+        $backgrounds = [
             'bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900',
             'bg-gradient-to-r from-emerald-950 via-emerald-900 to-slate-900',
             'bg-gradient-to-r from-indigo-950 via-indigo-900 to-slate-900',
         ];
+        /*
+|--------------------------------------------------------------------------
+| AMBIL DATA BANNER DARI ADMIN
+|--------------------------------------------------------------------------
+*/
         if ($banners->isNotEmpty()) {
-            foreach ($banners as $i => $banner) {
+            foreach ($banners as $index => $banner) {
                 $slides[] = [
                     'title' => $banner->title,
-                    'description' => $banner->subtitle ?? '',
-                    'accent' => $banner->link ? 'Info Terkini' : 'Pendidikan Digital',
-                    'bg' => $bgClasses[$i % 3],
+                    'description' => $banner->subtitle ?? $defaultDescription,
+                    'background' => $backgrounds[$index % count($backgrounds)],
                     'image' => $banner->image ? asset('storage/' . $banner->image) : null,
                     'link' => $banner->link ? url($banner->link) : null,
                 ];
             }
         } else {
+            /*
+|--------------------------------------------------------------------------
+| DEFAULT BANNER
+|--------------------------------------------------------------------------
+*/
             $slides = [
-                ['title' => 'Membentuk Generasi Unggul Berkarakter Pancasila', 'description' => $settings['hero_description'] ?? 'Sekolah berkomitmen menyediakan ekosistem pendidikan terbaik.', 'accent' => 'Unggul & Berintegritas', 'bg' => $bgClasses[0], 'image' => null, 'link' => null],
-                ['title' => 'Prestasi Akademik & Non-Akademik', 'description' => 'Kami mendidik siswa berinovasi dan berkompetisi di kancah global.', 'accent' => 'Inovator Masa Depan', 'bg' => $bgClasses[1], 'image' => null, 'link' => null],
-                ['title' => 'Fasilitas Belajar Digital & Laboratorium Canggih', 'description' => 'Sistem sekolah pintar dengan absensi digital RFID dan kelas multimedia.', 'accent' => 'Teknologi Smart School', 'bg' => $bgClasses[2], 'image' => null, 'link' => null],
+                [
+                    'title' => 'Membentuk Generasi Unggul Berkarakter',
+                    'description' => $settings['hero_description'] ?? $defaultDescription,
+                    'background' => $backgrounds[0],
+                    'image' => null,
+                    'link' => null,
+                ],
+                [
+                    'title' => 'Prestasi Akademik & Non Akademik',
+                    'description' => 'Sekolah membangun siswa kreatif dan inovatif.',
+                    'background' => $backgrounds[1],
+                    'image' => null,
+                    'link' => null,
+                ],
+                [
+                    'title' => 'Pembelajaran Modern Berbasis Teknologi',
+                    'description' => 'Mendukung pendidikan digital masa depan.',
+                    'background' => $backgrounds[2],
+                    'image' => null,
+                    'link' => null,
+                ],
             ];
         }
     @endphp
 
     {{-- ============ HERO CAROUSEL ============ --}}
-    <section class="relative min-h-[460px] sm:min-h-[580px] flex items-center overflow-hidden"
-        x-data="heroCarousel({{ json_encode($slides) }})" x-init="init()">
+    <section class="relative min-h-[520px] sm:min-h-[580px] flex items-center overflow-hidden" x-data="heroCarousel({{ json_encode($slides) }})"
+        x-init="init()">
         <template x-for="(slide, idx) in slides" :key="idx">
-            <div
-                class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
+            <div class="absolute inset-0 w-full h-full transition-opacity duration-1000 ease-in-out"
                 :class="idx === current ? 'opacity-100 z-10' : 'opacity-0 z-0'">
                 <div class="absolute inset-0" :class="slide.bg">
                     <img x-show="slide.image" :src="slide.image" class="w-full h-full object-cover">
                 </div>
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/40 to-transparent"></div>
 
-                <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 h-full items-center relative z-20 pt-24 pb-20">
+                <div
+                    class="max-w-7xl mx-auto px-4 sm:px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 h-full items-center relative z-20 pt-20 sm:pt-24 pb-16">
                     <div class="lg:col-span-8 space-y-6">
-                        <span class="inline-flex items-center gap-1.5 bg-blue-500/20 border border-blue-500/30 text-blue-300 font-extrabold text-[10px] px-3.5 py-1.5 rounded-full uppercase tracking-widest"
-                            x-text="slide.accent">
-                        </span>
-                        <h2 class="text-xl sm:text-3xl md:text-5xl font-extrabold tracking-tight leading-tight md:leading-none text-white max-w-2xl"
+                        <h2 class="text-2xl sm:text-3xl md:text-5xl font-extrabold tracking-tight leading-tight md:leading-none text-white max-w-2xl"
                             x-text="slide.title">
                         </h2>
-                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl"
-                            x-text="slide.description">
+                        <p class="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-xl" x-text="slide.description">
                         </p>
-                        <div class="flex items-center gap-3 pt-4">
+                        <div class="flex flex-wrap items-center gap-3 pt-4">
                             <a x-show="slide.link" :href="slide.link"
-                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/15 flex items-center gap-2 transition hover:scale-105">
+                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 sm:px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/15 flex items-center gap-2 transition hover:scale-105">
                                 Pelajari Selengkapnya
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                             </a>
@@ -73,13 +98,11 @@
         </template>
 
         {{-- Carousel controls --}}
-        <div class="absolute bottom-6 left-0 right-0 z-30 max-w-7xl mx-auto px-6 flex items-center justify-between">
+        <div class="absolute bottom-6 left-0 right-0 z-30 max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between">
             <div class="flex items-center gap-2">
                 <template x-for="(_, dotIdx) in slides" :key="dotIdx">
-                    <button
-                        class="transition-all duration-300 h-2 rounded-full cursor-pointer"
-                        :class="dotIdx === current ? 'w-8 bg-blue-500' : 'w-2 bg-slate-600'"
-                        @click="goTo(dotIdx)">
+                    <button class="transition-all duration-300 h-2 rounded-full cursor-pointer"
+                        :class="dotIdx === current ? 'w-8 bg-blue-500' : 'w-2 bg-slate-600'" @click="goTo(dotIdx)">
                     </button>
                 </template>
             </div>
@@ -98,7 +121,7 @@
 
     {{-- ============ STATISTICS ============ --}}
     <section class="bg-slate-50 border-y border-slate-200 py-10 relative z-20">
-        <div class="max-w-7xl mx-auto px-6 grid grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             @php
                 $statIcons = [
                     'Fasilitas' => 'business',
@@ -108,16 +131,21 @@
                 ];
             @endphp
             @forelse ($statistics ?? [] as $stat)
-                    <div data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}"
-                        class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex items-center sm:items-start gap-3 sm:gap-4 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
-                        <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
-                            <span class="material-symbols-outlined text-lg sm:text-xl">{{ $statIcons[$stat->label] ?? 'bar_chart' }}</span>
-                        </div>
-                        <div class="min-w-0">
-                            <h4 class="text-base sm:text-lg font-extrabold text-slate-900 leading-none truncate">{{ $stat->value }}</h4>
-                            <p class="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase mt-1 tracking-wide leading-none truncate">{{ $stat->label }}</p>
-                        </div>
+                <div data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}"
+                    class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex items-center sm:items-start gap-3 sm:gap-4 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
+                    <div
+                        class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        <span
+                            class="material-symbols-outlined text-lg sm:text-xl">{{ $statIcons[$stat->label] ?? 'bar_chart' }}</span>
                     </div>
+                    <div class="min-w-0">
+                        <h4 class="text-base sm:text-lg font-extrabold text-slate-900 leading-none truncate">
+                            {{ $stat->value }}</h4>
+                        <p
+                            class="text-[10px] sm:text-[11px] font-bold text-slate-500 uppercase mt-1 tracking-wide leading-none truncate">
+                            {{ $stat->label }}</p>
+                    </div>
+                </div>
             @empty
                 <div class="col-span-4 text-center py-8 text-slate-400 text-xs">Data statistik belum tersedia</div>
             @endforelse
@@ -125,20 +153,22 @@
     </section>
 
     {{-- ============ SAMBUTAN KEPSEK ============ --}}
-    <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center">
+    <section
+        class="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center">
         <div class="lg:col-span-5 relative" data-aos="fade-right">
             <div class="absolute -top-4 -left-4 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-45 -z-10"></div>
             @if (!empty($settings['hero_image']))
-                <img src="{{ asset('storage/settings/' . $settings['hero_image']) }}"
-                    alt="Kepala Sekolah"
+                <img src="{{ asset('storage/settings/' . $settings['hero_image']) }}" alt="Kepala Sekolah"
                     class="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl border border-slate-100">
             @else
-                <div class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-slate-100 flex items-center justify-center">
+                <div
+                    class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-slate-100 flex items-center justify-center">
                     <span class="material-symbols-outlined text-6xl text-blue-300">person</span>
                 </div>
             @endif
             @if (!empty($settings['kepala_sekolah']))
-                <div class="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur text-white px-4 py-2.5 rounded-xl border border-slate-700">
+                <div
+                    class="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur text-white px-4 py-2.5 rounded-xl border border-slate-700">
                     <span class="text-[9px] font-bold uppercase text-blue-400 tracking-wider">Kepala Sekolah</span>
                     <h5 class="text-xs font-black">{{ $settings['kepala_sekolah'] }}</h5>
                 </div>
@@ -146,14 +176,16 @@
         </div>
 
         <div class="lg:col-span-7 space-y-6" data-aos="fade-left">
-            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+            <span
+                class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                 Sambutan Kepala Sekolah
             </span>
             <h3 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">
                 Selamat Datang di {{ $settings['nama_website'] ?? 'Portal Sekolah' }}
             </h3>
             <div class="text-xs text-slate-600 leading-relaxed space-y-4">
-                <p>{{ $settings['sambutan_kepsek'] ?? 'Assalamu\'alaikum Warahmatullahi Wabarakatuh. Selamat datang di portal resmi sekolah kami.' }}</p>
+                <p>{{ $settings['sambutan_kepsek'] ?? 'Assalamu\'alaikum Warahmatullahi Wabarakatuh. Selamat datang di portal resmi sekolah kami.' }}
+                </p>
                 @if (!empty($settings['visi']))
                     <p class="font-semibold text-slate-700">Visi: {{ $settings['visi'] }}</p>
                 @endif
@@ -173,9 +205,10 @@
 
     {{-- ============ QUICK PORTALS ============ --}}
     <section class="py-14 sm:py-20 bg-slate-50 border-t border-slate-200">
-        <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center space-y-3 max-w-xl mx-auto mb-14">
-                <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                <span
+                    class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                     Navigasi Cepat
                 </span>
                 <h3 class="text-2xl font-black text-slate-900 tracking-tight">Jelajahi Portal Layanan</h3>
@@ -189,7 +222,8 @@
                         <span class="material-symbols-outlined text-xl">school</span>
                     </div>
                     <h4 class="font-extrabold text-xs text-slate-900 uppercase">Profil & Sejarah</h4>
-                    <p class="text-[11px] text-slate-500 leading-relaxed mt-2">Telusuri perjalanan sekolah serta visi kurikulum kami.</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed mt-2">Telusuri perjalanan sekolah serta visi
+                        kurikulum kami.</p>
                 </a>
 
                 <a href="/prestasi"
@@ -198,7 +232,8 @@
                         <span class="material-symbols-outlined text-xl">trophy</span>
                     </div>
                     <h4 class="font-extrabold text-xs text-slate-900 uppercase">Prestasi Akademik</h4>
-                    <p class="text-[11px] text-slate-500 leading-relaxed mt-2">Melihat torehan prestasi di berbagai bidang.</p>
+                    <p class="text-[11px] text-slate-500 leading-relaxed mt-2">Melihat torehan prestasi di berbagai bidang.
+                    </p>
                 </a>
 
                 <a href="/data-guru"
@@ -223,20 +258,23 @@
     </section>
 
     {{-- ============ PROFIL ============ --}}
-    <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+    <section
+        class="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
         <div data-aos="fade-right" class="space-y-6">
-            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+            <span
+                class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                 Tentang Sekolah
             </span>
             <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight leading-normal">
                 Mengabdi Demi Mencerdaskan Kehidupan Bangsa
             </h3>
             <p class="text-xs text-slate-600 leading-relaxed">
-                {{ $settings['profil_sekolah'] ?? $settings['tentang_sekolah'] ?? 'Deskripsi sekolah belum tersedia.' }}
+                {{ $settings['profil_sekolah'] ?? ($settings['tentang_sekolah'] ?? 'Deskripsi sekolah belum tersedia.') }}
             </p>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                 <div class="flex items-start gap-2.5">
-                    <div class="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 text-xs">
+                    <div
+                        class="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 text-xs">
                         <span class="material-symbols-outlined text-sm">check</span>
                     </div>
                     <div>
@@ -245,7 +283,8 @@
                     </div>
                 </div>
                 <div class="flex items-start gap-2.5">
-                    <div class="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 text-xs">
+                    <div
+                        class="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 text-xs">
                         <span class="material-symbols-outlined text-sm">check</span>
                     </div>
                     <div>
@@ -255,7 +294,7 @@
                 </div>
             </div>
             <a href="/profil"
-                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-xl font-bold text-xs transition shadow-md">
+                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition shadow-md">
                 Selengkapnya
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </a>
@@ -264,11 +303,11 @@
         <div class="relative" data-aos="fade-left">
             <div class="absolute -top-4 -left-4 w-72 h-72 bg-blue-200 rounded-full blur-3xl opacity-40 -z-10"></div>
             @if (!empty($settings['profil_image']))
-                <img src="{{ asset('storage/settings/' . $settings['profil_image']) }}"
-                    alt="Profil Sekolah"
+                <img src="{{ asset('storage/settings/' . $settings['profil_image']) }}" alt="Profil Sekolah"
                     class="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl border border-slate-100">
             @else
-                <div class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-slate-100 flex items-center justify-center">
+                <div
+                    class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-slate-100 flex items-center justify-center">
                     <span class="material-symbols-outlined text-6xl text-blue-300">school</span>
                 </div>
             @endif
@@ -277,15 +316,16 @@
     </section>
 
     {{-- ============ PRESTASI ============ --}}
-    <section class="py-14 sm:py-20 bg-slate-50 border-y border-slate-200"
-        x-data="{ filter: 'Semua' }">
-        <div class="max-w-7xl mx-auto px-6">
+    <section class="py-14 sm:py-20 bg-slate-50 border-y border-slate-200" x-data="{ filter: 'Semua' }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-12" data-aos="fade-up">
-                <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                <span
+                    class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                     Galeri Prestasi
                 </span>
-                <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight mt-3">Ukiran Prestasi</h3>
-                <p class="text-xs text-slate-500 mt-2">Daftar torehan membanggakan yang diraih siswa-siswi di berbagai bidang.</p>
+                <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight mt-3">Prestasi</h3>
+                <p class="text-xs text-slate-500 mt-2">Daftar torehan membanggakan yang diraih siswa-siswi di berbagai
+                    bidang.</p>
 
                 <div class="flex gap-2.5 overflow-x-auto pb-1 justify-center mt-6">
                     @php
@@ -300,8 +340,9 @@
                         <button @click="filter = '{{ $cat }}'"
                             class="px-4 py-2 text-xs font-bold rounded-xl border transition-all shrink-0 cursor-pointer"
                             :class="filter === '{{ $cat }}'
-                                ? 'bg-blue-600 text-white border-transparent shadow'
-                                : 'bg-white hover:bg-slate-50 text-slate-600 border-slate-200'">
+                                ?
+                                'bg-blue-600 text-white border-transparent shadow' :
+                                'bg-white hover:bg-slate-50 text-slate-600 border-slate-200'">
                             {{ $cat }}
                         </button>
                     @endforeach
@@ -311,11 +352,11 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 @forelse ($recentPrestasi as $prestasi)
                     <div x-show="filter === 'Semua' || filter === '{{ $prestasi->category }}'"
-                        x-transition:enter="transition ease-out duration-300"
-                        data-aos="fade-up"
+                        x-transition:enter="transition ease-out duration-300" data-aos="fade-up"
                         class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
                         <div class="flex items-center justify-between">
-                            <span class="text-[10px] bg-blue-50 text-blue-600 font-extrabold uppercase px-2.5 py-1 rounded-full">
+                            <span
+                                class="text-[10px] bg-blue-50 text-blue-600 font-extrabold uppercase px-2.5 py-1 rounded-full">
                                 {{ $prestasi->category ?? 'Prestasi' }}
                             </span>
                             @if ($prestasi->year)
@@ -324,10 +365,12 @@
                         </div>
                         <h4 class="font-extrabold text-sm text-slate-900 mt-4 leading-snug">{{ $prestasi->title }}</h4>
                         @if ($prestasi->description)
-                            <p class="text-[11px] text-slate-500 leading-relaxed mt-2.5">{{ Str::limit(strip_tags($prestasi->description), 100) }}</p>
+                            <p class="text-[11px] text-slate-500 leading-relaxed mt-2.5">
+                                {{ Str::limit(strip_tags($prestasi->description), 100) }}</p>
                         @endif
                         @if ($prestasi->level)
-                            <span class="inline-block mt-3 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">{{ $prestasi->level }}</span>
+                            <span
+                                class="inline-block mt-3 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">{{ $prestasi->level }}</span>
                         @endif
                     </div>
                 @empty
@@ -338,7 +381,7 @@
             @if ($recentPrestasi->count() > 0)
                 <div class="text-center mt-10">
                     <a href="/prestasi"
-                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs transition">
+                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
                         Lihat Semua Prestasi
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
                     </a>
@@ -348,10 +391,10 @@
     </section>
 
     {{-- ============ BERITA ============ --}}
-    <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6"
-        x-data="{ selectedNews: null }">
+    <section class="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6" x-data="{ selectedNews: null }">
         <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
-            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+            <span
+                class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                 Berita Sekolah
             </span>
             <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Menyajikan Kabar Hangat & Terpercaya</h3>
@@ -365,8 +408,7 @@
                     data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}">
                     <div class="h-48 relative overflow-hidden bg-slate-100">
                         @if ($news->image)
-                            <img src="{{ asset('storage/berita/' . $news->image) }}"
-                                alt="{{ $news->title }}"
+                            <img src="{{ asset('storage/berita/' . $news->image) }}" alt="{{ $news->title }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-slate-300">
@@ -374,18 +416,21 @@
                             </div>
                         @endif
                         @if ($news->category)
-                            <span class="absolute top-4 left-4 bg-blue-600 text-white text-[9px] font-extrabold uppercase py-1 px-3 rounded-full shadow">
+                            <span
+                                class="absolute top-4 left-4 bg-blue-600 text-white text-[9px] font-extrabold uppercase py-1 px-3 rounded-full shadow">
                                 {{ $news->category }}
                             </span>
                         @endif
                     </div>
-                    <div class="p-6 space-y-3 flex flex-col flex-1">
+                    <div class="p-4 sm:p-6 space-y-3 flex flex-col flex-1">
                         <div>
-                            <div class="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
+                            <div
+                                class="flex items-center gap-1.5 text-[10px] text-slate-400 font-semibold uppercase tracking-wider mb-2">
                                 <span class="material-symbols-outlined text-sm">calendar_month</span>
                                 <span>{{ \Carbon\Carbon::parse($news->created_at)->translatedFormat('d F Y') }}</span>
                             </div>
-                            <h4 class="font-extrabold text-sm text-slate-900 tracking-tight group-hover:text-blue-600 transition leading-snug">
+                            <h4
+                                class="font-extrabold text-sm text-slate-900 tracking-tight group-hover:text-blue-600 transition leading-snug">
                                 {{ $news->title }}
                             </h4>
                             <p class="text-[11px] text-slate-500 leading-normal mt-2 line-clamp-3">
@@ -393,7 +438,8 @@
                             </p>
                         </div>
                         <div class="pt-4 border-t border-slate-100 mt-auto">
-                            <span class="text-[11px] font-bold text-blue-600 group-hover:text-blue-800 transition flex items-center gap-1">
+                            <span
+                                class="text-[11px] font-bold text-blue-600 group-hover:text-blue-800 transition flex items-center gap-1">
                                 Baca Selengkapnya
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                             </span>
@@ -408,7 +454,7 @@
         @if ($recentNews->count() > 0)
             <div class="text-center mt-12">
                 <a href="/berita"
-                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs transition">
+                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
                     Lihat Semua Berita
                     <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </a>
@@ -419,36 +465,38 @@
         <template x-teleport="body">
             <div x-show="selectedNews !== null"
                 class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-4 overflow-y-auto"
-                x-cloak
-                @click="selectedNews = null">
+                x-cloak @click="selectedNews = null">
                 <div @click.stop
                     class="bg-white rounded-3xl max-w-2xl w-full my-8 overflow-hidden shadow-2xl border border-slate-100 text-left">
                     @foreach ($recentNews as $news)
                         <div x-show="selectedNews === {{ $news->id }}" x-cloak>
                             <div class="h-56 sm:h-72 relative bg-slate-100">
                                 @if ($news->image)
-                                    <img src="{{ asset('storage/berita/' . $news->image) }}"
-                                        alt="{{ $news->title }}"
+                                    <img src="{{ asset('storage/berita/' . $news->image) }}" alt="{{ $news->title }}"
                                         class="w-full h-full object-cover">
                                 @else
                                     <div class="w-full h-full flex items-center justify-center text-slate-300">
                                         <span class="material-symbols-outlined text-6xl">newspaper</span>
                                     </div>
                                 @endif
-                                <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent"></div>
+                                <div
+                                    class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-transparent">
+                                </div>
                                 <button @click="selectedNews = null"
                                     class="absolute top-4 right-4 w-10 h-10 rounded-full bg-slate-900/60 hover:bg-slate-900 text-white flex items-center justify-center transition cursor-pointer">
                                     <span class="material-symbols-outlined">close</span>
                                 </button>
                                 @if ($news->category)
-                                    <span class="absolute bottom-6 left-6 bg-blue-600 text-white text-[10px] font-extrabold uppercase py-1.5 px-4 rounded-full shadow">
+                                    <span
+                                        class="absolute bottom-6 left-6 bg-blue-600 text-white text-[10px] font-extrabold uppercase py-1.5 px-4 rounded-full shadow">
                                         {{ $news->category }}
                                     </span>
                                 @endif
                             </div>
-                            <div class="p-6 sm:p-8 space-y-4 overflow-y-auto max-h-[50vh]">
+                            <div class="p-6 sm:p-8 space-y-4 overflow-y-auto max-h-[65vh] sm:max-h-[50vh]">
                                 <div>
-                                    <div class="flex items-center gap-3 text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3">
+                                    <div
+                                        class="flex items-center gap-3 text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-3">
                                         <span class="flex items-center gap-1">
                                             <span class="material-symbols-outlined text-sm">calendar_month</span>
                                             {{ \Carbon\Carbon::parse($news->created_at)->translatedFormat('d F Y') }}
@@ -460,11 +508,12 @@
                                         {{ $news->title }}
                                     </h3>
                                 </div>
-                                <div class="text-xs text-slate-600 leading-relaxed space-y-4 border-b border-slate-100 pb-6">
+                                <div
+                                    class="text-xs text-slate-600 leading-relaxed space-y-4 border-b border-slate-100 pb-6">
                                     {!! nl2br(e($news->content)) !!}
                                 </div>
                             </div>
-                            <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+                            <div class="bg-slate-50 px-4 sm:px-6 py-4 border-t border-slate-100 flex justify-end">
                                 <button @click="selectedNews = null"
                                     class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold text-xs px-5 py-2.5 rounded-xl transition cursor-pointer">
                                     Tutup
@@ -479,9 +528,10 @@
 
     {{-- ============ FASILITAS ============ --}}
     <section class="py-14 sm:py-20 bg-slate-50 border-y border-slate-200">
-        <div class="max-w-7xl mx-auto px-6">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
-                <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                <span
+                    class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                     Fasilitas Utama
                 </span>
                 <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Infrastruktur Kelas Dunia</h3>
@@ -494,8 +544,7 @@
                         class="bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-lg transition duration-300 flex flex-col">
                         <div class="h-40 overflow-hidden bg-slate-100">
                             @if ($item->image)
-                                <img src="{{ asset('storage/' . $item->image) }}"
-                                    alt="{{ $item->name }}"
+                                <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->name }}"
                                     class="w-full h-full object-cover hover:scale-105 transition duration-500">
                             @else
                                 <div class="w-full h-full flex items-center justify-center text-slate-300">
@@ -523,25 +572,27 @@
     </section>
 
     {{-- ============ GURU ============ --}}
-    <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6"
-        x-data="{ search: '', deptFilter: 'Semua' }">
+    <section class="py-10 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6" x-data="{ search: '', deptFilter: 'Semua' }">
         <div class="text-center space-y-3 max-w-xl mx-auto mb-12" data-aos="fade-up">
-            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+            <span
+                class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                 Direktori Staf Pengajar
             </span>
-            <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Dipimpin Praktisi Pendidikan Berkelas</h3>
-            <p class="text-xs text-slate-500">Para guru merupakan lulusan universitas terbaik dan berlisensi profesional.</p>
+            <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Dipimpin Praktisi Pendidikan
+                Berkelas</h3>
+            <p class="text-xs text-slate-500">Para guru merupakan lulusan universitas terbaik dan berlisensi profesional.
+            </p>
         </div>
 
-        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl mb-10 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm" data-aos="fade-up">
+        <div class="bg-slate-50 border border-slate-200 p-5 rounded-2xl mb-10 flex flex-col md:flex-row gap-4 items-center justify-between shadow-sm"
+            data-aos="fade-up">
             <div class="relative w-full md:max-w-md">
-                <span class="material-symbols-outlined text-sm text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2">search</span>
-                <input type="text"
-                    x-model="search"
-                    placeholder="Cari guru berdasarkan nama atau bidang..."
+                <span
+                    class="material-symbols-outlined text-sm text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2">search</span>
+                <input type="text" x-model="search" placeholder="Cari guru berdasarkan nama atau bidang..."
                     class="w-full text-xs font-medium pl-9 pr-4 py-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition">
             </div>
-            <div class="flex gap-2.5 overflow-x-auto pb-1 shrink-0">
+            <div class="flex gap-2.5 overflow-x-auto pb-3 w-full scrollbar-hide">
                 @php
                     $depts = ['Semua'];
                     foreach ($recentGuru as $g) {
@@ -554,8 +605,9 @@
                     <button @click="deptFilter = '{{ $dept }}'"
                         class="px-4 py-2 text-xs font-bold rounded-xl border transition-all shrink-0 cursor-pointer"
                         :class="deptFilter === '{{ $dept }}'
-                            ? 'bg-blue-600 text-white border-transparent shadow-md'
-                            : 'bg-white hover:bg-slate-100 text-slate-600 border-slate-200'">
+                            ?
+                            'bg-blue-600 text-white border-transparent shadow-md' :
+                            'bg-white hover:bg-slate-100 text-slate-600 border-slate-200'">
                         {{ $dept }}
                     </button>
                 @endforeach
@@ -565,18 +617,19 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             @forelse ($recentGuru as $guru)
                 <div x-show="
-                    (deptFilter === 'Semua' || deptFilter === '{{ $guru->subject }}') &&
+                    (deptFilter === 'Semua' || deptFilter === '{{ $guru->subject }}')
+&&
                     (search === '' ||
                         '{{ strtolower($guru->name) }}'.includes(search.toLowerCase()) ||
                         '{{ strtolower($guru->position ?? '') }}'.includes(search.toLowerCase()) ||
                         '{{ strtolower($guru->subject ?? '') }}'.includes(search.toLowerCase()))"
-                    x-transition:enter="transition ease-out duration-300"
-                    data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}"
+                    x-transition:enter="transition ease-out duration-300" data-aos="fade-up"
+                    data-aos-delay="{{ $loop->index * 100 }}"
                     class="bg-white rounded-2xl p-6 border border-slate-200 text-center shadow-sm hover:shadow-lg hover:-translate-y-1.5 transition-all duration-300 group flex flex-col">
-                    <div class="relative w-24 h-24 mx-auto rounded-full overflow-hidden border-2 border-slate-100 mb-4 bg-slate-100">
+                    <div
+                        class="relative w-24 h-24 mx-auto rounded-full overflow-hidden border-2 border-slate-100 mb-4 bg-slate-100">
                         @if ($guru->photo)
-                            <img src="{{ asset('storage/guru/' . $guru->photo) }}"
-                                alt="{{ $guru->name }}"
+                            <img src="{{ asset('storage/guru/' . $guru->photo) }}" alt="{{ $guru->name }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-300">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-slate-300">
@@ -585,11 +638,13 @@
                         @endif
                     </div>
                     @if ($guru->subject)
-                        <span class="text-[9px] bg-slate-50 border border-slate-200 text-slate-500 px-2.5 py-1 rounded-full uppercase font-bold tracking-wider mb-3">
+                        <span
+                            class="text-[9px] bg-slate-50 border border-slate-200 text-slate-500 px-2.5 py-1 rounded-full uppercase font-bold tracking-wider mb-3">
                             {{ $guru->subject }}
                         </span>
                     @endif
-                    <h4 class="font-extrabold text-sm text-slate-900 group-hover:text-blue-600 transition">{{ $guru->name }}</h4>
+                    <h4 class="font-extrabold text-sm text-slate-900 group-hover:text-blue-600 transition">
+                        {{ $guru->name }}</h4>
                     @if ($guru->position)
                         <p class="text-[10px] text-blue-600 font-bold mt-1">{{ $guru->position }}</p>
                     @endif
@@ -607,7 +662,7 @@
         @if ($recentGuru->count() > 0)
             <div class="text-center mt-12">
                 <a href="/data-guru"
-                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs transition">
+                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
                     Lihat Semua Guru
                     <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </a>
@@ -616,32 +671,32 @@
     </section>
 
     {{-- ============ GALERI ============ --}}
-    <section class="py-14 sm:py-20 bg-slate-50 border-y border-slate-200"
-        x-data="{ lightbox: null }">
-        <div class="max-w-7xl mx-auto px-6">
+    <section class="py-14 sm:py-20 bg-slate-50 border-y border-slate-200" x-data="{ lightbox: null }">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
-                <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                <span
+                    class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                     Galeri Dokumentasi
                 </span>
                 <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Mengabadikan Momentum Kebersamaan</h3>
                 <p class="text-xs text-slate-500">Klik foto untuk melihat pratinjau resolusi tinggi.</p>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
                 @forelse ($recentGaleri as $foto)
                     <div @click="lightbox = '{{ asset('storage/galeri/' . $foto->image) }}'"
                         class="group relative cursor-pointer overflow-hidden rounded-2xl border border-slate-200 shadow-sm aspect-[4/3] bg-slate-100"
                         data-aos="zoom-in" data-aos-delay="{{ $loop->index * 100 }}">
                         @if ($foto->image)
-                            <img src="{{ asset('storage/galeri/' . $foto->image) }}"
-                                alt="{{ $foto->title }}"
+                            <img src="{{ asset('storage/galeri/' . $foto->image) }}" alt="{{ $foto->title }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                         @else
                             <div class="w-full h-full flex items-center justify-center text-slate-300">
                                 <span class="material-symbols-outlined text-5xl">image</span>
                             </div>
                         @endif
-                        <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div
+                            class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <p class="text-[10px] text-white leading-relaxed font-semibold">{{ $foto->title }}</p>
                         </div>
                     </div>
@@ -653,7 +708,7 @@
             @if ($recentGaleri->count() > 0)
                 <div class="text-center mt-10">
                     <a href="/galeri"
-                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-bold text-xs transition">
+                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
                         Lihat Semua Galeri
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
                     </a>
@@ -664,138 +719,19 @@
         {{-- Lightbox --}}
         <template x-teleport="body">
             <div x-show="lightbox !== null"
-                class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4"
-                x-cloak
+                class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4" x-cloak
                 @click="lightbox = null">
                 <button @click="lightbox = null"
                     class="absolute top-6 right-6 w-10 h-10 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
                     <span class="material-symbols-outlined">close</span>
                 </button>
                 <div @click.stop class="max-w-4xl max-h-[85vh]">
-                    <img :src="lightbox"
-                        alt="Preview"
+                    <img :src="lightbox" alt="Preview"
                         class="rounded-2xl border border-slate-800 shadow-2xl max-w-full max-h-[80vh] object-contain">
                 </div>
             </div>
         </template>
     </section>
-
-    {{-- ============ KONTAK & ASPIRASI ============ --}}
-    {{-- <section class="py-14 sm:py-20 max-w-7xl mx-auto px-6">
-        <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
-            <span class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
-                Hubungi Kami
-            </span>
-            <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Pusat Layanan & Aspirasi</h3>
-            <p class="text-xs text-slate-500">Sampaikan saran, pengaduan, atau pertanyaan melalui form di bawah.</p>
-        </div> --}}
-
-        {{-- <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start"> --}}
-            {{-- Left: Info kontak --}}
-            {{-- <div class="lg:col-span-5 space-y-8" data-aos="fade-right">
-                <div class="bg-slate-900 text-white p-8 rounded-2xl shadow-xl space-y-6 relative overflow-hidden">
-                    <div class="absolute right-0 top-0 w-32 h-32 bg-blue-500/10 rounded-full blur-2xl"></div>
-                    <h4 class="text-sm font-extrabold tracking-wide uppercase text-blue-400">Informasi Layanan</h4>
-                    <p class="text-xs text-slate-300 leading-relaxed">
-                        {{ $settings['deskripsi_layanan'] ?? 'Loket layanan administrasi buka setiap hari kerja. Silakan hubungi kami atau kunjungi ruang sekretariat.' }}
-                    </p>
-                    <div class="space-y-4">
-                        <div class="flex items-start gap-3.5">
-                            <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-sm">location_on</span>
-                            </div>
-                            <div>
-                                <h5 class="text-[11px] font-bold text-slate-300 uppercase">Alamat</h5>
-                                <p class="text-xs text-slate-200 mt-1.5">{{ $settings['alamat'] ?? '-' }}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3.5">
-                            <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-sm">call</span>
-                            </div>
-                            <div>
-                                <h5 class="text-[11px] font-bold text-slate-300 uppercase">Telepon</h5>
-                                <p class="text-xs text-slate-200 mt-1.5">{{ $settings['telepon'] ?? '-' }}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-start gap-3.5">
-                            <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
-                                <span class="material-symbols-outlined text-sm">mail</span>
-                            </div>
-                            <div>
-                                <h5 class="text-[11px] font-bold text-slate-300 uppercase">Email</h5>
-                                <p class="text-xs text-slate-200 mt-1.5 font-mono">{{ $settings['email'] ?? '-' }}</p>
-                            </div>
-                        </div>
-                        @if (!empty($settings['jam_operasional']))
-                            <div class="flex items-start gap-3.5">
-                                <div class="w-8 h-8 rounded-lg bg-blue-500/20 text-blue-300 flex items-center justify-center shrink-0">
-                                    <span class="material-symbols-outlined text-sm">schedule</span>
-                                </div>
-                                <div>
-                                    <h5 class="text-[11px] font-bold text-slate-300 uppercase">Jam Operasional</h5>
-                                    <p class="text-xs text-slate-200 mt-1.5">{{ $settings['jam_operasional'] }}</p>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div> --}}
-
-            {{-- Right: Contact Form --}}
-            {{-- <div class="lg:col-span-7" data-aos="fade-left">
-                <div class="bg-slate-50 border border-slate-200 rounded-2xl p-6 md:p-8 shadow-sm">
-                    <h4 class="font-extrabold text-sm text-slate-900 mb-5 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-blue-600">send</span>
-                        Kirim Pesan / Aspirasi
-                    </h4>
-
-                    @if (session('success'))
-                        <div class="bg-emerald-50 border border-emerald-200 text-emerald-800 p-6 rounded-xl text-center space-y-3">
-                            <span class="material-symbols-outlined text-4xl text-emerald-500">check_circle</span>
-                            <h5 class="font-bold text-xs uppercase">Pesan Berhasil Terkirim</h5>
-                            <p class="text-[11px] text-emerald-700">{{ session('success') }}</p>
-                        </div>
-                    @else
-                        <form action="{{ route('kontak.store') }}" method="POST" class="space-y-4 text-left">
-                            @csrf
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Nama Lengkap</label>
-                                    <input type="text" name="name" value="{{ old('name') }}" required
-                                        class="w-full text-xs px-3.5 py-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
-                                        placeholder="Nama Anda">
-                                </div>
-                                <div>
-                                    <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Email</label>
-                                    <input type="email" name="email" value="{{ old('email') }}" required
-                                        class="w-full text-xs px-3.5 py-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
-                                        placeholder="email@contoh.com">
-                                </div>
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Subjek</label>
-                                <input type="text" name="subject" value="{{ old('subject') }}" required
-                                    class="w-full text-xs px-3.5 py-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
-                                    placeholder="Subjek pesan">
-                            </div>
-                            <div>
-                                <label class="block text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Pesan</label>
-                                <textarea name="message" required rows="4"
-                                    class="w-full text-xs px-3.5 py-3 rounded-lg border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none"
-                                    placeholder="Tulis pesan Anda...">{{ old('message') }}</textarea>
-                            </div>
-                            <button type="submit"
-                                class="w-full bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-[11px] py-3.5 rounded-xl shadow-lg flex items-center justify-center gap-2 transition uppercase tracking-wider">
-                                <span class="material-symbols-outlined text-sm">send</span>
-                                Kirim Pesan
-                            </button>
-                        </form>
-                    @endif
-                </div>
-            </div>
-        </div>
-    </section> --}}
 
     @push('scripts')
         <script>

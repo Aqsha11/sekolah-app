@@ -93,7 +93,7 @@ class SettingController extends Controller
             // slider
             'slider_title',
             'slider_description',
-            'slider_button',
+            'slider_button', 
             'slider_link',
         ];
 
