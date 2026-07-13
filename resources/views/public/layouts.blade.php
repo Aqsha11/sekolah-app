@@ -146,7 +146,7 @@
 
             {{-- Mobile --}}
             <button id="menuBtn"
-                class="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-white hover:bg-white/10 transition-all">
+                class="lg:hidden w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 hover:bg-slate-100 transition-all">
                 <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
         </div>
