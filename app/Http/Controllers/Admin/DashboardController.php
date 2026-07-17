@@ -14,6 +14,8 @@ use App\Models\Siswa;
 use App\Models\Kelas;
 use App\Models\Alumni;
 use App\Models\Agenda;
+use App\Models\KalenderAkademik;
+use Carbon\Carbon;
 use Illuminate\View\View;
 
 class DashboardController extends Controller
@@ -54,6 +56,28 @@ class DashboardController extends Controller
             'latestBerita'   => Berita::latest()->limit(5)->get(),
             'latestGuru'     => Guru::latest()->limit(5)->get(),
             'latestPrestasi' => Prestasi::latest()->limit(5)->get(),
+
+            // KALENDER
+            'kalenderBulan' => Carbon::now()->startOfMonth(),
+            'kalenderEvents' => KalenderAkademik::where('is_active', true)
+                ->where(function ($q) {
+                    $now = Carbon::now();
+                    $startOfMonth = $now->copy()->startOfMonth();
+                    $endOfMonth = $now->copy()->endOfMonth();
+                    $q->whereBetween('tanggal_mulai', [$startOfMonth, $endOfMonth])
+                        ->orWhereBetween('tanggal_selesai', [$startOfMonth, $endOfMonth])
+                        ->orWhere(function ($q2) use ($startOfMonth, $endOfMonth) {
+                            $q2->where('tanggal_mulai', '<=', $startOfMonth)
+                                ->where('tanggal_selesai', '>=', $endOfMonth);
+                        });
+                })
+                ->orderBy('tanggal_mulai')
+                ->get(),
+            'upcomingEvents' => KalenderAkademik::where('is_active', true)
+                ->where('tanggal_selesai', '>=', Carbon::today())
+                ->orderBy('tanggal_mulai')
+                ->take(5)
+                ->get(),
         ];
 
         return view('admin.dashboard.index', $data);

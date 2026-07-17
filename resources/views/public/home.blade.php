@@ -15,7 +15,7 @@
         $defaultDescription = 'Mewujudkan generasi berkarakter, disiplin, unggul, dan berwawasan global.';
         $slides = [];
         $backgrounds = [
-            'bg-gradient-to-r from-blue-950 via-blue-900 to-slate-900',
+            'bg-gradient-to-r from-primary-950 via-primary-900 to-slate-900',
             'bg-gradient-to-r from-emerald-950 via-emerald-900 to-slate-900',
             'bg-gradient-to-r from-indigo-950 via-indigo-900 to-slate-900',
         ];
@@ -87,7 +87,7 @@
                         </p>
                         <div class="flex flex-wrap items-center gap-3 pt-4">
                             <a x-show="slide.link" :href="slide.link"
-                                class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-4 sm:px-6 py-3.5 rounded-xl shadow-lg shadow-blue-500/15 flex items-center gap-2 transition hover:scale-105">
+                                class="bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs px-4 sm:px-6 py-3.5 rounded-xl shadow-lg shadow-primary-500/15 flex items-center gap-2 transition hover:scale-105">
                                 Pelajari Selengkapnya
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                             </a>
@@ -102,7 +102,7 @@
             <div class="flex items-center gap-2">
                 <template x-for="(_, dotIdx) in slides" :key="dotIdx">
                     <button class="transition-all duration-300 h-2 rounded-full cursor-pointer"
-                        :class="dotIdx === current ? 'w-8 bg-blue-500' : 'w-2 bg-slate-600'" @click="goTo(dotIdx)">
+                        :class="dotIdx === current ? 'w-8 bg-primary-500' : 'w-2 bg-slate-600'" @click="goTo(dotIdx)">
                     </button>
                 </template>
             </div>
@@ -134,7 +134,7 @@
                 <div data-aos="fade-up" data-aos-delay="{{ $loop->index * 100 }}"
                     class="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200 shadow-sm flex items-center sm:items-start gap-3 sm:gap-4 hover:shadow-md hover:-translate-y-1 transition-all duration-300">
                     <div
-                        class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                        class="w-9 h-9 sm:w-11 sm:h-11 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center shrink-0">
                         <span
                             class="material-symbols-outlined text-lg sm:text-xl">{{ $statIcons[$stat->label] ?? 'bar_chart' }}</span>
                     </div>
@@ -156,20 +156,20 @@
     <section
         class="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 gap-8 sm:gap-12 items-center">
         <div class="lg:col-span-5 relative" data-aos="fade-right">
-            <div class="absolute -top-4 -left-4 w-72 h-72 bg-blue-100 rounded-full blur-3xl opacity-45 -z-10"></div>
+            <div class="absolute -top-4 -left-4 w-72 h-72 bg-primary-100 rounded-full blur-3xl opacity-45 -z-10"></div>
             @if (!empty($settings['hero_image']))
                 <img src="{{ asset('storage/settings/' . $settings['hero_image']) }}" alt="Kepala Sekolah"
                     class="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl border border-slate-100">
             @else
                 <div
-                    class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-slate-100 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-6xl text-blue-300">person</span>
+                    class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 border border-slate-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-6xl text-primary-300">person</span>
                 </div>
             @endif
             @if (!empty($settings['kepala_sekolah']))
                 <div
                     class="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur text-white px-4 py-2.5 rounded-xl border border-slate-700">
-                    <span class="text-[9px] font-bold uppercase text-blue-400 tracking-wider">Kepala Sekolah</span>
+                    <span class="text-[9px] font-bold uppercase text-primary-400 tracking-wider">Kepala Sekolah</span>
                     <h5 class="text-xs font-black">{{ $settings['kepala_sekolah'] }}</h5>
                 </div>
             @endif
@@ -177,7 +177,7 @@
 
         <div class="lg:col-span-7 space-y-6" data-aos="fade-left">
             <span
-                class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                class="bg-primary-50 text-primary-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                 Sambutan Kepala Sekolah
             </span>
             <h3 class="text-2xl font-black text-slate-900 tracking-tight leading-snug">
@@ -192,7 +192,7 @@
             </div>
             <div class="flex flex-wrap gap-3 pt-2">
                 <a href="/profil"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs px-5 py-3 rounded-xl transition shadow">
+                    class="bg-primary-600 hover:bg-primary-700 text-white font-bold text-xs px-5 py-3 rounded-xl transition shadow">
                     Lihat Visi Misi Sekolah
                 </a>
                 {{-- <a href="/kontak"
@@ -208,7 +208,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center space-y-3 max-w-xl mx-auto mb-14">
                 <span
-                    class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                    class="bg-primary-50 text-primary-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                     Navigasi Cepat
                 </span>
                 <h3 class="text-2xl font-black text-slate-900 tracking-tight">Jelajahi Portal Layanan</h3>
@@ -218,7 +218,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <a href="/profil"
                     class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition duration-300 text-left">
-                    <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center mb-4">
+                    <div class="w-10 h-10 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center mb-4">
                         <span class="material-symbols-outlined text-xl">school</span>
                     </div>
                     <h4 class="font-extrabold text-xs text-slate-900 uppercase">Profil & Sejarah</h4>
@@ -262,7 +262,7 @@
         class="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
         <div data-aos="fade-right" class="space-y-6">
             <span
-                class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                class="bg-primary-50 text-primary-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                 Tentang Sekolah
             </span>
             <h3 class="text-3xl font-extrabold text-slate-900 tracking-tight leading-normal">
@@ -274,7 +274,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
                 <div class="flex items-start gap-2.5">
                     <div
-                        class="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 text-xs">
+                        class="w-7 h-7 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 shrink-0 text-xs">
                         <span class="material-symbols-outlined text-sm">check</span>
                     </div>
                     <div>
@@ -284,7 +284,7 @@
                 </div>
                 <div class="flex items-start gap-2.5">
                     <div
-                        class="w-7 h-7 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 shrink-0 text-xs">
+                        class="w-7 h-7 rounded-full bg-primary-50 flex items-center justify-center text-primary-600 shrink-0 text-xs">
                         <span class="material-symbols-outlined text-sm">check</span>
                     </div>
                     <div>
@@ -294,21 +294,21 @@
                 </div>
             </div>
             <a href="/profil"
-                class="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition shadow-md">
+                class="inline-flex items-center gap-2 bg-primary-600 hover:bg-primary-700 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition shadow-md">
                 Selengkapnya
                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
             </a>
         </div>
 
         <div class="relative" data-aos="fade-left">
-            <div class="absolute -top-4 -left-4 w-72 h-72 bg-blue-200 rounded-full blur-3xl opacity-40 -z-10"></div>
+            <div class="absolute -top-4 -left-4 w-72 h-72 bg-primary-200 rounded-full blur-3xl opacity-40 -z-10"></div>
             @if (!empty($settings['profil_image']))
                 <img src="{{ asset('storage/settings/' . $settings['profil_image']) }}" alt="Profil Sekolah"
                     class="w-full h-80 md:h-96 object-cover rounded-2xl shadow-xl border border-slate-100">
             @else
                 <div
-                    class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-blue-100 to-blue-50 border border-slate-100 flex items-center justify-center">
-                    <span class="material-symbols-outlined text-6xl text-blue-300">school</span>
+                    class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 border border-slate-100 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-6xl text-primary-300">school</span>
                 </div>
             @endif
 
@@ -320,7 +320,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center mb-12" data-aos="fade-up">
                 <span
-                    class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                    class="bg-primary-50 text-primary-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                     Galeri Prestasi
                 </span>
                 <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight mt-3">Prestasi</h3>
@@ -341,7 +341,7 @@
                             class="px-4 py-2 text-xs font-bold rounded-xl border transition-all shrink-0 cursor-pointer"
                             :class="filter === '{{ $cat }}'
                                 ?
-                                'bg-blue-600 text-white border-transparent shadow' :
+                                'bg-primary-600 text-white border-transparent shadow' :
                                 'bg-white hover:bg-slate-50 text-slate-600 border-slate-200'">
                             {{ $cat }}
                         </button>
@@ -356,7 +356,7 @@
                         class="bg-white rounded-2xl p-5 border border-slate-200 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300">
                         <div class="flex items-center justify-between">
                             <span
-                                class="text-[10px] bg-blue-50 text-blue-600 font-extrabold uppercase px-2.5 py-1 rounded-full">
+                                class="text-[10px] bg-primary-50 text-primary-600 font-extrabold uppercase px-2.5 py-1 rounded-full">
                                 {{ $prestasi->category ?? 'Prestasi' }}
                             </span>
                             @if ($prestasi->year)
@@ -370,7 +370,7 @@
                         @endif
                         @if ($prestasi->level)
                             <span
-                                class="inline-block mt-3 text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded">{{ $prestasi->level }}</span>
+                                class="inline-block mt-3 text-[10px] font-bold text-primary-600 bg-primary-50 px-2 py-0.5 rounded">{{ $prestasi->level }}</span>
                         @endif
                     </div>
                 @empty
@@ -381,7 +381,7 @@
             @if ($recentPrestasi->count() > 0)
                 <div class="text-center mt-10">
                     <a href="/prestasi"
-                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
+                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-primary-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
                         Lihat Semua Prestasi
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
                     </a>
@@ -394,7 +394,7 @@
     <section class="py-14 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6" x-data="{ selectedNews: null }">
         <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
             <span
-                class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                class="bg-primary-50 text-primary-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                 Berita Sekolah
             </span>
             <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Menyajikan Kabar Hangat & Terpercaya</h3>
@@ -417,7 +417,7 @@
                         @endif
                         @if ($news->category)
                             <span
-                                class="absolute top-4 left-4 bg-blue-600 text-white text-[9px] font-extrabold uppercase py-1 px-3 rounded-full shadow">
+                                class="absolute top-4 left-4 bg-primary-600 text-white text-[9px] font-extrabold uppercase py-1 px-3 rounded-full shadow">
                                 {{ $news->category }}
                             </span>
                         @endif
@@ -430,7 +430,7 @@
                                 <span>{{ \Carbon\Carbon::parse($news->created_at)->translatedFormat('d F Y') }}</span>
                             </div>
                             <h4
-                                class="font-extrabold text-sm text-slate-900 tracking-tight group-hover:text-blue-600 transition leading-snug">
+                                class="font-extrabold text-sm text-slate-900 tracking-tight group-hover:text-primary-600 transition leading-snug">
                                 {{ $news->title }}
                             </h4>
                             <p class="text-[11px] text-slate-500 leading-normal mt-2 line-clamp-3">
@@ -439,7 +439,7 @@
                         </div>
                         <div class="pt-4 border-t border-slate-100 mt-auto">
                             <span
-                                class="text-[11px] font-bold text-blue-600 group-hover:text-blue-800 transition flex items-center gap-1">
+                                class="text-[11px] font-bold text-primary-600 group-hover:text-primary-800 transition flex items-center gap-1">
                                 Baca Selengkapnya
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                             </span>
@@ -454,7 +454,7 @@
         @if ($recentNews->count() > 0)
             <div class="text-center mt-12">
                 <a href="/berita"
-                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
+                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-primary-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
                     Lihat Semua Berita
                     <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </a>
@@ -488,7 +488,7 @@
                                 </button>
                                 @if ($news->category)
                                     <span
-                                        class="absolute bottom-6 left-6 bg-blue-600 text-white text-[10px] font-extrabold uppercase py-1.5 px-4 rounded-full shadow">
+                                        class="absolute bottom-6 left-6 bg-primary-600 text-white text-[10px] font-extrabold uppercase py-1.5 px-4 rounded-full shadow">
                                         {{ $news->category }}
                                     </span>
                                 @endif
@@ -531,7 +531,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
                 <span
-                    class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                    class="bg-primary-50 text-primary-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                     Fasilitas Utama
                 </span>
                 <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Infrastruktur Kelas Dunia</h3>
@@ -558,7 +558,7 @@
                                 {{ Str::limit(strip_tags($item->description), 100) }}
                             </p>
                             <a href="/fasilitas"
-                                class="inline-flex items-center gap-1 mt-3 text-[10px] font-bold text-blue-600 hover:text-blue-700 uppercase tracking-wider">
+                                class="inline-flex items-center gap-1 mt-3 text-[10px] font-bold text-primary-600 hover:text-primary-700 uppercase tracking-wider">
                                 Telusuri Area
                                 <span class="material-symbols-outlined text-sm">arrow_forward</span>
                             </a>
@@ -575,7 +575,7 @@
     <section class="py-10 sm:py-20 max-w-7xl mx-auto px-4 sm:px-6" x-data="{ search: '', deptFilter: 'Semua' }">
         <div class="text-center space-y-3 max-w-xl mx-auto mb-12" data-aos="fade-up">
             <span
-                class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                class="bg-primary-50 text-primary-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                 Direktori Staf Pengajar
             </span>
             <h3 class="text-xl sm:text-2xl font-extrabold text-slate-900 tracking-tight">Dipimpin Praktisi Pendidikan
@@ -590,7 +590,7 @@
                 <span
                     class="material-symbols-outlined text-sm text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2">search</span>
                 <input type="text" x-model="search" placeholder="Cari guru berdasarkan nama atau bidang..."
-                    class="w-full text-xs font-medium pl-9 pr-4 py-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition">
+                    class="w-full text-xs font-medium pl-9 pr-4 py-3 rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-100 transition">
             </div>
             <div class="flex gap-2.5 overflow-x-auto pb-3 w-full scrollbar-hide">
                 @php
@@ -606,7 +606,7 @@
                         class="px-4 py-2 text-xs font-bold rounded-xl border transition-all shrink-0 cursor-pointer"
                         :class="deptFilter === '{{ $dept }}'
                             ?
-                            'bg-blue-600 text-white border-transparent shadow-md' :
+                            'bg-primary-600 text-white border-transparent shadow-md' :
                             'bg-white hover:bg-slate-100 text-slate-600 border-slate-200'">
                         {{ $dept }}
                     </button>
@@ -643,10 +643,10 @@
                             {{ $guru->subject }}
                         </span>
                     @endif
-                    <h4 class="font-extrabold text-sm text-slate-900 group-hover:text-blue-600 transition">
+                    <h4 class="font-extrabold text-sm text-slate-900 group-hover:text-primary-600 transition">
                         {{ $guru->name }}</h4>
                     @if ($guru->position)
-                        <p class="text-[10px] text-blue-600 font-bold mt-1">{{ $guru->position }}</p>
+                        <p class="text-[10px] text-primary-600 font-bold mt-1">{{ $guru->position }}</p>
                     @endif
                     @if ($guru->bio)
                         <p class="text-[10px] text-slate-500 leading-normal mt-3 line-clamp-2 italic">
@@ -662,7 +662,7 @@
         @if ($recentGuru->count() > 0)
             <div class="text-center mt-12">
                 <a href="/data-guru"
-                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
+                    class="inline-flex items-center gap-2 bg-slate-900 hover:bg-primary-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
                     Lihat Semua Guru
                     <span class="material-symbols-outlined text-sm">arrow_forward</span>
                 </a>
@@ -675,7 +675,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6">
             <div class="text-center space-y-3 max-w-xl mx-auto mb-16" data-aos="fade-up">
                 <span
-                    class="bg-blue-50 text-blue-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
+                    class="bg-primary-50 text-primary-700 font-extrabold text-[10px] py-1.5 px-3 rounded-full tracking-wider uppercase inline-block">
                     Galeri Dokumentasi
                 </span>
                 <h3 class="text-2xl font-extrabold text-slate-900 tracking-tight">Mengabadikan Momentum Kebersamaan</h3>
@@ -708,7 +708,7 @@
             @if ($recentGaleri->count() > 0)
                 <div class="text-center mt-10">
                     <a href="/galeri"
-                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-blue-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
+                        class="inline-flex items-center gap-2 bg-slate-900 hover:bg-primary-600 text-white px-4 sm:px-6 py-3 rounded-xl font-bold text-xs transition">
                         Lihat Semua Galeri
                         <span class="material-symbols-outlined text-sm">arrow_forward</span>
                     </a>

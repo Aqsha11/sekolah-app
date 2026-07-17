@@ -23,19 +23,19 @@
             <div>
                 <label class="block font-semibold mb-1">Nama</label>
                 <input type="text" name="nama" value="{{ old('nama', $alumnus->nama) }}"
-                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" placeholder="Masukkan nama alumni" required>
             </div>
 
             <div>
                 <label class="block font-semibold mb-1">Tahun Lulus</label>
                 <input type="text" name="tahun_lulus" value="{{ old('tahun_lulus', $alumnus->tahun_lulus) }}"
-                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" placeholder="Contoh: 2020" required>
             </div>
 
             <div>
                 <label class="block font-semibold mb-1">Pekerjaan</label>
                 <input type="text" name="pekerjaan" value="{{ old('pekerjaan', $alumnus->pekerjaan) }}"
-                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300">
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" placeholder="Contoh: Mahasiswa">
             </div>
 
             <div class="flex gap-3">

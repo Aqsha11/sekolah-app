@@ -8,132 +8,23 @@
     $schoolName = $settings['nama_website'] ?? '';
 @endphp
 
-<style>
-    .card-galeri {
-        position: relative;
-        width: 100%;
-        height: 300px;
-        background-color: #f2f2f2;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        perspective: 1000px;
-        box-shadow: 0 0 0 5px #ffffff80;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .card-galeri .card-icon {
-        width: 64px;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 1;
-    }
-
-    .card-galeri:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    .card-galeri .card-content {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding: 24px;
-        box-sizing: border-box;
-        background-color: #f2f2f2;
-        transform: rotateX(-90deg);
-        transform-origin: bottom;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .card-galeri:hover .card-content {
-        transform: rotateX(0deg);
-    }
-
-    .card-galeri .card-title {
-        margin: 0;
-        font-size: 18px;
-        color: #333;
-        font-weight: 700;
-    }
-
-    .card-galeri:hover .card-icon {
-        scale: 0;
-    }
-
-    .card-galeri .card-description {
-        margin: 10px 0 0;
-        font-size: 13px;
-        color: #555;
-        line-height: 1.5;
-        display: -webkit-box;
-        -webkit-line-clamp: 6;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .card-galeri .card-badge {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        z-index: 2;
-        padding: 4px 12px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 600;
-        background: rgba(34, 197, 94, 0.9);
-        color: #fff;
-        backdrop-filter: blur(4px);
-    }
-
-    .card-galeri .card-image {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 0;
-    }
-
-    .card-galeri:hover .card-image {
-        scale: 0;
-    }
-</style>
-
 {{-- HERO --}}
 <section data-aos="fade-in" class="relative overflow-hidden py-20">
-
-    <div class="absolute inset-0 bg-gradient-to-br from-[#C4E2F5]/50 via-white to-sky-50"></div>
-
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-100/50 via-white to-primary-50"></div>
     <div class="relative max-w-7xl mx-auto px-4 md:px-6 text-center">
-
-        <span
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-semibold shadow-sm">
-            <i class="fa-solid fa-images"></i>
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-600 text-white text-sm font-semibold shadow-sm">
+            <span class="material-symbols-outlined text-sm">photo_library</span>
             Galeri Sekolah
         </span>
-
-        <h1 class="mt-6 text-4xl md:text-5xl font-bold text-slate-900">
-            Galeri {{ $schoolName }}
-        </h1>
-
+        <h1 class="mt-6 text-4xl md:text-5xl font-bold text-slate-900">Galeri {{ $schoolName }}</h1>
         <p class="max-w-2xl mx-auto mt-5 text-slate-600 text-lg leading-relaxed">
             Kumpulan foto kegiatan, dokumentasi acara, dan aktivitas sekolah.
         </p>
-
     </div>
-
 </section>
 
 {{-- CONTENT --}}
-<section class="max-w-7xl mx-auto px-4 md:px-6 pb-20">
+<section class="max-w-7xl mx-auto px-4 md:px-6 pb-20" x-data="{ lightbox: null }">
 
     @if ($galeris->count() > 0)
 
@@ -141,19 +32,24 @@
 
             @foreach ($galeris as $index => $galeri)
 
-                <div data-aos="fade-up" data-aos-delay="{{ $index * 100 }}" class="card-galeri">
-
-                    <span class="card-badge">{{ $galeri->category ?? 'Umum' }}</span>
+                <div data-aos="fade-up" data-aos-delay="{{ $index * 100 }}"
+                    @click="lightbox = '{{ asset('storage/galeri/' . $galeri->image) }}'"
+                    class="group relative cursor-pointer overflow-hidden rounded-2xl border border-slate-200 shadow-sm aspect-[4/3] bg-slate-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
 
                     @if($galeri->image)
-                        <img src="{{ asset('storage/galeri/' . $galeri->image) }}" alt="{{ $galeri->title }}" class="card-image">
+                        <img src="{{ asset('storage/galeri/' . $galeri->image) }}" alt="{{ $galeri->title }}"
+                            class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
                     @else
-                        <i class="fa-solid fa-image card-icon text-6xl text-slate-400"></i>
+                        <div class="w-full h-full flex items-center justify-center text-slate-300">
+                            <span class="material-symbols-outlined text-5xl">image</span>
+                        </div>
                     @endif
 
-                    <div class="card-content">
-                        <h3 class="card-title">{{ $galeri->title }}</h3>
-                        <p class="card-description">{{ $galeri->description ?? '' }}</p>
+                    <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-slate-950 via-slate-900/40 to-transparent p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <p class="text-sm text-white leading-relaxed font-semibold">{{ $galeri->title }}</p>
+                        @if ($galeri->category)
+                            <span class="inline-block mt-1 text-[10px] bg-white/20 backdrop-blur text-white px-2 py-0.5 rounded-full">{{ $galeri->category }}</span>
+                        @endif
                     </div>
 
                 </div>
@@ -168,21 +64,29 @@
 
     @else
 
-        <div class="bg-white rounded-3xl border border-dashed border-slate-300 p-16 text-center">
-
-            <i class="fa-solid fa-images text-6xl text-slate-300"></i>
-
-            <h3 class="mt-6 text-2xl font-bold text-slate-700">
-                Belum Ada Galeri
-            </h3>
-
-            <p class="mt-2 text-slate-500">
-                Foto galeri akan tampil di sini.
-            </p>
-
+        <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-16 text-center">
+            <span class="material-symbols-outlined text-6xl text-slate-300">photo_library</span>
+            <h3 class="mt-6 text-2xl font-bold text-slate-700">Belum Ada Galeri</h3>
+            <p class="mt-2 text-slate-500">Foto galeri akan tampil di sini.</p>
         </div>
 
     @endif
+
+    {{-- Lightbox --}}
+    <template x-teleport="body">
+        <div x-show="lightbox !== null"
+            class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4" x-cloak
+            @click="lightbox = null">
+            <button @click="lightbox = null"
+                class="absolute top-6 right-6 w-10 h-10 rounded-full bg-slate-800 text-slate-300 hover:text-white flex items-center justify-center transition cursor-pointer">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+            <div @click.stop class="max-w-4xl max-h-[85vh]">
+                <img :src="lightbox" alt="Preview"
+                    class="rounded-2xl border border-slate-800 shadow-2xl max-w-full max-h-[80vh] object-contain">
+            </div>
+        </div>
+    </template>
 
 </section>
 

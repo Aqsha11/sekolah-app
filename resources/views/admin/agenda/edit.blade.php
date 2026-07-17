@@ -23,18 +23,18 @@
             <div>
                 <label class="block font-semibold mb-1">Judul</label>
                 <input type="text" name="judul" value="{{ old('judul', $agendum->judul) }}"
-                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" placeholder="Masukkan judul agenda" required>
             </div>
 
             <div>
                 <label class="block font-semibold mb-1">Tanggal</label>
                 <input type="date" name="tanggal" value="{{ old('tanggal', $agendum->tanggal) }}"
-                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" placeholder="Pilih tanggal" required>
             </div>
 
             <div>
                 <label class="block font-semibold mb-1">Deskripsi</label>
-                <textarea name="deskripsi" rows="4" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300">{{ old('deskripsi', $agendum->deskripsi) }}</textarea>
+                <textarea name="deskripsi" rows="4" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" placeholder="Tuliskan deskripsi agenda">{{ old('deskripsi', $agendum->deskripsi) }}</textarea>
             </div>
 
             <div class="flex gap-3">

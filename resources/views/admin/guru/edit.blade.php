@@ -24,25 +24,25 @@
 
             <div>
                 <label class="block font-semibold mb-1">Nama Guru</label>
-                <input type="text" name="name" value="{{ old('nama', $guru->name) }}"
+                <input type="text" name="name" value="{{ old('nama', $guru->name) }}" placeholder="Masukkan nama guru"
                     class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
             </div>
 
             <div>
                 <label class="block font-semibold mb-1">NIP</label>
-                <input type="text" name="nip" value="{{ old('nip', $guru->nip) }}"
+                <input type="text" name="nip" value="{{ old('nip', $guru->nip) }}" placeholder="Masukkan NIP (opsional)"
                     class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300">
             </div>
 
             <div>
                 <label class="block font-semibold mb-1">Mata Pelajaran</label>
-                <input type="text" name="mapel" value="{{ old('mapel', $guru->subject) }}"
+                <input type="text" name="mapel" value="{{ old('mapel', $guru->subject) }}" placeholder="Contoh: Matematika"
                     class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
             </div>
 
             <div>
                 <label class="block font-semibold mb-1">Email</label>
-                <input type="email" name="email" value="{{ old('email', $guru->email) }}"
+                <input type="email" name="email" value="{{ old('email', $guru->email) }}" placeholder="guru@sekolah.sch.id"
                     class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300">
             </div>
 

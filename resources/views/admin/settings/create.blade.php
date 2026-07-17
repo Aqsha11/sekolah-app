@@ -179,7 +179,7 @@
 
                 <h2 class="text-xl font-bold mb-5 flex items-center gap-2">
 
-                    <i class="fa-solid fa-phone text-blue-600"></i>
+                    <i class="fa-solid fa-phone text-primary-600"></i>
 
                     Kontak Sekolah
 

@@ -24,4 +24,12 @@ class Guru extends Model
         'bio',
         'is_active',
     ];
+
+    /**
+     * Relasi: satu guru punya banyak jadwal pelajaran
+     */
+    public function jadwalPelajarans(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(JadwalPelajaran::class);
+    }
 }

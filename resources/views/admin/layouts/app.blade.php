@@ -7,6 +7,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
         $settings = \App\Models\Setting::pluck('value', 'key');
+        $adminPalette = \App\Models\Setting::generateColorPalette($settings['primary_color'] ?? '#2563eb');
     @endphp
     <title>
         @yield('title', $settings['nama_website'] ?? 'Dashboard')
@@ -25,36 +26,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap">
 
-    {{-- Tailwind --}}
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: {
-                            50: '#eff6ff',
-                            100: '#dbeafe',
-                            200: '#bfdbfe',
-                            300: '#93c5fd',
-                            400: '#60a5fa',
-                            500: '#3b82f6',
-                            600: '#2563eb',
-                            700: '#1d4ed8',
-                            800: '#1e40af',
-                            900: '#1e3a8a',
-                            950: '#172554',
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                    }
-                }
-            }
-        }
-    </script>
+    {{-- Dynamic theme colors (CSS variables) --}}
+    <x-theme-colors :settings="$settings" />
+
+    {{-- Vite (Tailwind CSS + Alpine.js + Chart.js) --}}
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     <style>
+        [x-cloak] { display: none !important; }
+
         * {
             font-family: 'Inter', sans-serif;
         }
@@ -91,7 +71,7 @@
             transform: translateY(-50%);
             width: 3px;
             height: 0;
-            background: #3b82f6;
+            background: {{ $adminPalette[500] }};
             border-radius: 0 4px 4px 0;
             transition: height 0.2s ease;
         }
@@ -103,7 +83,7 @@
 
         .sidebar-link.active {
             background: rgba(255, 255, 255, 0.12);
-            color: #60a5fa;
+            color: {{ $adminPalette[400] }};
         }
 
         .sidebar-link:hover:not(.active) {
@@ -196,7 +176,7 @@
         }
 
         .accent-text {
-            color: #2563eb;
+            color: {{ $adminPalette[600] }};
         }
 
         /* ── 3D Checkbox ── */
@@ -462,7 +442,7 @@
         }
 
         .loading-overlay .loading-text {
-            color: #2563eb;
+            color: {{ $adminPalette[600] }};
             font-size: 14px;
             font-weight: 500;
             letter-spacing: 0.5px;
@@ -486,8 +466,8 @@
         }
 
         .custum-file-upload:hover {
-            border-color: #3b82f6;
-            background-color: rgba(59, 130, 246, 0.05);
+            border-color: {{ $adminPalette[500] }};
+            background-color: rgba({{ hexdec(substr($adminPalette[500], 1, 2)) }}, {{ hexdec(substr($adminPalette[500], 3, 2)) }}, {{ hexdec(substr($adminPalette[500], 5, 2)) }}, 0.05);
         }
 
         .custum-file-upload .icon svg {
@@ -497,7 +477,7 @@
         }
 
         .custum-file-upload:hover .icon svg {
-            fill: #3b82f6;
+            fill: {{ $adminPalette[500] }};
         }
 
         .custum-file-upload .text span {
@@ -508,7 +488,7 @@
         }
 
         .custum-file-upload:hover .text span {
-            color: #3b82f6;
+            color: {{ $adminPalette[500] }};
         }
 
         .custum-file-upload input {
@@ -525,12 +505,16 @@
 </head>
 
 <body class="h-full bg-slate-50 text-slate-800">
+    @php $hideSidebar = $__env->hasSection('hideSidebar'); @endphp
 
     {{-- Mobile Overlay --}}
+    @if(! $hideSidebar)
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/50 z-30 hidden lg:hidden" onclick="closeSidebar()"></div>
+    @endif
 
     <div class="flex h-full min-h-screen">
 
+        @if(! $hideSidebar)
         {{-- ========== SIDEBAR ========== --}}
         <aside id="sidebar"
             class="fixed top-0 left-0 h-full w-64 bg-primary-950 z-40 flex flex-col overflow-y-auto
@@ -568,7 +552,7 @@
             </a>
 
             {{-- navbar --}}
-            <nav class="flex-1 px-3 py-4 space-y-0.5">
+            <nav class="flex-1 px-3 py-3 space-y-1 overflow-y-auto">
 
                 {{-- ===== ORANG TUA MENU ===== --}}
                 @hasrole('orang_tua')
@@ -577,21 +561,28 @@
                     </p>
 
                     <a href="{{ route('orangtua.dashboard') }}"
-                        class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('orangtua.*') ? 'active' : '' }}">
+                        class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('orangtua.dashboard') ? 'active' : '' }}">
                         <span
-                            class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('orangtua.*') ? 'bg-white/30 text-white' : 'text-primary-500' }}">
+                            class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('orangtua.dashboard') ? 'bg-white/30 text-white' : 'text-primary-500' }}">
                             <i class="fa-solid fa-chart-line text-sm"></i>
                         </span>
                         <span>Kehadiran Anak</span>
                     </a>
+
+                    <a href="{{ route('orangtua.jadwal') }}"
+                        class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('orangtua.jadwal') ? 'active' : '' }}">
+                        <span
+                            class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('orangtua.jadwal') ? 'bg-white/30 text-white' : 'text-primary-500' }}">
+                            <i class="fa-solid fa-table-cells-large text-sm"></i>
+                        </span>
+                        <span>Jadwal Pelajaran</span>
+                    </a>
                 @endhasrole
 
-                {{-- ===== MENU UMUM (semua role kecuali orang_tua) ===== --}}
+                {{-- ===== MENU ADMIN ===== --}}
                 @unlessrole('orang_tua')
-                    <p class="text-primary-500 text-[10px] font-semibold uppercase tracking-widest px-3 py-2 mt-1 mb-1">
-                        Menu Utama
-                    </p>
 
+                    {{-- Dashboard --}}
                     <a href="{{ route('admin.dashboard') }}"
                         class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                         <span
@@ -601,182 +592,281 @@
                         <span>Dashboard</span>
                     </a>
 
-                    @can('manage berita')
-                        <a href="{{ route('admin.berita.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                    @hasrole('guru')
+                        <a href="{{ route('admin.jadwal-saya') }}"
+                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.jadwal-saya') ? 'active' : '' }}">
                             <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.berita.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-newspaper text-sm"></i>
+                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.jadwal-saya') ? 'bg-white/30 text-white' : 'text-primary-500' }}">
+                                <i class="fa-solid fa-table-cells-large text-sm"></i>
                             </span>
-                            <span>Berita</span>
+                            <span>Jadwal Mengajar</span>
                         </a>
-                    @endcan
+                    @endhasrole
 
-                    @can('manage guru')
-                        <a href="{{ route('admin.guru.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
-                            <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.guru.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-chalkboard-user text-sm"></i>
-                            </span>
-                            <span>Guru</span>
-                        </a>
-                    @endcan
+                    {{-- ===== KONTEN SEKOLAH ===== --}}
+                    @if(
+                        $user = auth()->user() and
+                        ($user->hasPermissionTo('manage berita') || $user->hasPermissionTo('manage galeri') ||
+                         $user->hasPermissionTo('manage fasilitas') || $user->hasPermissionTo('manage prestasi') ||
+                         $user->hasPermissionTo('manage banner') || $user->hasPermissionTo('manage kontak'))
+                    )
+                        @php
+                            $isActiveKonten = request()->routeIs('admin.berita.*') || request()->routeIs('admin.galeri.*')
+                                || request()->routeIs('admin.fasilitas.*') || request()->routeIs('admin.prestasi.*')
+                                || request()->routeIs('admin.banner.*') || request()->routeIs('admin.kontak.*');
+                        @endphp
+                        <div x-data="{ open: {{ $isActiveKonten ? 'true' : 'false' }} }" class="mt-3">
+                            <button @click="open = !open"
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-primary-400 text-[10px] font-semibold uppercase tracking-widest hover:bg-white/5 transition-colors">
+                                <span>Konten Sekolah</span>
+                                <i class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"
+                                    :class="open ? 'rotate-180' : ''"></i>
+                            </button>
 
-                    @can('manage galeri')
-                        <a href="{{ route('admin.galeri.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}">
-                            <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.galeri.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-images text-sm"></i>
-                            </span>
-                            <span>Galeri</span>
-                        </a>
-                    @endcan
+                            <div x-show="open" x-collapse x-cloak class="space-y-0.5 mt-0.5">
+                                @can('manage berita')
+                                    <a href="{{ route('admin.berita.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.berita.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-newspaper text-sm"></i>
+                                        </span>
+                                        <span>Berita</span>
+                                    </a>
+                                @endcan
 
-                    @can('manage fasilitas')
-                        <a href="{{ route('admin.fasilitas.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.fasilitas.*') ? 'active' : '' }}">
-                            <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.fasilitas.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-school text-sm"></i>
-                            </span>
-                            <span>Fasilitas</span>
-                        </a>
-                    @endcan
+                                @can('manage galeri')
+                                    <a href="{{ route('admin.galeri.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.galeri.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.galeri.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-images text-sm"></i>
+                                        </span>
+                                        <span>Galeri</span>
+                                    </a>
+                                @endcan
 
-                    @can('manage prestasi')
-                        <a href="{{ route('admin.prestasi.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.prestasi.*') ? 'active' : '' }}">
-                            <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.prestasi.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-trophy text-sm"></i>
-                            </span>
-                            <span>Prestasi</span>
-                        </a>
-                    @endcan
+                                @can('manage fasilitas')
+                                    <a href="{{ route('admin.fasilitas.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.fasilitas.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.fasilitas.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-school text-sm"></i>
+                                        </span>
+                                        <span>Fasilitas</span>
+                                    </a>
+                                @endcan
 
-                    @can('manage banner')
-                        <a href="{{ route('admin.banner.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.banner.*') ? 'active' : '' }}">
-                            <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.banner.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-sliders-h text-sm"></i>
-                            </span>
-                            <span>Banner</span>
-                        </a>
-                    @endcan
+                                @can('manage prestasi')
+                                    <a href="{{ route('admin.prestasi.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.prestasi.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.prestasi.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-trophy text-sm"></i>
+                                        </span>
+                                        <span>Prestasi</span>
+                                    </a>
+                                @endcan
 
-                    @can('manage kontak')
-                        <a href="{{ route('admin.kontak.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.kontak.*') ? 'active' : '' }}">
-                            <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.kontak.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-envelope text-sm"></i>
-                            </span>
-                            <span>Kontak</span>
+                                @can('manage banner')
+                                    <a href="{{ route('admin.banner.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.banner.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.banner.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-sliders-h text-sm"></i>
+                                        </span>
+                                        <span>Banner</span>
+                                    </a>
+                                @endcan
 
-                            @if (isset($unreadMessages) && $unreadMessages > 0)
-                                <span
-                                    class="ml-auto bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full badge-pulse">
-                                    {{ $unreadMessages }}
-                                </span>
-                            @endif
-                        </a>
-                    @endcan
+                                @can('manage kontak')
+                                    <a href="{{ route('admin.kontak.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.kontak.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.kontak.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-envelope text-sm"></i>
+                                        </span>
+                                        <span>Kontak</span>
+                                        @if (isset($unreadMessages) && $unreadMessages > 0)
+                                            <span class="ml-auto bg-rose-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full badge-pulse">
+                                                {{ $unreadMessages }}
+                                            </span>
+                                        @endif
+                                    </a>
+                                @endcan
+                            </div>
+                        </div>
+                    @endif
 
-                    @can('manage absensi')
-                        <p class="text-primary-500 text-[10px] font-semibold uppercase tracking-widest px-3 py-2 mt-4 mb-1">
-                            Absensi
-                        </p>
+                    {{-- ===== AKADEMIK ===== --}}
+                    @if(
+                        $user = auth()->user() and
+                        ($user->hasPermissionTo('manage guru') || $user->hasPermissionTo('manage kelas') ||
+                         $user->hasPermissionTo('manage siswa') || $user->hasPermissionTo('manage jadwal') ||
+                         $user->hasPermissionTo('manage kalender') || $user->hasPermissionTo('manage absensi'))
+                    )
+                        @php
+                            $isActiveAkademik = request()->routeIs('admin.guru.*') || request()->routeIs('admin.kelas.*')
+                                || request()->routeIs('admin.siswa.*') || request()->routeIs('admin.jadwal.*')
+                                || request()->routeIs('admin.kalender.*') || request()->routeIs('admin.absensi.*')
+                                || request()->routeIs('admin.orang_tua.*') || request()->routeIs('admin.laporan.*');
+                        @endphp
+                        <div x-data="{ open: {{ $isActiveAkademik ? 'true' : 'false' }} }" class="mt-3">
+                            <button @click="open = !open"
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-primary-400 text-[10px] font-semibold uppercase tracking-widest hover:bg-white/5 transition-colors">
+                                <span>Akademik</span>
+                                <i class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"
+                                    :class="open ? 'rotate-180' : ''"></i>
+                            </button>
 
-                        <a href="{{ route('admin.absensi.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.absensi.*') ? 'active' : '' }}">
-                            <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.absensi.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-clipboard-check text-sm"></i>
-                            </span>
-                            <span>Absensi</span>
-                        </a>
-                    @endcan
+                            <div x-show="open" x-collapse x-cloak class="space-y-0.5 mt-0.5">
+                                @can('manage guru')
+                                    <a href="{{ route('admin.guru.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.guru.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.guru.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-chalkboard-user text-sm"></i>
+                                        </span>
+                                        <span>Guru</span>
+                                    </a>
+                                @endcan
 
-                    @can('manage siswa')
-                        <a href="{{ route('admin.siswa.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
-                            <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.siswa.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-user-graduate text-sm"></i>
-                            </span>
-                            <span>Siswa</span>
-                        </a>
+                                @can('manage kelas')
+                                    <a href="{{ route('admin.kelas.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.kelas.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.kelas.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-chalkboard text-sm"></i>
+                                        </span>
+                                        <span>Kelas</span>
+                                    </a>
+                                @endcan
 
-                        <a href="{{ route('admin.orang_tua.index') }}"
-                            class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.orang_tua.*') ? 'active' : '' }}">
-                            <span
-                                class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.orang_tua.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                                <i class="fa-solid fa-people-arrows text-sm"></i>
-                            </span>
-                            <span>Orang Tua</span>
-                        </a>
-                    @endcan
+                                @can('manage siswa')
+                                    <a href="{{ route('admin.siswa.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.siswa.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.siswa.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-user-graduate text-sm"></i>
+                                        </span>
+                                        <span>Siswa</span>
+                                    </a>
 
-                    <a href="{{ route('rfid.index') }}" target="_blank"
-                        class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium">
-                        <span class="w-8 h-8 rounded-lg flex items-center justify-center text-primary-500">
-                            <i class="fa-solid fa-credit-card text-sm"></i>
-                        </span>
-                        <span>RFID Scanner</span>
-                    </a>
+                                    <a href="{{ route('admin.orang_tua.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.orang_tua.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.orang_tua.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-people-arrows text-sm"></i>
+                                        </span>
+                                        <span>Orang Tua</span>
+                                    </a>
+                                @endcan
+
+                                @can('manage jadwal')
+                                    <a href="{{ route('admin.jadwal.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.jadwal.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.jadwal.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-table-cells-large text-sm"></i>
+                                        </span>
+                                        <span>Jadwal Pelajaran</span>
+                                    </a>
+                                @endcan
+
+                                @can('manage kalender')
+                                    <a href="{{ route('admin.kalender.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.kalender.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.kalender.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-calendar-days text-sm"></i>
+                                        </span>
+                                        <span>Kalender Akademik</span>
+                                    </a>
+                                @endcan
+
+                                @can('manage absensi')
+                                    <a href="{{ route('admin.absensi.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.absensi.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.absensi.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-clipboard-check text-sm"></i>
+                                        </span>
+                                        <span>Absensi</span>
+                                    </a>
+                                @endcan
+
+                                <a href="{{ route('rfid.index') }}" target="_blank"
+                                    class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium">
+                                    <span class="w-8 h-8 rounded-lg flex items-center justify-center text-primary-500">
+                                        <i class="fa-solid fa-credit-card text-sm"></i>
+                                    </span>
+                                    <span>RFID Scanner</span>
+                                    <i class="fa-solid fa-arrow-up-right-from-square text-[9px] text-primary-500 ml-auto"></i>
+                                </a>
+
+                                @can('manage laporan')
+                                    <a href="{{ route('admin.laporan.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.laporan.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.laporan.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-chart-bar text-sm"></i>
+                                        </span>
+                                        <span>Rekap & Laporan</span>
+                                    </a>
+                                @endcan
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- ===== KONFIGURASI ===== --}}
+                    @if(
+                        $user = auth()->user() and
+                        ($user->hasPermissionTo('manage users') || $user->hasPermissionTo('manage roles') ||
+                         $user->hasPermissionTo('manage permissions') || $user->hasPermissionTo('manage website'))
+                    )
+                        @php
+                            $isActiveConfig = request()->routeIs('admin.users.*') || request()->routeIs('admin.roles.*')
+                                || request()->routeIs('admin.permissions.*') || request()->routeIs('admin.settings.*');
+                        @endphp
+                        <div x-data="{ open: {{ $isActiveConfig ? 'true' : 'false' }} }" class="mt-3">
+                            <button @click="open = !open"
+                                class="w-full flex items-center justify-between px-3 py-2 rounded-lg text-primary-400 text-[10px] font-semibold uppercase tracking-widest hover:bg-white/5 transition-colors">
+                                <span>Konfigurasi</span>
+                                <i class="fa-solid fa-chevron-down text-[9px] transition-transform duration-200"
+                                    :class="open ? 'rotate-180' : ''"></i>
+                            </button>
+
+                            <div x-show="open" x-collapse x-cloak class="space-y-0.5 mt-0.5">
+                                @can('manage users')
+                                    <a href="{{ route('admin.users.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.users.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-users text-sm"></i>
+                                        </span>
+                                        <span>Users</span>
+                                    </a>
+                                @endcan
+
+                                @can('manage roles')
+                                    <a href="{{ route('admin.roles.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.roles.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-shield-halved text-sm"></i>
+                                        </span>
+                                        <span>Roles</span>
+                                    </a>
+                                @endcan
+
+                                @can('manage permissions')
+                                    <a href="{{ route('admin.permissions.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.permissions.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-key text-sm"></i>
+                                        </span>
+                                        <span>Permissions</span>
+                                    </a>
+                                @endcan
+
+                                @can('manage website')
+                                    <a href="{{ route('admin.settings.index') }}"
+                                        class="sidebar-link flex items-center gap-3 px-3 py-2 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                                        <span class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.settings.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
+                                            <i class="fa-solid fa-gear text-sm"></i>
+                                        </span>
+                                        <span>Pengaturan Website</span>
+                                    </a>
+                                @endcan
+                            </div>
+                        </div>
+                    @endif
+
                 @endunlessrole
-
-                {{-- ===== CONFIG (permission-based) ===== --}}
-                @can('manage users')
-                    <p class="text-primary-500 text-[10px] font-semibold uppercase tracking-widest px-3 py-2 mt-4 mb-1">
-                        Configuration
-                    </p>
-
-                    <a href="{{ route('admin.users.index') }}"
-                        class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                        <span
-                            class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.users.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                            <i class="fa-solid fa-users text-sm"></i>
-                        </span>
-                        <span>Users</span>
-                    </a>
-                @endcan
-
-                @can('manage roles')
-                    <a href="{{ route('admin.roles.index') }}"
-                        class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
-                        <span
-                            class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.roles.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                            <i class="fa-solid fa-shield-halved text-sm"></i>
-                        </span>
-                        <span>Roles</span>
-                    </a>
-                @endcan
-
-                @can('manage permissions')
-                    <a href="{{ route('admin.permissions.index') }}"
-                        class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.permissions.*') ? 'active' : '' }}">
-                        <span
-                            class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.permissions.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                            <i class="fa-solid fa-key text-sm"></i>
-                        </span>
-                        <span>Permissions</span>
-                    </a>
-                @endcan
-
-                @can('manage website')
-                    <a href="{{ route('admin.settings.index') }}"
-                        class="sidebar-link flex items-center gap-3 px-3 py-2.5 rounded-lg text-white text-sm font-medium {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-                        <span
-                            class="w-8 h-8 rounded-lg flex items-center justify-center {{ request()->routeIs('admin.settings.*') ? 'bg-primary-500/30 text-white' : 'text-primary-500' }}">
-                            <i class="fa-solid fa-gear text-sm"></i>
-                        </span>
-                        <span>Pengaturan Website</span>
-                    </a>
-                @endcan
 
             </nav>
 
@@ -808,18 +898,21 @@
                 </form>
             </div>
         </aside>
+        @endif
 
         {{-- ========== MAIN CONTENT ========== --}}
-        <div class="flex-1 flex flex-col min-w-0 lg:ml-64">
+        <div class="flex-1 flex flex-col min-w-0 {{ $hideSidebar ? '' : 'lg:ml-64' }}">
 
             {{-- Topbar --}}
             <header
                 class="sticky top-0 z-20 bg-white/80 backdrop-blur-xl border-b border-gray-200/70 flex items-center gap-4 px-4 lg:px-6 h-16 flex-shrink-0">
-                {{-- Hamburger --}}
-                <button onclick="openSidebar()"
-                    class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors">
-                    <i class="fa-solid fa-bars text-sm"></i>
-                </button>
+        @if(! $hideSidebar)
+        {{-- Hamburger --}}
+        <button onclick="openSidebar()"
+            class="lg:hidden w-9 h-9 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors">
+            <i class="fa-solid fa-bars text-sm"></i>
+        </button>
+        @endif
 
                 {{-- Breadcrumb / Page Title --}}
                 <div class="flex-1 min-w-0">
@@ -829,6 +922,7 @@
 
                 {{-- Right Actions --}}
                 <div class="flex items-center gap-2">
+                    @if(! $hideSidebar)
                     {{-- Notification bell --}}
                     <a href="{{ route('admin.kontak.index') }}"
                         class="relative w-9 h-9 flex items-center justify-center rounded-lg text-gray-500 hover:bg-gray-100 transition-colors"
@@ -838,6 +932,7 @@
                             <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-rose-500 rounded-full"></span>
                         @endif
                     </a>
+                    @endif
 
                     {{-- View Site --}}
                     <a href="/" target="_blank"

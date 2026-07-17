@@ -65,6 +65,7 @@ class DummyDataSeeder extends Seeder
             ['key' => 'profil_sekolah', 'value' => 'SMA Negeri 1 Jakarta merupakan sekolah menengah atas negeri yang berlokasi di Jakarta Pusat. Berdiri sejak tahun 1950, sekolah ini telah melahirkan ribuan lulusan yang berkiprah di berbagai bidang di tingkat nasional maupun internasional.'],
             ['key' => 'sambutan_kepsek', 'value' => 'Assalamualaikum wr. wb. Puji syukur kehadirat Allah SWT atas limpahan rahmat dan karunia-Nya. SMA Negeri 1 Jakarta terus berkomitmen untuk memberikan pendidikan terbaik bagi generasi penerus bangsa. Dengan dukungan tenaga pendidik yang profesional dan fasilitas yang memadai, kami siap mencetak lulusan yang beriman, berilmu, dan berkarakter.'],
             ['key' => 'sejarah', 'value' => 'SMA Negeri 1 Jakarta didirikan pada tahun 1950 dengan nama SMA Negeri 1 Jakarta Pusat. Sejak awal berdiri, sekolah ini telah menjadi salah satu sekolah favorit di Jakarta. Berbagai prestasi telah diraih baik di tingkat kota, provinsi, maupun nasional.'],
+            ['key' => 'primary_color', 'value' => '#2563eb'],
         ];
 
         foreach ($settings as $setting) {

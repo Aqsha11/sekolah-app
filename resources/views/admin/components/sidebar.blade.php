@@ -4,7 +4,7 @@
     <div>
         <div class="p-6 border-b border-slate-800">
             {{-- <h1 class="text-2xl font-bold">/h1> --}}
-            {{-- <p class="text-blue-200 text-sm">Lambandia</p> --}}
+            {{-- <p class="text-primary-200 text-sm">Lambandia</p> --}}
         </div>
         <!-- Font Awesome -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -65,7 +65,7 @@
             {{-- SUPER ADMIN --}}
             @role('admin|super_admin')
                 <div class="pt-4 pb-2">
-                    <p class="text-xs uppercase text-blue-400 tracking-wider px-4">
+                    <p class="text-xs uppercase text-primary-400 tracking-wider px-4">
                         Administrator
                     </p>
                 </div>
@@ -97,7 +97,7 @@
 
             {{-- PROFILE --}}
             <div class="pt-4 pb-2">
-                <p class="text-xs uppercase text-blue-400 tracking-wider px-4">
+                <p class="text-xs uppercase text-primary-400 tracking-wider px-4">
                     Account
                 </p>
             </div>
@@ -119,7 +119,7 @@
                 {{ auth()->user()->name }}
             </p>
 
-            <p class="text-xs text-blue-400">
+            <p class="text-xs text-primary-400">
                 {{ auth()->user()->email }}
             </p>
         </div>

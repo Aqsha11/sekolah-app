@@ -37,7 +37,7 @@
                         <td class="p-3 text-center">
                             <div class="flex gap-2 justify-center">
                                 <a href="{{ route('admin.alumni.edit', $item->id) }}"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-xs">
+                                    class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1 rounded-lg text-xs">
                                     <i class="fa-solid fa-pen"></i>
                                 </a>
                                 <form action="{{ route('admin.alumni.destroy', $item->id) }}"

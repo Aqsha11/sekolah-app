@@ -12,14 +12,14 @@
         <div>
             <label class="block font-semibold mb-1">Judul <span class="text-red-500">*</span></label>
             <input type="text" name="title" value="{{ old('title', $banner->title) }}"
-                class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
+                class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" placeholder="Masukkan judul banner" required>
             @error('title') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
         </div>
 
         <div>
             <label class="block font-semibold mb-1">Subtitle</label>
             <textarea name="subtitle" rows="2"
-                class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300">{{ old('subtitle', $banner->subtitle) }}</textarea>
+                class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" placeholder="Masukkan subtitle banner">{{ old('subtitle', $banner->subtitle) }}</textarea>
             @error('subtitle') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
         </div>
 
@@ -49,7 +49,7 @@
             <div>
                 <label class="block font-semibold mb-1">Urutan</label>
                 <input type="number" name="order" value="{{ old('order', $banner->order) }}"
-                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" min="0">
+                    class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" placeholder="0" min="0">
                 @error('order') <p class="text-red-500 text-sm mt-1">{{ $message }}</p> @enderror
             </div>
             <div class="flex items-end pb-2">

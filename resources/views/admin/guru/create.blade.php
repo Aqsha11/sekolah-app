@@ -21,19 +21,19 @@
             @csrf
 
             <label>Nama</label>
-            <input type="text" name="name" value="{{ old('name') }}" class="w-full border p-2 rounded" required>
+            <input type="text" name="name" value="{{ old('name') }}" placeholder="Masukkan nama guru" class="w-full border p-2 rounded" required>
 
             <label>NIP</label>
-            <input type="text" name="nip" value="{{ old('nip') }}" class="w-full border p-2 rounded">
+            <input type="text" name="nip" value="{{ old('nip') }}" placeholder="Masukkan NIP (opsional)" class="w-full border p-2 rounded">
 
             <label>Mata Pelajaran</label>
-            <input type="text" name="subject" value="{{ old('subject') }}" class="w-full border p-2 rounded" required>
+            <input type="text" name="subject" value="{{ old('subject') }}" placeholder="Contoh: Matematika" class="w-full border p-2 rounded" required>
 
             <label>Jabatan</label>
-            <input type="text" name="position" value="{{ old('position') }}" class="w-full border p-2 rounded" required>
+            <input type="text" name="position" value="{{ old('position') }}" placeholder="Contoh: Guru Kelas" class="w-full border p-2 rounded" required>
 
             <label>Email</label>
-            <input type="email" name="email" value="{{ old('email') }}" class="w-full border p-2 rounded">
+            <input type="email" name="email" value="{{ old('email') }}" placeholder="guru@sekolah.sch.id" class="w-full border p-2 rounded">
 
             <label>Foto</label>
             <input type="file" name="photo" class="w-full border p-2 rounded">

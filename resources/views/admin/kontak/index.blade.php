@@ -73,7 +73,7 @@
                                 </span>
 
                             @elseif($item->status == 'read')
-                                <span class="px-2 py-1 text-xs rounded bg-blue-500 text-white">
+                                <span class="px-2 py-1 text-xs rounded bg-primary-500 text-white">
                                     Dilihat
                                 </span>
 
@@ -155,7 +155,7 @@
                                 </span>
 
                             @elseif($item->status == 'read')
-                                <span class="px-2 py-1 text-xs rounded bg-blue-500 text-white">
+                                <span class="px-2 py-1 text-xs rounded bg-primary-500 text-white">
                                     Read
                                 </span>
 

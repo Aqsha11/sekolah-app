@@ -11,7 +11,7 @@
 
         <div class="mb-4">
             <label class="block text-sm font-medium mb-1">Nama Lengkap</label>
-            <input type="text" name="nama" value="{{ old('nama', $siswa->nama) }}" required
+            <input type="text" name="nama" value="{{ old('nama', $siswa->nama) }}" placeholder="Masukkan nama lengkap" required
                 class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-primary-200">
             @error('nama') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
         </div>
@@ -19,7 +19,7 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
                 <label class="block text-sm font-medium mb-1">NIS</label>
-                <input type="text" name="nis" value="{{ old('nis', $siswa->nis) }}" required
+                <input type="text" name="nis" value="{{ old('nis', $siswa->nis) }}" placeholder="Masukkan NIS" required
                     class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-primary-200">
                 @error('nis') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
             </div>

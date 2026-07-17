@@ -80,7 +80,7 @@
     <div class="mt-6 flex gap-3">
 
         <a href="{{ route('admin.settings.edit') }}"
-            class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
+            class="bg-primary-500 hover:bg-primary-600 text-white px-4 py-2 rounded-lg flex items-center gap-2">
             <i class="fa-solid fa-pen"></i> Edit
         </a>
 

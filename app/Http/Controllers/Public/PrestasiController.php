@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Public;
 
 use App\Http\Controllers\Controller;
 use App\Models\Prestasi;
+use App\Models\Setting;
 use Illuminate\View\View;
 
 class PrestasiController extends Controller
@@ -13,9 +14,10 @@ class PrestasiController extends Controller
      */
     public function index(): View
     {
+        $settings = Setting::pluck('value', 'key')->toArray();
         $prestasi = Prestasi::latest()->paginate(9);
 
-        return view('public.prestasi', compact('prestasi'));
+        return view('public.prestasi', compact('prestasi', 'settings'));
     }
 
     /**
@@ -23,6 +25,8 @@ class PrestasiController extends Controller
      */
     public function show(Prestasi $prestasi): View
     {
-        return view('public.prestasi-show', compact('prestasi'));
+        $settings = Setting::pluck('value', 'key')->toArray();
+
+        return view('public.prestasi-show', compact('prestasi', 'settings'));
     }
 }

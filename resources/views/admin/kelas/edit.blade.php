@@ -22,7 +22,7 @@
 
             <div>
                 <label class="block font-semibold mb-1">Nama Kelas</label>
-                <input type="text" name="nama_kelas" value="{{ old('nama_kelas', $kela->nama_kelas) }}"
+                <input type="text" name="nama_kelas" value="{{ old('nama_kelas', $kela->nama_kelas) }}" placeholder="Contoh: X-A"
                     class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
             </div>
 

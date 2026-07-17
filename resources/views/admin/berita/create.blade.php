@@ -23,7 +23,7 @@
             {{-- TITLE (FIX: dari judul → title) --}}
             <div>
                 <label class="block font-semibold mb-1">Judul Berita</label>
-                <input type="text" name="title" value="{{ old('title') }}"
+                <input type="text" name="title" value="{{ old('title') }}" placeholder="Masukkan judul berita"
                     class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
             </div>
 
@@ -61,7 +61,7 @@
             {{-- CONTENT (FIX: deskripsi → content) --}}
             <div>
                 <label class="block font-semibold mb-1">Deskripsi</label>
-                <textarea name="content" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" rows="5" required>{{ old('content') }}</textarea>
+                <textarea name="content" placeholder="Tuliskan konten berita" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" rows="5" required>{{ old('content') }}</textarea>
             </div>
 
             {{-- IMAGE --}}

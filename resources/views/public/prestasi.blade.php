@@ -4,168 +4,57 @@
 
 @section('content')
 
-<style>
-    .card-prestasi {
-        position: relative;
-        width: 100%;
-        height: 300px;
-        background-color: #f2f2f2;
-        border-radius: 10px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        overflow: hidden;
-        perspective: 1000px;
-        box-shadow: 0 0 0 5px #ffffff80;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-
-    .card-prestasi .card-icon {
-        width: 64px;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 1;
-    }
-
-    .card-prestasi:hover {
-        transform: scale(1.05);
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    }
-
-    .card-prestasi .card-content {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        padding: 24px;
-        box-sizing: border-box;
-        background-color: #f2f2f2;
-        transform: rotateX(-90deg);
-        transform-origin: bottom;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-    }
-
-    .card-prestasi:hover .card-content {
-        transform: rotateX(0deg);
-    }
-
-    .card-prestasi .card-title {
-        margin: 0;
-        font-size: 16px;
-        color: #333;
-        font-weight: 700;
-    }
-
-    .card-prestasi:hover .card-icon {
-        scale: 0;
-    }
-
-    .card-prestasi .card-description {
-        margin: 10px 0 0;
-        font-size: 13px;
-        color: #555;
-        line-height: 1.5;
-        display: -webkit-box;
-        -webkit-line-clamp: 6;
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-    }
-
-    .card-prestasi .card-badge {
-        position: absolute;
-        top: 12px;
-        right: 12px;
-        z-index: 2;
-        padding: 4px 12px;
-        border-radius: 999px;
-        font-size: 11px;
-        font-weight: 600;
-        backdrop-filter: blur(4px);
-        color: #fff;
-    }
-
-    .card-prestasi .card-image {
-        position: absolute;
-        inset: 0;
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-        transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        z-index: 0;
-    }
-
-    .card-prestasi:hover .card-image {
-        scale: 0;
-    }
-
-    .card-prestasi .card-meta {
-        position: absolute;
-        top: 12px;
-        left: 12px;
-        z-index: 2;
-        padding: 4px 10px;
-        border-radius: 999px;
-        font-size: 10px;
-        font-weight: 600;
-        background: rgba(15, 23, 42, 0.8);
-        color: #fff;
-        backdrop-filter: blur(4px);
-    }
-</style>
-
 {{-- HERO --}}
 <section data-aos="fade-in" class="relative overflow-hidden py-20">
-
-    <div class="absolute inset-0 bg-gradient-to-br from-[#C4E2F5]/50 via-white to-sky-50"></div>
-
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-100/50 via-white to-primary-50"></div>
     <div class="relative max-w-7xl mx-auto px-4 md:px-6 text-center">
-
-        <span
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-semibold shadow-sm">
-            <i class="fa-solid fa-trophy"></i>
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-600 text-white text-sm font-semibold shadow-sm">
+            <span class="material-symbols-outlined text-sm">military_tech</span>
             Prestasi Sekolah
         </span>
-
-        <h1 class="mt-6 text-4xl md:text-5xl font-bold text-slate-900">
-            Prestasi & Pencapaian
-        </h1>
-
+        <h1 class="mt-6 text-4xl md:text-5xl font-bold text-slate-900">Prestasi & Pencapaian</h1>
         <p class="max-w-2xl mx-auto mt-5 text-slate-600 text-lg leading-relaxed">
             Dokumentasi berbagai pencapaian akademik, non akademik, dan olahraga siswa.
         </p>
-
     </div>
-
 </section>
 
 {{-- STATS --}}
 <section class="max-w-7xl mx-auto px-4 md:px-6 -mt-10 relative z-10">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-        <div data-aos="fade-up" data-aos-delay="0" class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md p-6 border border-white/50">
-            <h3 class="text-sm text-slate-600 font-medium">Total Prestasi</h3>
-            <p class="text-3xl font-bold text-blue-500 mt-2">
-                {{ $prestasi->total() }}
-            </p>
+        <div data-aos="fade-up" data-aos-delay="0" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md p-6 border border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-xl">emoji_events</span>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-medium uppercase tracking-wide">Total Prestasi</p>
+                    <p class="text-2xl font-bold text-primary-600">{{ $prestasi->total() }}</p>
+                </div>
+            </div>
         </div>
-
-        <div data-aos="fade-up" data-aos-delay="100" class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md p-6 border border-white/50">
-            <h3 class="text-sm text-slate-600 font-medium">Kategori</h3>
-            <p class="text-3xl font-bold text-slate-900 mt-2">
-                {{ $prestasi->groupBy('category')->count() }}
-            </p>
+        <div data-aos="fade-up" data-aos-delay="100" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md p-6 border border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-xl">category</span>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-medium uppercase tracking-wide">Kategori</p>
+                    <p class="text-2xl font-bold text-slate-900">{{ $prestasi->groupBy('category')->count() }}</p>
+                </div>
+            </div>
         </div>
-
-        <div data-aos="fade-up" data-aos-delay="200" class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md p-6 border border-white/50">
-            <h3 class="text-sm text-slate-600 font-medium">Prestasi Terbaru</h3>
-            <p class="text-lg font-semibold text-slate-900 mt-2 line-clamp-1">
-                {{ $prestasi->first()?->title ?? 'Belum ada data' }}
-            </p>
+        <div data-aos="fade-up" data-aos-delay="200" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md p-6 border border-slate-100">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-indigo-100 text-indigo-600 flex items-center justify-center">
+                    <span class="material-symbols-outlined text-xl">trending_up</span>
+                </div>
+                <div>
+                    <p class="text-xs text-slate-500 font-medium uppercase tracking-wide">Prestasi Terbaru</p>
+                    <p class="text-sm font-semibold text-slate-900 line-clamp-1">{{ $prestasi->first()?->title ?? 'Belum ada data' }}</p>
+                </div>
+            </div>
         </div>
-
     </div>
 </section>
 
@@ -175,90 +64,77 @@
     @foreach (['Akademik', 'Olahraga', 'Teknologi & Multimedia', 'Seni'] as $kategori)
         @php
             $items = $prestasi->where('category', $kategori);
+            $color = match ($kategori) {
+                'Akademik' => 'bg-primary-600',
+                'Olahraga' => 'bg-emerald-600',
+                'Teknologi & Multimedia' => 'bg-purple-600',
+                'Seni' => 'bg-amber-600',
+                default => 'bg-slate-600',
+            };
         @endphp
 
         <div class="mb-14">
-
             <div class="flex items-center justify-between mb-8">
-
                 <div>
-                    <h2 class="text-3xl font-bold text-slate-900">
-
-                        @php
-                            $color = match ($kategori) {
-                                'Akademik' => 'bg-blue-600',
-                                'Olahraga' => 'bg-green-600',
-                                'Teknologi & Multimedia' => 'bg-purple-600',
-                                'Seni' => 'bg-blue-500',
-                                default => 'bg-slate-600',
-                            };
-                        @endphp
-
-                        <span class="{{ $color }} text-white text-xs px-3 py-1 rounded-lg shadow">
-                            {{ $kategori }}
-                        </span>
-
+                    <h2 class="text-2xl font-bold text-slate-900">
+                        <span class="{{ $color }} text-white text-xs px-3 py-1 rounded-lg shadow inline-block align-middle mr-2">{{ $kategori }}</span>
                     </h2>
-
-                    <p class="text-slate-600 mt-2">
-                        Daftar pencapaian siswa kategori {{ $kategori }}
-                    </p>
+                    <p class="text-slate-500 mt-2 text-sm">Daftar pencapaian siswa kategori {{ $kategori }}</p>
                 </div>
-
-                <span
-                    class="hidden md:flex items-center px-4 py-2 rounded-lg bg-slate-100 text-slate-700 text-sm font-medium">
+                <span class="hidden md:flex items-center px-4 py-2 rounded-xl bg-slate-100 text-slate-700 text-sm font-medium">
                     {{ $items->count() }} Prestasi
                 </span>
-
             </div>
 
             <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
 
                 @forelse ($items as $index2 => $item)
+                    <a href="{{ route('prestasi.show', $item->id) }}"
+                        data-aos="fade-up" data-aos-delay="{{ ($index2 % 3) * 100 }}"
+                        class="group bg-white rounded-2xl overflow-hidden shadow-sm border border-slate-200 hover:shadow-lg hover:-translate-y-1 transition-all duration-300 flex flex-col">
 
-                    <div data-aos="fade-up" data-aos-delay="{{ ($index2 % 3) * 100 }}" class="card-prestasi">
-
-                        @if ($item->image)
-                            <img src="{{ asset('storage/prestasi/' . $item->image) }}" alt="{{ $item->title }}" class="card-image">
-                        @else
-                            <i class="fa-solid fa-trophy card-icon text-6xl text-slate-400"></i>
-                        @endif
-
-                        <span class="card-badge" style="background: rgba(34, 197, 94, 0.9);">Aktif</span>
-
-                        <span class="card-meta">{{ $item->year }} • {{ $item->level }}</span>
-
-                        <div class="card-content">
-                            <h3 class="card-title">{{ $item->title }}</h3>
-                            <p class="card-description">{{ $item->description }}</p>
-                            <div class="mt-3">
-                                <a href="{{ route('prestasi.show', $item->id) }}"
-                                    class="text-blue-500 text-sm font-semibold hover:underline inline-flex items-center gap-1">
-                                    Lihat Detail <i class="fa-solid fa-arrow-right text-xs"></i>
-                                </a>
-                            </div>
+                        <div class="h-48 overflow-hidden bg-slate-100 relative">
+                            @if ($item->image)
+                                <img src="{{ asset('storage/prestasi/' . $item->image) }}" alt="{{ $item->title }}"
+                                    class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                            @else
+                                <div class="w-full h-full flex items-center justify-center text-slate-300">
+                                    <span class="material-symbols-outlined text-5xl">emoji_events</span>
+                                </div>
+                            @endif
+                            <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur text-white text-[10px] font-bold px-2.5 py-1 rounded-full shadow">
+                                {{ $item->year }} &bull; {{ $item->level }}
+                            </span>
                         </div>
 
-                    </div>
+                        <div class="p-5 flex flex-col flex-1">
+                            <h3 class="font-bold text-sm text-slate-900 group-hover:text-primary-600 transition leading-snug">{{ $item->title }}</h3>
+                            @if ($item->description)
+                                <p class="text-[11px] text-slate-500 leading-relaxed mt-2 flex-1 line-clamp-2">
+                                    {{ Str::limit(strip_tags($item->description), 100) }}
+                                </p>
+                            @endif
+                            <span class="inline-flex items-center gap-1 mt-3 text-[11px] font-bold text-primary-600 group-hover:text-primary-700 transition">
+                                Lihat Detail
+                                <span class="material-symbols-outlined text-sm">arrow_forward</span>
+                            </span>
+                        </div>
+
+                    </a>
 
                 @empty
 
                     <div class="col-span-full">
-                        <div class="bg-white rounded-3xl border border-dashed border-slate-300 p-10 text-center">
-                            <i class="fa-solid fa-trophy text-5xl text-slate-300"></i>
-                            <h3 class="mt-4 text-lg font-semibold text-slate-700">
-                                Belum ada data prestasi {{ $kategori }}
-                            </h3>
-                            <p class="text-slate-500 mt-2">
-                                Data prestasi akan tampil di sini.
-                            </p>
+                        <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-10 text-center">
+                            <span class="material-symbols-outlined text-5xl text-slate-300">emoji_events</span>
+                            <h3 class="mt-4 text-lg font-semibold text-slate-700">Belum ada data prestasi {{ $kategori }}</h3>
+                            <p class="text-slate-500 mt-2 text-sm">Data prestasi akan tampil di sini.</p>
                         </div>
                     </div>
 
                 @endforelse
 
             </div>
-
         </div>
     @endforeach
 

@@ -9,7 +9,7 @@
         {{-- HEADER --}}
         <div class="mb-6">
             <h1 class="text-2xl md:text-3xl font-bold text-slate-800 flex items-center gap-3">
-                <i class="fa-solid fa-user-pen text-blue-500"></i>
+                <i class="fa-solid fa-user-pen text-primary-500"></i>
                 Edit User
             </h1>
 
@@ -33,8 +33,8 @@
                             Nama Lengkap
                         </label>
 
-                        <input type="text" name="name" value="{{ old('name', $user->name) }}"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" name="name" value="{{ old('name', $user->name) }}" placeholder="Masukkan nama lengkap"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
 
                         @error('name')
                             <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
@@ -47,8 +47,8 @@
                             Email
                         </label>
 
-                        <input type="email" name="email" value="{{ old('email', $user->email) }}"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <input type="email" name="email" value="{{ old('email', $user->email) }}" placeholder="user@sekolah.test"
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
 
                         @error('email')
                             <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
@@ -62,7 +62,7 @@
                         </label>
 
                         <input type="text" name="phone" value="{{ old('phone', $user->phone) }}" placeholder="Contoh: 082116052300"
-                            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
 
                         @error('phone')
                             <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
@@ -78,7 +78,7 @@
                             </label>
 
                             <input type="password" name="password" placeholder="Kosongkan jika tidak diubah"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
 
                             @error('password')
                                 <p class="text-red-500 text-sm mt-2">{{ $message }}</p>
@@ -91,7 +91,7 @@
                             </label>
 
                             <input type="password" name="password_confirmation" placeholder="Ulangi password baru"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">
                         </div>
 
                     </div>
@@ -128,7 +128,7 @@
                             </label>
 
                             <select name="is_active"
-                                class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-blue-500">
+                                class="w-full rounded-xl border border-slate-300 px-4 py-3 focus:ring-2 focus:ring-primary-500">
 
                                 <option value="1" {{ old('is_active', $user->is_active) == 1 ? 'selected' : '' }}>
                                     Aktif
@@ -156,7 +156,7 @@
                         </a>
 
                         <button type="submit"
-                            class="px-6 py-3 rounded-xl bg-blue-500 hover:bg-blue-600 text-white font-semibold flex items-center justify-center gap-2">
+                            class="px-6 py-3 rounded-xl bg-primary-500 hover:bg-primary-600 text-white font-semibold flex items-center justify-center gap-2">
 
                             <i class="fa-solid fa-floppy-disk"></i>
                             Update User

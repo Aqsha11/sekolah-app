@@ -1,11 +1,11 @@
-# 📘 School Management System — Dokumentasi Project
+# School Management System — Dokumentasi Project
 
 > **Sistem Manajemen Sekolah** — CMS website sekolah + Panel Admin + Absensi RFID + Dashboard Orang Tua
 > Framework: **Laravel 12** | PHP ^8.2 | MySQL | Tailwind CSS 3 | Alpine.js | Vite
 
 ---
 
-## 📋 Daftar Isi
+## Daftar Isi
 
 1. [Arsitektur Aplikasi](#1-arsitektur-aplikasi)
 2. [Role & Permission](#2-role--permission)
@@ -17,6 +17,8 @@
 8. [Cara Install & Setup](#8-cara-install--setup)
 9. [Testing](#9-testing)
 10. [Catatan Teknis](#10-catatan-teknis)
+11. [Keamanan](#11-keamanan)
+12. [Perintah Penting](#12-perintah-penting)
 
 ---
 
@@ -44,6 +46,21 @@
 | Image | Intervention Image 3 |
 | Export Excel | OpenSpout 4 |
 | Testing | Pest PHP 3 |
+| Package Manager | yarn |
+
+### Route Files
+
+Routes dipecah ke beberapa file, dimuat via `bootstrap/app.php`:
+
+```
+routes/
+├── web.php          # Auth (login/logout/force-logout)
+├── admin.php        # Semua admin routes
+├── public.php       # Halaman publik website
+├── orangtua.php     # Dashboard orang tua
+├── rfid.php         # Scanner RFID
+└── api.php          # API v1 (Sanctum auth)
+```
 
 ---
 
@@ -67,7 +84,9 @@ view berita, create berita, edit berita, delete berita, manage berita,
 manage users, manage roles, manage permissions,
 manage galeri, manage fasilitas, manage website,
 manage guru, manage prestasi, manage kontak,
-manage banner, manage absensi, manage siswa
+manage banner, manage absensi, manage siswa,
+manage kelas, manage agenda, manage alumni,
+manage kalender, manage jadwal, manage laporan
 ```
 
 ### Middleware Aliases (registered di `bootstrap/app.php`)
@@ -111,26 +130,28 @@ manage banner, manage absensi, manage siswa
 
 ### Auth
 
-| Method | URI | Controller |
-|--------|-----|------------|
-| GET | `/login` | `AuthenticatedSessionController@create` |
-| POST | `/login` | `AuthenticatedSessionController@store` |
-| POST | `/logout` | `AuthenticatedSessionController@destroy` |
-| POST | `/force-logout` | Closure |
+| Method | URI | Middleware | Controller |
+|--------|-----|------------|------------|
+| GET | `/login` | `guest` | `AuthenticatedSessionController@create` |
+| POST | `/login` | `guest` | `AuthenticatedSessionController@store` |
+| POST | `/logout` | `auth` | `AuthenticatedSessionController@destroy` |
+| GET | `/force-logout` | `auth` | Closure |
 
 ### RFID
 
 | Method | URI | Keterangan |
 |--------|-----|------------|
 | GET | `/rfid` | Halaman scanner |
-| POST | `/rfid/scan` | Endpoint scan (CSRF excluded, throttle 30/menit) |
+| POST | `/rfid/scan` | Endpoint scan (CSRF excluded, throttle 30/menit, API key wajib) |
 
 ### Orang Tua Dashboard
 
 | Method | URI | Nama Route |
 |--------|-----|------------|
 | GET | `/orang-tua/dashboard` | `orangtua.dashboard` |
-| GET | `/orang-tua/riwayat/{siswa}` | `orangtua.riwayat` |
+| GET | `/orang-tua/riwayat` | `orangtua.riwayat` |
+| GET | `/orang-tua/realtime-all` | `orangtua.realtimeAll` |
+| GET | `/orang-tua/jadwal` | `orangtua.jadwal` |
 | GET | `/orang-tua/realtime/{siswa}` | `orangtua.realtime` |
 
 ### Admin Panel
@@ -146,19 +167,40 @@ manage banner, manage absensi, manage siswa
 | Kontak (CRUD) | `/admin/kontak` | `manage kontak` |
 | Banner (CRUD) | `/admin/banner` | `manage banner` |
 | Siswa (CRUD) | `/admin/siswa` | `manage siswa` |
-| Absensi (CRUD) | `/admin/absensi` | `manage absensi` |
+| Absensi | `/admin/absensi` | `manage absensi` |
+| Kelas (CRUD) | `/admin/kelas` | `manage kelas` |
+| Agenda (CRUD) | `/admin/agenda` | `manage agenda` |
+| Alumni (CRUD) | `/admin/alumni` | `manage alumni` |
+| Kalender (CRUD) | `/admin/kalender` | `manage kalender` |
+| Jadwal (CRUD) | `/admin/jadwal` | `manage jadwal` |
+| Laporan | `/admin/laporan` | `manage laporan` |
 | Users (CRUD) | `/admin/users` | `manage users` |
 | Roles | `/admin/roles` | `manage roles` |
 | Permissions | `/admin/permissions` | `manage permissions` |
 | Settings | `/admin/settings` | `manage website` |
 | Orang Tua | `/admin/orang-tua` | `manage siswa` |
 | Profile | `/admin/profile` | Semua auth |
+| Jadwal Saya | `/admin/jadwal-saya` | `role:guru\|super_admin\|admin` |
+
+### API v1
+
+| Method | URI | Auth | Keterangan |
+|--------|-----|------|------------|
+| POST | `/api/v1/auth/login` | Public | Login, return Sanctum token |
+| POST | `/api/v1/auth/logout` | `auth:sanctum` | Logout |
+| GET | `/api/v1/profil` | `auth:sanctum` | Data profil |
+| GET | `/api/v1/absensi` | `auth:sanctum` | Data absensi anak |
+| GET | `/api/v1/absensi/{siswa}` | `auth:sanctum` | Absensi per siswa |
+| GET | `/api/v1/jadwal` | `auth:sanctum` | Jadwal pelajaran |
+| GET | `/api/v1/kalender` | `auth:sanctum` | Kalender akademik |
+| GET | `/api/v1/siswa` | `auth:sanctum` | Data siswa |
+| POST | `/api/v1/rfid/scan` | API Key | Scan RFID |
 
 ---
 
 ## 4. Database Schema
 
-### 15 Tables
+### 20+ Tables
 
 | Tabel | Key Columns | Relasi |
 |-------|-------------|--------|
@@ -178,10 +220,12 @@ manage banner, manage absensi, manage siswa
 | **absensis** | id, siswa_id, rfid, check_in, check_out, status, tanggal | → siswas |
 | **orang_tua** | id, nama, email (unique), phone | ↔ siswas (pivot) |
 | **orang_tua_siswa** | orang_tua_id, siswa_id | Pivot table |
+| **jadwal_pelajarans** | id, kelas, hari, jam_mulai, jam_selesai, mata_pelajaran, guru, ruangan, warna | — |
+| **kalender_akademiks** | id, judul, deskripsi, tanggal_mulai, tanggal_selesai, tipe, warna, dot_color | — |
 
 ### Constraints Penting
 
-- **absensis**: unique(siswa_id, tanggal) — 1 record per siswa per hari
+- **absensis**: unique(siswa_id, tanggal) — 1 record per siswa per hari + index on tanggal
 - **siswas**: unique(nis), unique(rfid)
 - **berita**: unique(slug)
 - **settings**: unique(key)
@@ -194,18 +238,24 @@ Model yang menggunakan `SoftDeletes`: `users`, `gurus`, `berita`, `fasilitas`, `
 
 ## 5. Struktur Controller
 
-### Admin Controllers (16)
+### Admin Controllers (20+)
 
 | Controller | Fungsi Utama |
 |-----------|-------------|
 | `DashboardController` | Statistik dashboard (chart) |
 | `AbsensiController` | CRUD absensi, rekap, export Excel, laporan per periode |
+| `AgendaController` | CRUD agenda sekolah |
+| `AlumniController` | CRUD alumni |
 | `BannerController` | CRUD banner hero |
 | `BeritaController` | CRUD berita dengan upload gambar |
 | `FasilitasController` | CRUD fasilitas |
 | `GaleriController` | CRUD galeri |
 | `GuruController` | CRUD guru dengan upload photo |
+| `JadwalPelajaranController` | CRUD jadwal pelajaran |
+| `KalenderAkademikController` | CRUD kalender akademik |
+| `KelasController` | CRUD kelas |
 | `KontakController` | Kelola pesan masuk, reply, mark read |
+| `LaporanController` | Laporan & rekap absensi |
 | `OrangTuaController` | Kelola relasi orang tua-siswa |
 | `PermissionController` | CRUD permissions |
 | `PrestasiController` | CRUD prestasi |
@@ -215,7 +265,7 @@ Model yang menggunakan `SoftDeletes`: `users`, `gurus`, `berita`, `fasilitas`, `
 | `SiswaController` | CRUD siswa, export Excel |
 | `UserController` | CRUD users, filter, export Excel |
 
-### Public Controllers (9)
+### Public Controllers (10)
 
 | Controller | Fungsi |
 |-----------|--------|
@@ -226,8 +276,21 @@ Model yang menggunakan `SoftDeletes`: `users`, `gurus`, `berita`, `fasilitas`, `
 | `FacilityController` | Fasilitas sekolah |
 | `ContactsController` | Form kontak |
 | `PrestasiController` | Prestasi sekolah |
-| `OrangTuaController` | Dashboard & riwayat absensi anak |
+| `OrangTuaController` | Dashboard, riwayat, jadwal anak |
 | `RfidController` | Halaman & endpoint scan RFID |
+| `JadwalController` | Jadwal pelajaran (guru & orang tua) |
+
+### API Controllers (6)
+
+| Controller | Fungsi |
+|-----------|--------|
+| `AuthController` | Login & logout (Sanctum) |
+| `AbsensiApiController` | Data absensi |
+| `SiswaApiController` | Data siswa |
+| `JadwalApiController` | Jadwal pelajaran |
+| `KalenderApiController` | Kalender akademik |
+| `RfidApiController` | Scan RFID via API |
+| `ProfilApiController` | Data profil |
 
 ---
 
@@ -247,11 +310,12 @@ resources/views/
 │   ├── guru/show.blade.php
 │   ├── galeri.blade.php
 │   ├── fasilitas.blade.php
-│   └── kontak.blade.php
+│   ├── kontak.blade.php
+│   └── jadwal-orang-tua.blade.php
 ├── admin/                      # Panel admin
 │   ├── layouts/               # app, guest, navigation, sidebar
-│   ├── components/            # 15 blade components
-│   ├── auth/                  # Login, register, forgot/reset password
+│   ├── components/            # Blade components
+│   ├── auth/                  # Login
 │   ├── dashboard/index.blade.php
 │   ├── berita/                # create, edit, index, show
 │   ├── guru/                  # create, edit, index, show
@@ -262,6 +326,12 @@ resources/views/
 │   ├── banner/                # create, edit, index
 │   ├── siswa/                 # create, edit, index
 │   ├── absensi/               # create, edit, index, laporan
+│   ├── kelas/                 # create, edit, index
+│   ├── agenda/                # create, edit, index
+│   ├── alumni/                # create, edit, index
+│   ├── kalender/              # create, edit, index
+│   ├── jadwal/                # create, edit, index
+│   ├── laporan/               # index, absensi
 │   ├── users/                 # create, edit, index, show
 │   ├── roles/                 # create, edit, index, show
 │   ├── permissions/           # create, edit, index, show
@@ -273,8 +343,13 @@ resources/views/
 │   └── riwayat.blade.php
 ├── rfid/                       # Halaman scanner RFID
 │   └── index.blade.php
+├── components/                 # Shared components
+│   └── theme-colors.blade.php
 └── errors/                     # Custom error pages
-    └── 403.blade.php
+    ├── 403.blade.php
+    ├── 404.blade.php
+    ├── 419.blade.php
+    └── 500.blade.php
 ```
 
 ---
@@ -289,26 +364,66 @@ resources/views/
 - **Flow**: Scan pertama → check-in, Scan kedua (hari sama) → check-out
 - **Status**: hadir, terlambat, izin, sakit, alpha
 - **Duplicate Prevention**: Unique constraint siswa_id + tanggal
-- **Auth**: API Key via header `X-API-Key` atau parameter `api_key`
+- **Auth**: API Key **wajib** via header `X-API-Key` atau parameter `api_key`
+- **Realtime**: Event `AbsensiUpdated` di-broadcast via Pusher (log driver)
+- **Throttle**: 30 requests/menit (web), 60 requests/menit (API)
 
 ### 7.2 Dashboard Orang Tua
 
-- Orang tua bisa memantau absensi anak secara real-time
-- Riwayat absensi per bulan
-- Endpoint JSON realtime
+- 3 tab: **Kehadiran** (realtime), **Jadwal**, **Kalender**
+- Statistik absensi: total, hadir, terlambat, izin, sakit, alpha
+- Persentase kehadiran dengan progress bar
+- Riwayat absensi per bulan dengan filter
+- Jadwal pelajaran hari ini (highlight hari aktif)
+- Kalender akademik
+- **Polling real-time** setiap 3 detik via `GET /orang-tua/realtime-all`
 - Relasi many-to-many (1 orang tua bisa punya banyak anak)
 
-### 7.3 Export Excel
+### 7.3 Dynamic Color System
+
+Warna website dikontrol dari admin settings (`primary_color`):
+
+- `tailwind.config.js` → CSS variables via `primary` palette
+- `<x-theme-colors />` → inject CSS variables dari database
+- Semua komponen otomatis mengikuti warna yang dipilih
+
+### 7.4 Export Excel
 
 Menggunakan OpenSpout v4, tersedia export:
 - Daftar Siswa → `/admin/siswa/export/excel`
 - Absensi Harian → `/admin/absensi/export/excel`
-- Laporan Absensi (per periode) → `/admin/absensi/export/laporan`
+- Laporan Absensi (per periode) → `/admin/laporan/export/absensi/excel`
 - Data Users → `/admin/users/export/excel`
 
-### 7.4 CMS Website
+### 7.5 Export PDF
 
-Halaman publik lengkap: berita (dengan slug), profil sekolah, guru, prestasi, galeri foto, fasilitas, kontak form.
+Menggunakan DomPDF:
+- Laporan Absensi PDF → `/admin/laporan/export/absensi/pdf`
+
+### 7.6 CMS Website
+
+Halaman publik lengkap dengan desain profesional:
+- Berita (dengan slug, kategori, related news)
+- Profil sekolah (Alpine.js tabs: Profil Sekolah / Visi & Misi)
+- Guru (daftar & detail dengan bio)
+- Prestasi (daftar & detail)
+- Galeri foto (dengan lightbox)
+- Fasilitas
+- Kontak form
+
+### 7.7 Settings Website
+
+Admin bisa mengatur:
+- Nama sekolah, nama website, tagline
+- Profil sekolah, visi, misi
+- Sambutan kepala sekolah
+- Email, telepon, alamat
+- Jam operasional
+- Akreditasi (A/B/C/D)
+- Hero image, logo
+- Warna tema (primary color)
+- Banner carousel
+- Social media links
 
 ---
 
@@ -317,7 +432,7 @@ Halaman publik lengkap: berita (dengan slug), profil sekolah, guru, prestasi, ga
 ### Prasyarat
 - PHP 8.2+
 - Composer
-- Node.js & npm/yarn
+- Node.js & yarn
 - MySQL
 
 ### Langkah
@@ -329,29 +444,55 @@ cd sekolah-app
 
 # 2. Install dependencies
 composer install
-npm install
+yarn install
 
 # 3. Setup environment
 cp .env.example .env
-# - Edit .env: DB_DATABASE, DB_USERNAME, DB_PASSWORD
-# - Atur RFID_API_KEY
+# Edit .env: DB_DATABASE, DB_USERNAME, DB_PASSWORD, RFID_API_KEY, APP_URL
 
 # 4. Generate key & migrate
 php artisan key:generate
 php artisan migrate --seed
 
-# 5. Build frontend
-npm run build
+# 5. Link storage
+php artisan storage:link
 
-# 6. Jalankan
+# 6. Build frontend
+yarn build
+
+# 7. Jalankan
 php artisan serve
 ```
 
 ### Atau via Composer Script
 
 ```bash
-composer setup       # full install + .env + key + migrate + seed + npm build
+composer setup       # full install + .env + key + migrate + seed + yarn build
 composer dev         # serve + queue + logs + Vite (concurrent)
+```
+
+### Deployment Production
+
+```bash
+# 1. Set APP_KEY dan RFID_API_KEY di .env
+php artisan key:generate
+
+# 2. Jalankan migrasi
+php artisan migrate --force
+
+# 3. Cache config, routes, views
+php artisan config:cache
+php artisan route:cache
+php artisan view:cache
+
+# 4. Link storage
+php artisan storage:link
+
+# 5. Build frontend
+yarn build
+
+# 6. Jalankan queue worker
+php artisan queue:work
 ```
 
 ---
@@ -368,7 +509,7 @@ composer test
 | Framework | Pest PHP 3 |
 | Database | SQLite in-memory (via phpunit.xml) |
 | Trait | `RefreshDatabase` |
-| Tests | 6 Feature test files, 1 Unit test |
+| Tests | 43 tests, 69 assertions |
 
 ### Test Files
 
@@ -377,16 +518,14 @@ tests/
 ├── Feature/
 │   ├── Auth/
 │   │   ├── AuthenticationTest.php
-│   │   ├── EmailVerificationTest.php
-│   │   ├── PasswordConfirmationTest.php
-│   │   ├── PasswordResetTest.php
 │   │   ├── PasswordUpdateTest.php
-│   │   └── RegistrationTest.php
+│   ├── AdminPageTest.php       # 21 tests (CRUD access)
 │   ├── ExampleTest.php
-│   └── ProfileTest.php
+│   ├── ProfileTest.php
+│   └── PublicPageTest.php      # 11 tests (all public pages)
 ├── Unit/
 │   └── ExampleTest.php
-├── Pest.php
+├── Pest.php                    # Global setup (RolePermissionSeeder)
 └── TestCase.php
 ```
 
@@ -399,28 +538,31 @@ tests/
 | Config | Value |
 |--------|-------|
 | Timezone | `Asia/Makassar` (WITA) |
-| Session Driver | `database` (60 menit, expire on close, encrypt, same_site=strict) |
+| Session Driver | `database` (120 menit, encrypt, secure cookie, same_site=lax) |
 | Cache Driver | `database` |
 | Queue Driver | `database` |
+| Broadcast Driver | `log` ( Pusher ready) |
 | DB Default | MySQL (SQLite fallback) |
 
 ### Alur Boot App (`bootstrap/app.php`)
 
 ```php
-// Middleware
-->withMiddleware(function (Middleware $middleware) {
-    $middleware->alias([
-        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-    ]);
-    // CSRF excluded for RFID
-    $middleware->validateCsrfTokens(except: ['rfid/scan']);
-})
+->withRouting(
+    web: routes/web.php,
+    api: routes/api.php,
+    then: function () {
+        Route::middleware('web')->group('routes/public.php');
+        Route::middleware('web')->group('routes/admin.php');
+        Route::middleware('web')->group('routes/orangtua.php');
+        Route::middleware('web')->group('routes/rfid.php');
+    },
+)
 
-// Exceptions
-->withExceptions(function (Exceptions $exceptions) {
-    // UnauthorizedException -> 403 view or JSON
+->withMiddleware(function (Middleware $middleware) {
+    $middleware->alias([...]);           // Spatie role/permission
+    $middleware->append(SecurityHeaders::class);  // Security headers
+    $middleware->validateCsrfTokens(except: ['rfid/scan']);
+    $middleware->trustHosts(at: ['localhost', '127.0.0.1', '::1']);
 })
 ```
 
@@ -434,21 +576,30 @@ View::composer('admin.*', function ($view) {
 });
 ```
 
-### Keamanan
+### RFID Configuration
 
-- Session: encrypt + same_site strict + expire on close
-- RFID endpoint: throttle 30 requests/menit, API Key auth
-- No public registration
-- CSRF disabled only for `rfid/scan`
-- Soft deletes pada model penting
+API key disimpan di `config/rfid.php` (env: `RFID_API_KEY`).
+Controller menggunakan `config('rfid.api_key')` — bukan `env()` langsung.
+
+### HTML Sanitization
+
+Konten berita menggunakan `clean_html()` helper untuk mencegah XSS:
+- Strips `<script>`, event handlers, `javascript:` URIs
+- Memb safe tags: h1-h6, p, br, strong, em, a, img, table, dll
 
 ### Seeder Order
 
 ```
-1. RolePermissionSeeder   — 18 permissions + 6 roles
+1. RolePermissionSeeder   — permissions + roles
 2. CreateAdminUserSeeder  — admin & operator users
 3. RoleSeeder             — re-create roles
-4. DummyDataSeeder        — dummy data development (72 siswa, 12 guru, dll)
+4. KelasSeeder            — 9 kelas
+5. SiswaSeeder            — 72 siswa
+6. OrangTuaSeeder         — 5 orang tua + relasi
+7. AbsensiSeeder          — 1440 records absensi
+8. DummyImageSeeder       — guru, prestasi, berita, galeri, fasilitas
+9. JadwalPelajaranSeeder  — 324 jadwal (9 kelas)
+10. KalenderAkademikSeeder — 15 event
 ```
 
 ### File Upload
@@ -458,47 +609,88 @@ Images disimpan di `storage/app/public/` dengan subdirektori:
 - `guru/`
 - `settings/`
 - `banners/`
+- `galeri/`
+- `fasilitas/`
+- `prestasi/`
+- `avatars/`
 
 Wajib jalankan: `php artisan storage:link`
 
 ---
 
-## Struktur Direktori Lengkap
+## 11. Keamanan
+
+### Security Headers (Middleware)
+
+Middleware `SecurityHeaders` ditambahkan ke semua request:
+- `X-Content-Type-Options: nosniff`
+- `X-Frame-Options: SAMEORIGIN`
+- `X-XSS-Protection: 1; mode=block`
+- `Referrer-Policy: strict-origin-when-cross-origin`
+- `Permissions-Policy: camera=(), microphone=(), geolocation=()`
+- `Strict-Transport-Security` (HTTPS only)
+
+### Rate Limiting
+
+| Endpoint | Limit | Key |
+|----------|-------|-----|
+| Login | 5/menit | IP + email |
+| RFID scan (web) | 30/menit | IP |
+| RFID scan (API) | 60/menit | IP |
+| Form kontak | 5/menit | email + IP |
+
+### Authentication
+
+- Session-based auth (web) + Sanctum tokens (API)
+- `SESSION_ENCRYPT=true`, `SESSION_SECURE_COOKIE=true`
+- `SESSION_SAME_SITE=lax`
+- No public registration
+
+### RFID Security
+
+- API key **wajib** untuk semua scan request
+- Config via `config/rfid.php` (bukan `env()` runtime)
+- CSRF excluded untuk `/rfid/scan`
+
+### XSS Prevention
+
+- Blade auto-escaping (`{{ }}`)
+- `clean_html()` helper untuk konten berita (`{!! !!}`)
+- Strips script tags, event handlers, javascript: URIs
+
+### Production Defaults (`.env.example`)
 
 ```
-sekolah-app/
-├── app/
-│   ├── Http/
-│   │   ├── Controllers/
-│   │   │   ├── Admin/          # 16 controller
-│   │   │   ├── Auth/           # 9 controller (Breeze)
-│   │   │   ├── Public/         # 9 controller
-│   │   │   └── Controller.php
-│   │   ├── Middleware/         # CheckPermission, CheckRole (unused)
-│   │   └── Requests/          # 6 Form Request
-│   ├── Models/                 # 15 model
-│   ├── Providers/              # AppServiceProvider
-│   └── View/Components/       # AppLayout, GuestLayout
-├── bootstrap/                  # app.php, providers.php
-├── config/                     # 12 file konfigurasi
-├── database/
-│   ├── factories/              # UserFactory
-│   ├── migrations/             # 23 migration
-│   └── seeders/                # 5 seeder
-├── public/
-├── resources/views/            # Lihat section 6
-├── routes/
-│   ├── web.php                 # Semua routes
-│   ├── auth.php                # Tidak dipakai
-│   └── console.php
-├── tests/                      # Pest tests
-├── composer.json
-├── package.json
-└── vite.config.js
+APP_ENV=production
+APP_DEBUG=false
+LOG_LEVEL=warning
+SESSION_DRIVER=database
+SESSION_ENCRYPT=true
+SESSION_SECURE_COOKIE=true
+CACHE_DRIVER=database
+QUEUE_CONNECTION=database
 ```
 
 ---
 
-> **Dibuat:** Juni 2026  
-> **Laravel Version:** 12.x  
-> **Terakhir diperbarui:** 16 Juni 2026
+## 12. Perintah Penting
+
+| Aksi | Perintah |
+|------|----------|
+| Full setup | `composer setup` |
+| Dev server | `composer dev` |
+| Run tests | `composer test` |
+| Build frontend | `yarn build` |
+| Link storage | `php artisan storage:link` |
+| Clear dummy data | `php artisan data:clear` |
+| Clear dummy data (skip konfirmasi) | `php artisan data:clear --force` |
+| Cache config | `php artisan config:cache` |
+| Cache routes | `php artisan route:cache` |
+| Cache views | `php artisan view:cache` |
+| Fresh migrate + seed | `php artisan migrate:fresh --seed` |
+
+---
+
+> **Dibuat:** Juni 2026
+> **Laravel Version:** 12.x
+> **Terakhir diperbarui:** 18 Juli 2026

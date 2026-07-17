@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="bg-white p-6 rounded-xl shadow">
-    <h1 class="text-2xl font-bold mb-6"><i class="fa-solid fa-pen text-blue-600"></i> Edit Permission</h1>
+    <h1 class="text-2xl font-bold mb-6"><i class="fa-solid fa-pen text-primary-600"></i> Edit Permission</h1>
 
     <form action="{{ route('admin.permissions.update', $permission->id) }}" method="POST" class="space-y-6">
         @csrf @method('PUT')
@@ -22,7 +22,7 @@
         </div>
 
         <div class="flex gap-3">
-            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">
+            <button type="submit" class="bg-primary-600 hover:bg-primary-700 text-white px-6 py-2 rounded-lg">
                 <i class="fa-solid fa-save"></i> Update
             </button>
             <a href="{{ route('admin.permissions.index') }}" class="bg-primary-600 hover:bg-gray-600 text-white px-6 py-2 rounded-lg">

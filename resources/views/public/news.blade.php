@@ -16,7 +16,7 @@
             <div class="max-w-3xl">
 
                 <span
-                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-semibold shadow-sm">
+                    class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500 text-white text-sm font-semibold shadow-sm">
                     <i class="fa-solid fa-newspaper"></i>
                     Berita Sekolah
                 </span>
@@ -31,7 +31,7 @@
 
             </div>
 
-            <div data-aos="fade-left" class="w-full lg:w-[350px]">
+            <div data-aos="fade-left" class="w-full lg:w-80 shrink-0">
 
                 <form action="{{ route('berita.index') }}" method="GET" class="bg-white/80 backdrop-blur-sm rounded-xl p-4 shadow-lg border border-white/50">
 
@@ -43,10 +43,10 @@
 
                         <input type="text" name="search" value="{{ request('search') }}"
                             placeholder="Cari berita..."
-                            class="flex-1 bg-white rounded-lg px-4 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm border border-slate-200">
+                            class="flex-1 bg-white rounded-lg px-4 py-2 text-slate-900 focus:outline-none focus:ring-2 focus:ring-primary-500 text-sm border border-slate-200">
 
                         <button type="submit"
-                            class="bg-blue-500 hover:bg-blue-600 text-white px-4 rounded-lg font-semibold transition">
+                            class="bg-primary-500 hover:bg-primary-600 text-white px-4 rounded-lg font-semibold transition">
                             Cari
                         </button>
 
@@ -97,7 +97,7 @@
                         <div class="absolute bottom-0 left-0 p-6 md:p-8 text-white">
 
                             <span
-                                class="inline-flex px-4 py-2 rounded-lg bg-blue-500 text-slate-900 text-xs font-semibold mb-4">
+                                class="inline-flex px-4 py-2 rounded-lg bg-primary-500 text-slate-900 text-xs font-semibold mb-4">
                                 Berita Utama
                             </span>
 
@@ -111,22 +111,24 @@
 
                             <div class="flex items-center gap-4 text-sm text-slate-200 mb-4">
 
-                                <span>
-                                    📅
+                                <span class="flex items-center gap-1.5">
+                                    <span class="material-symbols-outlined text-sm">calendar_month</span>
                                     {{ \Carbon\Carbon::parse($berita->first()->created_at)->translatedFormat('d F Y') }}
                                 </span>
 
-                                <span>
-                                    🏷️
-                                    {{ $berita->first()->category }}
-                                </span>
+                                @if ($berita->first()->category)
+                                    <span class="flex items-center gap-1.5">
+                                        <span class="material-symbols-outlined text-sm">label</span>
+                                        {{ $berita->first()->category }}
+                                    </span>
+                                @endif
 
                             </div>
 
                             <a href="{{ route('berita.show', $berita->first()->slug) }}"
                                 class="bg-white text-center w-44 rounded-2xl h-10 relative text-black text-sm font-semibold group inline-flex items-center justify-center border border-slate-200">
                                 <div
-                                    class="bg-blue-500 rounded-xl h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[168px] z-10 duration-500">
+                                    class="bg-primary-500 rounded-xl h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[168px] z-10 duration-500">
 
                                 </div>
                                 <span class="translate-x-2 z-20">Baca Selengkapnya</span>
@@ -174,15 +176,15 @@
 
                                 <div class="flex items-center gap-2 text-xs text-slate-500 mb-3">
 
-                                    <span>
-                                        📅
+                                    <span class="flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">calendar_month</span>
                                         {{ \Carbon\Carbon::parse($item->created_at)->translatedFormat('d F Y') }}
                                     </span>
 
                                 </div>
 
                                 <h3
-                                    class="text-lg font-bold text-slate-900 mb-2 line-clamp-2 group-hover:text-blue-500 transition">
+                                    class="text-lg font-bold text-slate-900 mb-2 line-clamp-2 group-hover:text-primary-500 transition">
 
                                     {{ $item->title }}
 
@@ -200,7 +202,7 @@
                                     <a href="{{ route('berita.show', $item->slug) }}"
                                         class="bg-white text-center w-44 rounded-2xl h-10 relative text-black text-sm font-semibold group inline-flex items-center justify-center border border-slate-200">
                                         <div
-                                            class="bg-blue-500 rounded-xl h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[168px] z-10 duration-500">
+                                            class="bg-primary-500 rounded-xl h-8 w-1/4 flex items-center justify-center absolute left-1 top-[4px] group-hover:w-[168px] z-10 duration-500">
 
                                         </div>
                                         <span class="translate-x-2 z-20">Baca Selengkapnya</span>
@@ -223,8 +225,8 @@
                 {{-- EMPTY --}}
                 <div class="bg-slate-50 border border-dashed border-slate-300 rounded-xl p-12 text-center">
 
-                    <div class="text-5xl mb-4">
-                        📰
+                    <div class="mb-4">
+                        <span class="material-symbols-outlined text-6xl text-slate-300">newspaper</span>
                     </div>
 
                     <h3 class="text-2xl font-bold text-slate-700 mb-2">
@@ -255,7 +257,7 @@
                     {{-- Semua --}}
                     <a href="{{ route('berita.index') }}"
                         class="px-3 py-2 rounded-lg text-xs font-medium transition
-        {{ request('category') == null ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
+        {{ request('category') == null ? 'bg-primary-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
                         Semua
                     </a>
 
@@ -263,7 +265,7 @@
                     @foreach ($categories as $category)
                         <a href="{{ route('berita.index', ['category' => $category]) }}"
                             class="px-3 py-2 rounded-lg text-xs font-medium transition
-            {{ request('category') == $category ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
+            {{ request('category') == $category ? 'bg-primary-600 text-white' : 'bg-slate-100 text-slate-700 hover:bg-slate-200' }}">
                             {{ $category }}
                         </a>
                     @endforeach
@@ -303,7 +305,7 @@
                             <div class="flex-1 min-w-0">
 
                                 <h4
-                                    class="font-semibold text-slate-800 line-clamp-2 group-hover:text-blue-500 transition text-sm">
+                                    class="font-semibold text-slate-800 line-clamp-2 group-hover:text-primary-500 transition text-sm">
 
                                     {{ $latest->title }}
 

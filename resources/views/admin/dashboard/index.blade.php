@@ -84,15 +84,15 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-5">
 
         {{-- Chart --}}
-        <div class="lg:col-span-2 bg-gradient-to-br from-blue-50 to-white rounded-2xl border border-blue-100 shadow-sm p-6">
+        <div class="lg:col-span-2 bg-gradient-to-br from-primary-50 to-white rounded-2xl border border-primary-100 shadow-sm p-6">
 
             <div class="flex items-center justify-between mb-5">
                 <div>
                     <h3 class="font-semibold text-gray-900 text-sm">Statistik Konten</h3>
                     <p class="text-gray-400 text-xs mt-0.5">Ringkasan data keseluruhan</p>
                 </div>
-                <div class="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center shadow-sm">
-                    <i class="fa-solid fa-chart-column text-blue-600 text-xs"></i>
+                <div class="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center shadow-sm">
+                    <i class="fa-solid fa-chart-column text-primary-600 text-xs"></i>
                 </div>
             </div>
 
@@ -105,64 +105,95 @@
 
         {{-- Quick Actions --}}
         <div class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <h3 class="font-semibold text-gray-900 text-sm mb-4">Akses Cepat</h3>
-            <div class="space-y-2.5">
-                <a href="{{ route('admin.berita.create') }}"
-                    class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50 transition-all group">
-                    <div
-                        class="w-8 h-8 rounded-lg bg-primary-100 flex items-center justify-center group-hover:bg-primary-100 transition-colors">
-                        <i class="fa-solid fa-pen-to-square text-primary-600 text-xs group-hover:text-primary-700"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-gray-800">Tulis Berita</p>
-                        <p class="text-[10px] text-gray-400">Publikasikan artikel baru</p>
-                    </div>
-                    <i
-                        class="fa-solid fa-arrow-right text-gray-300 text-[10px] ml-auto group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all"></i>
-                </a>
-
-                <a href="{{ route('admin.guru.create') }}"
-                    class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50 transition-all group">
-                    <div
-                        class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-primary-100 transition-colors">
-                        <i class="fa-solid fa-user-plus text-slate-600 text-xs group-hover:text-primary-600"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-gray-800">Tambah Guru</p>
-                        <p class="text-[10px] text-gray-400">Daftarkan guru baru</p>
-                    </div>
-                    <i
-                        class="fa-solid fa-arrow-right text-gray-300 text-[10px] ml-auto group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all"></i>
-                </a>
-
-                <a href="{{ route('admin.galeri.create') }}"
-                    class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50 transition-all group">
-                    <div
-                        class="w-8 h-8 rounded-lg bg-primary-50 flex items-center justify-center group-hover:bg-primary-100 transition-colors">
-                        <i class="fa-solid fa-upload text-primary-700 text-xs group-hover:text-primary-600"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-gray-800">Upload Foto</p>
-                        <p class="text-[10px] text-gray-400">Tambah galeri kegiatan</p>
-                    </div>
-                    <i
-                        class="fa-solid fa-arrow-right text-gray-300 text-[10px] ml-auto group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all"></i>
-                </a>
-
-                <a href="{{ route('admin.settings.index') }}"
-                    class="flex items-center gap-3 p-3 rounded-xl border border-gray-100 hover:border-primary-200 hover:bg-primary-50 transition-all group">
-                    <div
-                        class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-primary-100 transition-colors">
-                        <i class="fa-solid fa-sliders text-gray-600 text-xs group-hover:text-primary-600"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs font-semibold text-gray-800">Pengaturan</p>
-                        <p class="text-[10px] text-gray-400">Konfigurasi website</p>
-                    </div>
-                    <i
-                        class="fa-solid fa-arrow-right text-gray-300 text-[10px] ml-auto group-hover:text-primary-400 group-hover:translate-x-0.5 transition-all"></i>
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="font-semibold text-gray-900 text-sm">Kalender</h3>
+                <a href="{{ route('admin.kalender.index') }}" class="text-xs text-primary-600 hover:text-primary-700 font-medium flex items-center gap-1">
+                    Lihat semua <i class="fa-solid fa-arrow-right text-[10px]"></i>
                 </a>
             </div>
+            @php
+                $startOfMonth = $kalenderBulan->copy()->startOfMonth();
+                $endOfMonth = $kalenderBulan->copy()->endOfMonth();
+                $startDay = (int) $startOfMonth->dayOfWeek;
+                $daysInMonth = $endOfMonth->day;
+            @endphp
+
+            {{-- Mini month header --}}
+            <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-bold text-gray-700">{{ $kalenderBulan->translatedFormat('F Y') }}</span>
+            </div>
+
+            {{-- Mini calendar grid --}}
+            <div class="grid grid-cols-7 gap-px bg-gray-200 rounded-lg overflow-hidden border border-gray-200">
+                @foreach(['Mi', 'Se', 'Ra', 'Ka', 'Ju', 'Sa', 'Mi'] as $i => $dn)
+                    <div class="bg-gray-50 px-0 py-1.5 text-center text-[9px] font-bold text-gray-500 uppercase">
+                        {{ $dn }}
+                    </div>
+                @endforeach
+
+                @for($i = 0; $i < $startDay; $i++)
+                    <div class="bg-white min-h-[32px]"></div>
+                @endfor
+
+                @for($d = 1; $d <= $daysInMonth; $d++)
+                    @php
+                        $date = $kalenderBulan->copy()->day($d);
+                        $dayEvents = $kalenderEvents->filter(fn($e) => $e->isActiveOn($date));
+                        $isToday = $date->isToday();
+                    @endphp
+                    <div class="bg-white min-h-[32px] p-0.5 relative group cursor-default
+                        {{ $isToday ? 'bg-primary-50' : 'hover:bg-gray-50' }}">
+                        <span class="inline-flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-semibold
+                            {{ $isToday ? 'bg-primary-500 text-white' : 'text-gray-700' }}">
+                            {{ $d }}
+                        </span>
+                        @if($dayEvents->count() > 0)
+                            <div class="flex justify-center gap-px mt-px">
+                                @foreach($dayEvents->take(3) as $ev)
+                                    <span class="w-1 h-1 rounded-full" style="background:{{ $ev->dot_color }}"></span>
+                                @endforeach
+                            </div>
+                            {{-- Tooltip --}}
+                            <div class="absolute z-50 bottom-full left-1/2 -translate-x-1/2 mb-1 hidden group-hover:block w-44 bg-gray-900 text-white text-[10px] rounded-lg p-2 shadow-lg pointer-events-none">
+                                @foreach($dayEvents as $ev)
+                                    <div class="flex items-center gap-1.5 py-0.5">
+                                        <span class="w-1.5 h-1.5 rounded-full shrink-0" style="background:{{ $ev->dot_color }}"></span>
+                                        <span class="truncate">{{ $ev->judul }}</span>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                @endfor
+
+                @php $remaining = 7 - (($startDay + $daysInMonth) % 7); @endphp
+                @if($remaining < 7)
+                    @for($i = 0; $i < $remaining; $i++)
+                        <div class="bg-white min-h-[32px] opacity-30"></div>
+                    @endfor
+                @endif
+            </div>
+
+            {{-- Upcoming events --}}
+            @if($upcomingEvents->count() > 0)
+                <div class="mt-4 space-y-2">
+                    <p class="text-[10px] font-bold text-gray-500 uppercase tracking-wider">Mendatang</p>
+                    @foreach($upcomingEvents as $ev)
+                        <div class="flex items-center gap-2 p-2 rounded-lg hover:bg-gray-50 transition-colors">
+                            <span class="w-2 h-2 rounded-full shrink-0" style="background:{{ $ev->dot_color }}"></span>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-xs font-medium text-gray-800 truncate">{{ $ev->judul }}</p>
+                                <p class="text-[10px] text-gray-400">
+                                    {{ $ev->tanggal_mulai->format('d M') }}{{ $ev->tanggal_selesai ? ' - ' . $ev->tanggal_selesai->format('d M') : '' }}
+                                </p>
+                            </div>
+                            <span class="text-[10px] px-1.5 py-0.5 rounded font-medium border {{ $ev->warna }}">
+                                {{ ucfirst($ev->tipe) }}
+                            </span>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 
@@ -302,6 +333,9 @@
 
             if (!ctx) return;
 
+            const cs = getComputedStyle(document.documentElement);
+            const primary = (shade) => cs.getPropertyValue(`--color-primary-${shade}`).trim();
+
             new Chart(ctx, {
                 type: 'bar',
                 data: {
@@ -314,18 +348,18 @@
                             {{ $totalGaleri ?? 0 }},
                         ],
                         backgroundColor: [
-                            '#2563eb',
-                            '#3b82f6',
-                            '#60a5fa',
-                            '#93c5fd'
+                            primary(600),
+                            primary(500),
+                            primary(400),
+                            primary(300)
                         ],
 
                         borderSkipped: false,
                         hoverBackgroundColor: [
-                            '#1d4ed8',
-                            '#2563eb',
-                            '#3b82f6',
-                            '#60a5fa'
+                            primary(700),
+                            primary(600),
+                            primary(500),
+                            primary(400)
                         ],
 
                         barThickness: 28,
@@ -356,7 +390,7 @@
                         y: {
                             beginAtZero: true,
                             grid: {
-                                color: '#dbeafe'
+                                color: primary(100)
                             },
                             ticks: {
                                 precision: 0,

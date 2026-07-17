@@ -39,7 +39,7 @@
         {{-- Actions --}}
         <div class="mt-8 flex gap-3">
             <a href="{{ route('admin.roles.edit', $role->id) }}"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-lg flex items-center gap-2">
+                class="bg-primary-500 hover:bg-primary-600 text-white px-6 py-2 rounded-lg flex items-center gap-2">
                 <i class="fa-solid fa-pen"></i> Edit
             </a>
             <a href="{{ route('admin.roles.index') }}"

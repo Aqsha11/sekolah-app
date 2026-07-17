@@ -29,7 +29,7 @@
                 {{-- NAMA --}}
                 <div>
                     <label class="block font-semibold mb-1">Nama Prestasi</label>
-                    <input type="text" name="title" value="{{ old('title', $prestasi->title) }}"
+                    <input type="text" name="title" value="{{ old('title', $prestasi->title) }}" placeholder="Masukkan nama prestasi"
                         class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
                 </div>
 
@@ -78,7 +78,7 @@
                 {{-- TAHUN --}}
                 <div>
                     <label class="block font-semibold mb-1">Tahun</label>
-                    <input type="number" name="year" value="{{ old('year', $prestasi->year) }}"
+                    <input type="number" name="year" value="{{ old('year', $prestasi->year) }}" placeholder="Contoh: 2025"
                         class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
                 </div>
 
@@ -87,7 +87,7 @@
             {{-- DESKRIPSI --}}
             <div>
                 <label class="block font-semibold mb-1">Deskripsi</label>
-                <textarea name="description" rows="4" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300">{{ old('description', $prestasi->description) }}</textarea>
+                <textarea name="description" rows="4" placeholder="Tuliskan deskripsi prestasi" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300">{{ old('description', $prestasi->description) }}</textarea>
             </div>
 
             {{-- GAMBAR --}}

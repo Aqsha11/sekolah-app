@@ -9,62 +9,50 @@
 
     $heroImg = !empty($settings['hero_image'])
         ? asset('storage/settings/' . $settings['hero_image'])
-        : asset('images/sekolah.jpg');
+        : null;
 
     $sambutan = $settings['sambutan_kepsek'] ?? 'Sambutan kepala sekolah belum tersedia.';
     $kepsek = $settings['nama_kepsek'] ?? 'Kepala Sekolah';
 
-    $sejarah = $settings['sejarah'] ?? 'Sejarah sekolah belum tersedia.';
+    $sejarah = $settings['profil_sekolah'] ?? $settings['sejarah'] ?? 'Profil sekolah belum tersedia.';
     $visi = $settings['visi'] ?? 'Visi belum tersedia.';
     $misi = $settings['misi'] ?? 'Misi belum tersedia.';
 @endphp
 
 {{-- HERO --}}
 <section data-aos="fade-in" class="relative overflow-hidden py-20">
-
-    <div class="absolute inset-0 bg-gradient-to-br from-[#C4E2F5]/50 via-white to-sky-50"></div>
-
+    <div class="absolute inset-0 bg-gradient-to-br from-primary-100/50 via-white to-primary-50"></div>
     <div class="relative max-w-7xl mx-auto px-4 md:px-6">
-
         <div class="max-w-3xl">
-
-            <span
-                class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-semibold shadow-sm">
-                <i class="fa-solid fa-school"></i>
+            <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-600 text-white text-sm font-semibold shadow-sm">
+                <span class="material-symbols-outlined text-sm">school</span>
                 Profil Sekolah
             </span>
-
-            <h1 class="mt-6 text-4xl md:text-5xl font-bold text-slate-900">
-                {{ $schoolName }}
-            </h1>
-
+            <h1 class="mt-6 text-4xl md:text-5xl font-bold text-slate-900">{{ $schoolName }}</h1>
             <p class="mt-5 text-slate-600 text-lg leading-relaxed">
                 Mengenal lebih dekat sejarah, visi misi, dan sambutan resmi dari sekolah kami.
             </p>
-
         </div>
-
     </div>
-
 </section>
 
 {{-- HERO SECTION --}}
 <section class="max-w-7xl mx-auto px-4 md:px-6 pb-12 grid md:grid-cols-3 gap-8">
 
     <div class="md:col-span-2" data-aos="fade-right">
-        <img src="{{ $heroImg }}" class="w-full h-80 md:h-96 object-cover rounded-xl shadow-lg">
+        @if ($heroImg)
+            <img src="{{ $heroImg }}" alt="Profil {{ $schoolName }}" class="w-full h-80 md:h-96 object-cover rounded-2xl shadow-lg border border-slate-100">
+        @else
+            <div class="w-full h-80 md:h-96 rounded-2xl bg-gradient-to-br from-primary-100 to-primary-50 border border-slate-100 flex items-center justify-center">
+                <span class="material-symbols-outlined text-6xl text-primary-300">school</span>
+            </div>
+        @endif
     </div>
 
-    <div data-aos="fade-left" class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md p-6 border border-white/50">
-        <h2 class="text-xl font-bold text-slate-900 mb-3">
-            Sambutan Kepala Sekolah
-        </h2>
-
-        <p class="text-slate-600 text-sm leading-relaxed">
-            "{{ $sambutan }}"
-        </p>
-
-        <div class="mt-6 border-t pt-4">
+    <div data-aos="fade-left" class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md p-6 border border-slate-100">
+        <h2 class="text-xl font-bold text-slate-900 mb-3">Sambutan Kepala Sekolah</h2>
+        <p class="text-slate-600 text-sm leading-relaxed italic">"{{ $sambutan }}"</p>
+        <div class="mt-6 border-t border-slate-200 pt-4">
             <p class="font-semibold text-slate-900">{{ $kepsek }}</p>
             <p class="text-sm text-slate-500">Kepala Sekolah</p>
         </div>
@@ -73,43 +61,46 @@
 </section>
 
 {{-- DETAIL SECTION --}}
-<section class="max-w-7xl mx-auto px-4 md:px-6 pb-20">
+<section class="max-w-7xl mx-auto px-4 md:px-6 pb-20" x-data="{ activeTab: 'profil' }">
 
-    <div class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md overflow-hidden border border-white/50" data-aos="fade-up">
+    <div class="bg-white/80 backdrop-blur-sm rounded-2xl shadow-md overflow-hidden border border-slate-100" data-aos="fade-up">
 
         <div class="flex border-b border-slate-200">
-            <button onclick="openTab('sejarah')"
-                class="tab-btn px-6 py-4 font-semibold text-blue-500 border-b-2 border-blue-500">
-                Sejarah
+            <button @click="activeTab = 'profil'"
+                class="px-6 py-4 font-semibold text-sm transition-all border-b-2 cursor-pointer"
+                :class="activeTab === 'profil' ? 'text-primary-600 border-primary-600' : 'text-slate-600 border-transparent hover:text-primary-600'">
+                <span class="material-symbols-outlined text-sm align-middle mr-2">history_edu</span>
+                Profil Sekolah
             </button>
-
-            <button onclick="openTab('visi')" class="tab-btn px-6 py-4 text-slate-600 hover:text-blue-500">
+            <button @click="activeTab = 'visi'"
+                class="px-6 py-4 font-semibold text-sm transition-all border-b-2 cursor-pointer"
+                :class="activeTab === 'visi' ? 'text-primary-600 border-primary-600' : 'text-slate-600 border-transparent hover:text-primary-600'">
+                <span class="material-symbols-outlined text-sm align-middle mr-2">visibility</span>
                 Visi & Misi
             </button>
         </div>
 
         <div class="p-6 md:p-8">
 
-            <div id="sejarah" class="tab-content">
-                <h2 class="text-2xl font-bold text-slate-900 mb-4">Sejarah Sekolah</h2>
-                <p class="text-slate-600 leading-relaxed whitespace-pre-line">
-                    {{ $sejarah }}
-                </p>
+            <div x-show="activeTab === 'profil'" x-transition.opacity>
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">Profil Sekolah</h2>
+                <p class="text-slate-600 leading-relaxed whitespace-pre-line">{{ $sejarah }}</p>
             </div>
 
-            <div id="visi" class="tab-content hidden space-y-6">
+            <div x-show="activeTab === 'visi'" x-transition.opacity class="space-y-6">
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900 mb-3">Visi</h2>
-                    <p class="text-slate-600 italic">"{{ $visi }}"</p>
+                    <p class="text-slate-600 italic bg-primary-50 border border-primary-100 rounded-xl p-4">"{{ $visi }}"</p>
                 </div>
-
                 <div>
                     <h2 class="text-2xl font-bold text-slate-900 mb-3">Misi</h2>
-                    <ul class="space-y-2 text-slate-600">
+                    <ul class="space-y-3 text-slate-600">
                         @foreach (explode("\n", $misi) as $item)
-                            @if ($item)
-                                <li class="flex gap-2">
-                                    <i class="fa-solid fa-check text-blue-500 mt-1"></i>
+                            @if (trim($item) !== '')
+                                <li class="flex items-start gap-3 bg-slate-50 rounded-xl p-3">
+                                    <span class="w-6 h-6 rounded-full bg-primary-100 text-primary-700 flex items-center justify-center shrink-0 mt-0.5">
+                                        <span class="material-symbols-outlined text-sm">check</span>
+                                    </span>
                                     <span>{{ $item }}</span>
                                 </li>
                             @endif
@@ -122,19 +113,5 @@
     </div>
 
 </section>
-
-<script>
-    function openTab(tab) {
-        document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
-        document.getElementById(tab).classList.remove('hidden');
-
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('text-blue-500', 'border-b-2', 'border-blue-500');
-            btn.classList.add('text-slate-600');
-        });
-
-        event.target.classList.add('text-blue-500', 'border-b-2', 'border-blue-500');
-    }
-</script>
 
 @endsection

@@ -18,12 +18,12 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
             <div>
                 <label class="block text-sm font-medium mb-1">Jam Check In</label>
-                <input type="time" name="check_in" value="{{ old('check_in', $absensi->check_in?->format('H:i')) }}"
+                <input type="time" name="check_in" value="{{ old('check_in', $absensi->check_in?->format('H:i')) }}" placeholder="Pilih jam masuk"
                     class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-primary-200">
             </div>
             <div>
                 <label class="block text-sm font-medium mb-1">Jam Check Out</label>
-                <input type="time" name="check_out" value="{{ old('check_out', $absensi->check_out?->format('H:i')) }}"
+                <input type="time" name="check_out" value="{{ old('check_out', $absensi->check_out?->format('H:i')) }}" placeholder="Pilih jam pulang"
                     class="w-full border rounded-lg px-3 py-2 focus:ring focus:ring-primary-200">
             </div>
         </div>

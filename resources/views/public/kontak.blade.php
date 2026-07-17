@@ -20,7 +20,7 @@
     <div class="relative max-w-7xl mx-auto px-4 md:px-6 text-center">
 
         <span
-            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500 text-white text-sm font-semibold shadow-sm">
+            class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary-500 text-white text-sm font-semibold shadow-sm">
             <i class="fa-solid fa-envelope"></i>
             Kontak Kami
         </span>
@@ -61,7 +61,7 @@
                     class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg transition duration-300 p-5 flex gap-4 border border-white/50">
 
                     <div
-                        class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                        class="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center text-xl shrink-0">
                         <i class="fa-solid fa-location-dot"></i>
                     </div>
 
@@ -71,7 +71,7 @@
                         </h3>
 
                         <p class="text-slate-600 mt-1 leading-relaxed text-sm">
-                            {{ $settings['alamat'] ?? '-' }}
+                            {{ $alamat }}
                         </p>
                     </div>
 
@@ -81,7 +81,7 @@
                     class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg transition duration-300 p-5 flex gap-4 border border-white/50">
 
                     <div
-                        class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                        class="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center text-xl shrink-0">
                         <i class="fa-solid fa-phone"></i>
                     </div>
 
@@ -91,7 +91,7 @@
                         </h3>
 
                         <p class="text-slate-600 mt-1 text-sm">
-                            {{ $settings['telepon'] ?? '-' }}
+                            {{ $telepon }}
                         </p>
                     </div>
 
@@ -101,7 +101,7 @@
                     class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg transition duration-300 p-5 flex gap-4 border border-white/50">
 
                     <div
-                        class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                        class="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center text-xl shrink-0">
                         <i class="fa-solid fa-envelope"></i>
                     </div>
 
@@ -111,7 +111,7 @@
                         </h3>
 
                         <p class="text-slate-600 mt-1 text-sm">
-                            {{ $settings['email'] ?? '-' }}
+                            {{ $email }}
                         </p>
                     </div>
 
@@ -121,7 +121,7 @@
                     class="bg-white/80 backdrop-blur-sm rounded-xl shadow-md hover:shadow-lg transition duration-300 p-5 flex gap-4 border border-white/50">
 
                     <div
-                        class="w-12 h-12 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center text-xl shrink-0">
+                        class="w-12 h-12 rounded-xl bg-primary-100 text-primary-600 flex items-center justify-center text-xl shrink-0">
                         <i class="fa-solid fa-clock"></i>
                     </div>
 
@@ -188,7 +188,7 @@
                         </label>
 
                         <input type="text" name="name" value="{{ old('name') }}"
-                            class="w-full rounded-lg border border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200/50 p-3 transition text-sm"
+                            class="w-full rounded-lg border border-slate-300 focus:border-primary-500 focus:ring focus:ring-primary-200/50 p-3 transition text-sm"
                             placeholder="Masukkan nama lengkap">
                     </div>
 
@@ -198,7 +198,7 @@
                         </label>
 
                         <input type="email" name="email" value="{{ old('email') }}"
-                            class="w-full rounded-lg border border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200/50 p-3 transition text-sm"
+                            class="w-full rounded-lg border border-slate-300 focus:border-primary-500 focus:ring focus:ring-primary-200/50 p-3 transition text-sm"
                             placeholder="email@gmail.com">
                     </div>
 
@@ -208,7 +208,7 @@
                         </label>
 
                         <input type="text" name="subject" value="{{ old('subject') }}"
-                            class="w-full rounded-lg border border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200/50 p-3 transition text-sm"
+                            class="w-full rounded-lg border border-slate-300 focus:border-primary-500 focus:ring focus:ring-primary-200/50 p-3 transition text-sm"
                             placeholder="Masukkan subjek pesan">
                     </div>
 
@@ -218,12 +218,12 @@
                         </label>
 
                         <textarea name="message" rows="5"
-                            class="w-full rounded-lg border border-slate-300 focus:border-blue-500 focus:ring focus:ring-blue-200/50 p-3 transition resize-none text-sm"
+                            class="w-full rounded-lg border border-slate-300 focus:border-primary-500 focus:ring focus:ring-primary-200/50 p-3 transition resize-none text-sm"
                             placeholder="Tulis pesan Anda di sini...">{{ old('message') }}</textarea>
                     </div>
 
                     <button type="submit"
-                        class="w-full bg-blue-500 hover:bg-blue-600 text-white py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition duration-300">
+                        class="w-full bg-primary-500 hover:bg-primary-600 text-white py-3 rounded-lg font-semibold shadow-md hover:shadow-lg transition duration-300">
 
                         <i class="fa-solid fa-paper-plane mr-2"></i>
                         Kirim Pesan

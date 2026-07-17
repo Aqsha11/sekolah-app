@@ -23,7 +23,7 @@
     <form method="GET" class="flex flex-wrap gap-3 mb-6 p-4 bg-gray-50 rounded-lg">
         <div>
             <label class="block text-xs font-medium mb-1">Tanggal</label>
-            <input type="date" name="tanggal" value="{{ $tanggal }}"
+            <input type="date" name="tanggal" value="{{ $tanggal }}" placeholder="Pilih tanggal"
                 class="border rounded-lg px-3 py-1.5 text-sm focus:ring focus:ring-primary-200">
         </div>
         <div>
@@ -79,7 +79,7 @@
                             @php
                                 $statusClass = match($absensi->status) {
                                     'hadir' => 'bg-green-100 text-green-700',
-                                    'izin' => 'bg-blue-100 text-blue-700',
+                                    'izin' => 'bg-primary-100 text-primary-700',
                                     'sakit' => 'bg-orange-100 text-orange-700',
                                     'alpha' => 'bg-red-100 text-red-700',
                                     'terlambat' => 'bg-orange-100 text-orange-800',
@@ -93,7 +93,7 @@
                         <td class="px-4 py-2 text-`">
                             <div class="flex justify-center gap-2">
                                 <a href="{{ route('admin.absensi.edit', $absensi->id) }}"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">
+                                    class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1 rounded-lg text-sm">
                                     <i class="fa-solid fa-pen"></i>
                                 </a>
                                 <form action="{{ route('admin.absensi.destroy', $absensi->id) }}" method="POST"
@@ -123,7 +123,7 @@
             @php
                 $statusClass = match($absensi->status) {
                     'hadir' => 'bg-green-100 text-green-700',
-                    'izin' => 'bg-blue-100 text-blue-700',
+                    'izin' => 'bg-primary-100 text-primary-700',
                     'sakit' => 'bg-orange-100 text-orange-700',
                     'alpha' => 'bg-red-100 text-red-700',
                     'terlambat' => 'bg-orange-100 text-orange-800',
@@ -146,7 +146,7 @@
                 </div>
                 <div class="flex gap-2 mt-3">
                     <a href="{{ route('admin.absensi.edit', $absensi->id) }}"
-                        class="flex-1 bg-blue-500 text-white text-center py-1.5 rounded-lg text-sm">
+                        class="flex-1 bg-primary-500 text-white text-center py-1.5 rounded-lg text-sm">
                         <i class="fa-solid fa-pen"></i> Edit
                     </a>
                     <form action="{{ route('admin.absensi.destroy', $absensi->id) }}" method="POST"

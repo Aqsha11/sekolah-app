@@ -41,7 +41,7 @@ body {
 }
 
 .btn-primary {
-    @apply bg-slate-900 text-white hover:bg-blue-600 hover:text-slate-900;
+    @apply bg-primary-600 text-white hover:bg-primary-700;
 }
 
 .btn-secondary {
@@ -62,7 +62,7 @@ body {
 }
 
 .badge-primary {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-primary-100 text-primary-800;
 }
 
 .badge-success {
@@ -74,7 +74,7 @@ body {
 }
 
 .badge-warning {
-    @apply bg-blue-100 text-blue-800;
+    @apply bg-amber-100 text-amber-800;
 }
 
 /* Table Styles */
@@ -102,7 +102,7 @@ body {
 .form-input,
 .form-select,
 .form-textarea {
-    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent;
 }
 
 .form-label {

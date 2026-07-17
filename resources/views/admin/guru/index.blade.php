@@ -71,7 +71,7 @@
                             <div class="flex justify-center gap-2">
 
                                 <a href="{{ route('admin.guru.edit', $guru->id) }}"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">
+                                    class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1 rounded-lg text-sm">
                                     <i class="fa-solid fa-pen"></i>
                                 </a>
 
@@ -145,7 +145,7 @@
                 <div class="flex gap-2 mt-3">
 
                     <a href="{{ route('admin.guru.edit', $guru->id) }}"
-                        class="flex-1 bg-blue-500 text-white text-center py-1 rounded-lg text-sm">
+                        class="flex-1 bg-primary-500 text-white text-center py-1 rounded-lg text-sm">
                         <i class="fa-solid fa-pen"></i>
                     </a>
 

@@ -59,9 +59,13 @@ class SettingController extends Controller
             'logo' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'favicon' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:1024',
             'slider_image' => 'nullable|image|mimes:jpg,jpeg,png,webp|max:4096',
+            'primary_color' => 'nullable|regex:/^#[0-9A-Fa-f]{6}$/',
         ]);
 
         $fields = [
+
+            // warna tema
+            'primary_color',
 
             // profil sekolah
             'profil_sekolah',
@@ -82,6 +86,7 @@ class SettingController extends Controller
             'nama_website',
             'tagline',
             'nama_sekolah',
+            'akreditasi',
 
             // hero lama
             'hero_title',
@@ -110,11 +115,15 @@ class SettingController extends Controller
         }
         if ($request->has('social_media')) {
 
+            $socials = array_values(array_filter($request->social_media, function ($item) {
+                return !empty(trim($item['name'] ?? '')) || !empty(trim($item['url'] ?? ''));
+            }));
+
             Setting::updateOrCreate(
                 ['key' => 'social_media'],
                 [
                     'value' => json_encode(
-                        array_values($request->social_media),
+                        $socials,
                         JSON_UNESCAPED_UNICODE
                     )
                 ]

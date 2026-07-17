@@ -10,11 +10,11 @@
         @csrf @method('PUT')
         <div>
             <label class="block font-semibold mb-1">Judul</label>
-            <input type="text" name="title" value="{{ old('title',$galeri->title) }}" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
+            <input type="text" name="title" value="{{ old('title',$galeri->title) }}" placeholder="Masukkan judul galeri" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" required>
         </div>
         <div>
             <label class="block font-semibold mb-1">Deskripsi</label>
-            <textarea name="description" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" rows="4">{{ old('description',$galeri->description) }}</textarea>
+            <textarea name="description" placeholder="Tuliskan deskripsi galeri" class="w-full border rounded-lg p-2 focus:ring focus:ring-primary-300" rows="4">{{ old('description',$galeri->description) }}</textarea>
         </div>
         <div>
             <label class="block font-semibold mb-1">Foto</label>

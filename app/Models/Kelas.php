@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Kelas extends Model
 {
@@ -12,4 +13,12 @@ class Kelas extends Model
     protected $fillable = [
         'nama_kelas',
     ];
+
+    /**
+     * Relasi: satu kelas punya banyak jadwal pelajaran
+     */
+    public function jadwalPelajarans(): HasMany
+    {
+        return $this->hasMany(JadwalPelajaran::class);
+    }
 }

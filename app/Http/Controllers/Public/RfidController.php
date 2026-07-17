@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Public;
 
+use App\Events\AbsensiUpdated;
 use App\Http\Controllers\Controller;
 use App\Models\Absensi;
 use App\Models\Siswa;
@@ -29,16 +30,14 @@ class RfidController extends Controller
      */
     public function scan(Request $request): JsonResponse
     {
-        // Jika request dari hardware (bukan dari web), verifikasi API key
-        if ($request->hasHeader('X-API-Key') || $request->has('api_key')) {
-            $apiKey = $request->header('X-API-Key') ?: $request->input('api_key');
-            $validKey = env('RFID_API_KEY');
-            if (!$validKey || $apiKey !== $validKey) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Unauthorized',
-                ], 401);
-            }
+        // Verifikasi API key wajib untuk semua request scan
+        $apiKey = $request->header('X-API-Key') ?: $request->input('api_key');
+        $validKey = config('rfid.api_key');
+        if (!$validKey || $apiKey !== $validKey) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Unauthorized',
+            ], 401);
         }
 
         // Validasi input rfid
@@ -92,6 +91,8 @@ class RfidController extends Controller
                 'tanggal' => $today,
             ]);
 
+            AbsensiUpdated::dispatch($siswa, $absensi, 'check_in');
+
             $pesan = $status === 'terlambat'
                 ? "{$siswa->nama} - Terlambat! (" . $now->format('H:i') . ")"
                 : "{$siswa->nama} - Check-in berhasil";
@@ -113,6 +114,8 @@ class RfidController extends Controller
             $absensi->update([
                 'check_out' => $now,
             ]);
+
+            AbsensiUpdated::dispatch($siswa, $absensi, 'check_out');
 
             $durasi = $now->diffInMinutes($absensi->check_in);
             $jam = intdiv($durasi, 60);

@@ -17,12 +17,12 @@
     <form method="GET" class="flex flex-wrap gap-3 mb-6 p-4 bg-gray-50 rounded-lg">
         <div>
             <label class="block text-xs font-medium mb-1">Dari Tanggal</label>
-            <input type="date" name="dari" value="{{ request('dari') }}"
+            <input type="date" name="dari" value="{{ request('dari') }}" placeholder="Dari tanggal"
                 class="border rounded-lg px-3 py-1.5 text-sm focus:ring focus:ring-primary-200">
         </div>
         <div>
             <label class="block text-xs font-medium mb-1">Sampai Tanggal</label>
-            <input type="date" name="sampai" value="{{ request('sampai') }}"
+            <input type="date" name="sampai" value="{{ request('sampai') }}" placeholder="Sampai tanggal"
                 class="border rounded-lg px-3 py-1.5 text-sm focus:ring focus:ring-primary-200">
         </div>
         <div>
@@ -83,7 +83,7 @@
                             @php
                                 $statusClass = match($absensi->status) {
                                     'hadir' => 'bg-green-100 text-green-700',
-                                    'izin' => 'bg-blue-100 text-blue-700',
+                                    'izin' => 'bg-primary-100 text-primary-700',
                                     'sakit' => 'bg-orange-100 text-orange-700',
                                     'alpha' => 'bg-red-100 text-red-700',
                                     'terlambat' => 'bg-orange-100 text-orange-800',
@@ -110,7 +110,7 @@
             @php
                 $statusClass = match($absensi->status) {
                     'hadir' => 'bg-green-100 text-green-700',
-                    'izin' => 'bg-blue-100 text-blue-700',
+                    'izin' => 'bg-primary-100 text-primary-700',
                     'sakit' => 'bg-orange-100 text-orange-700',
                     'alpha' => 'bg-red-100 text-red-700',
                     'terlambat' => 'bg-orange-100 text-orange-800',

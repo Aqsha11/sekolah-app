@@ -129,7 +129,7 @@
             ======================= --}}
             @role('guru')
                 <div class="pt-4 pb-2">
-                    <p class="text-xs uppercase text-blue-400 tracking-wider px-4">
+                    <p class="text-xs uppercase text-primary-400 tracking-wider px-4">
                         Menu Guru
                     </p>
                 </div>
@@ -141,7 +141,7 @@
             ======================= --}}
             @hasanyrole('admin|super_admin')
                 <div class="pt-4 pb-2">
-                    <p class="text-xs uppercase text-blue-400 tracking-wider px-4">
+                    <p class="text-xs uppercase text-primary-400 tracking-wider px-4">
                         Administrator
                     </p>
                 </div>
@@ -173,7 +173,7 @@
                 ACCOUNT (SEMUA ROLE)
             ======================= --}}
             <div class="pt-4 pb-2">
-                <p class="text-xs uppercase text-blue-400 tracking-wider px-4">
+                <p class="text-xs uppercase text-primary-400 tracking-wider px-4">
                     Account
                 </p>
             </div>
@@ -189,7 +189,7 @@
     </div>
 
     {{-- FOOTER --}}
-    <div class="p-4 border-t border-slate-800 text-xs text-blue-400">
+    <div class="p-4 border-t border-slate-800 text-xs text-primary-400">
         © {{ date('Y') }} 
     </div>
 </div>

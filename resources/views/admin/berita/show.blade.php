@@ -28,7 +28,7 @@
                 @if ($berita->status === 'published')
                     <span class="px-3 py-1 rounded-full bg-green-100 text-green-700 text-sm">Published</span>
                 @else
-                    <span class="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm">Draft</span>
+                    <span class="px-3 py-1 rounded-full bg-primary-100 text-primary-700 text-sm">Draft</span>
                 @endif
             </div>
 

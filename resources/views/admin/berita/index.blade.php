@@ -84,7 +84,7 @@
                                     Published
                                 </span>
                             @else
-                                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
+                                <span class="px-2 py-1 text-xs rounded-full bg-primary-100 text-primary-700">
                                     Draft
                                 </span>
                             @endif
@@ -95,7 +95,7 @@
                             <div class="flex justify-center gap-2">
 
                                 <a href="{{ route('admin.berita.edit', $item->id) }}"
-                                    class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm">
+                                    class="bg-primary-500 hover:bg-primary-600 text-white px-3 py-1 rounded-lg text-sm">
                                     <i class="fa-solid fa-pen"></i>
                                 </a>
 
@@ -169,7 +169,7 @@
                                     Published
                                 </span>
                             @else
-                                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-700">
+                                <span class="px-2 py-1 text-xs rounded-full bg-primary-100 text-primary-700">
                                     Draft
                                 </span>
                             @endif
@@ -183,7 +183,7 @@
                 <div class="flex gap-2 mt-3">
 
                     <a href="{{ route('admin.berita.edit', $item->id) }}"
-                        class="flex-1 bg-blue-500 text-white text-center py-1 rounded-lg text-sm">
+                        class="flex-1 bg-primary-500 text-white text-center py-1 rounded-lg text-sm">
                         <i class="fa-solid fa-pen"></i>
                     </a>
 
