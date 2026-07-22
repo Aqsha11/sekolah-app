@@ -38,18 +38,6 @@ Thumbs.db
 # ================================
 /node_modules
 /vendor
-ppdb/node_modules
-ppdb/vendor
-ppdb/bin
-ppdb/.env
-ppdb/.phpunit.result.cache
-ppdb/public/build
-ppdb/public/storage
-ppdb/public/vendor
-ppdb/storage/logs/*
-ppdb/storage/framework/cache/*
-ppdb/storage/framework/sessions/*
-ppdb/storage/framework/views/*
 
 # ================================
 # File Build Frontend (Vite)
